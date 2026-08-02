@@ -99,12 +99,27 @@
   }
   .scena-item:hover{background:#00000008;}
   .scena-item.active{background:var(--sipario);color:var(--carta);}
-  .scena-item .dot{width:6px;height:6px;border-radius:50%;background:var(--oro);flex-shrink:0;}
+  .scena-item .dot{width:8px;height:8px;border-radius:50%;background:var(--oro);flex-shrink:0;}
+  .scena-item .dot.st-bozza{background:#8a93a8;}
+  .scena-item .dot.st-rivedere{background:#d98a2b;}
+  .scena-item .dot.st-definitiva{background:#3f8c5c;}
   .scena-item.active .dot{background:var(--oro-chiaro);}
-  .scena-item span.lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .scena-item.active .dot.st-bozza{background:#c7cfe0;}
+  .scena-item.active .dot.st-rivedere{background:#f0bd7a;}
+  .scena-item.active .dot.st-definitiva{background:#8fd6ac;}
+  .scena-item input.scene-name-input{
+    flex:1;background:none;border:none;outline:none;font:inherit;color:inherit;
+    overflow:hidden;text-overflow:ellipsis;padding:2px 0;
+  }
   .scena-item .icon-btn{opacity:0;font-size:12px;}
   .scena-item:hover .icon-btn{opacity:1;}
   .scena-item.active .icon-btn{color:var(--carta);}
+  .filter-banner{
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    background:var(--sipario);color:var(--carta);border-radius:6px;padding:8px 10px;margin-bottom:10px;
+    font-size:12px;font-family:'Inter',sans-serif;
+  }
+  .filter-banner button{background:none;border:none;color:var(--oro-chiaro);cursor:pointer;font-weight:700;font-size:13px;}
 
   .add-btn{
     width:100%;margin-top:6px;padding:8px;background:none;border:1px dashed #b8a879;
@@ -125,6 +140,10 @@
     outline:none;resize:none;line-height:1.4;
   }
   .pers-card .rm{float:right;}
+  .pers-card .filter-btn{
+    float:right;margin-right:4px;background:none;border:none;color:var(--grigio);cursor:pointer;font-size:12px;
+  }
+  .pers-card .filter-btn:hover{color:var(--sipario);}
 
   .guida-toggle{
     margin:10px 16px 16px;padding:10px 12px;background:var(--sipario);color:var(--carta);
@@ -136,10 +155,13 @@
   main{flex:1;display:flex;flex-direction:column;background:#4a1319;overflow:hidden;position:relative;}
   .stage{flex:1;overflow-y:auto;padding:36px 40px;display:flex;justify-content:center;}
   .page{
-    background:var(--carta);width:100%;max-width:720px;min-height:100%;
+    background:var(--carta);width:100%;
+    max-width:min(96%, calc(680px + (var(--ms-size) - 14px) * 18));
+    min-height:100%;
     padding:52px 56px 90px;box-shadow:0 12px 40px rgba(0,0,0,.45);
     font-family:'Courier Prime',monospace;position:relative;
     --ms-size:14px;
+    transition:max-width .15s ease;
   }
   .page::before{
     content:"";position:absolute;top:0;bottom:0;left:0;width:6px;
@@ -235,6 +257,34 @@
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:60px;outline:none;
   }
+  .scene-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 14px;}
+  .status-btn{
+    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    padding:4px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
+  }
+  .status-btn.on-bozza{background:#8a93a8;color:#fff;border-color:#8a93a8;}
+  .status-btn.on-rivedere{background:#d98a2b;color:#fff;border-color:#d98a2b;}
+  .status-btn.on-definitiva{background:#3f8c5c;color:#fff;border-color:#3f8c5c;}
+  .presence-wrap{margin:0 0 14px;}
+  .presence-label{font-family:'Inter',sans-serif;font-size:11px;color:var(--grigio);margin-bottom:5px;}
+  .presence-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .chip{
+    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    padding:3px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
+  }
+  .chip.on{background:var(--sipario);color:var(--carta);border-color:var(--sipario);}
+  .presence-auto{background:none;border:none;color:var(--grigio);cursor:pointer;font-size:11px;text-decoration:underline dotted;font-family:'Inter',sans-serif;}
+  .presence-auto:hover{color:var(--sipario);}
+  .page.rehearsal .block-controls,
+  .page.rehearsal .mini-actions,
+  .page.rehearsal .block-toolbar,
+  .page.rehearsal .director-wrap,
+  .page.rehearsal .scene-meta-row,
+  .page.rehearsal .presence-wrap,
+  .page.rehearsal .block-num{display:none !important;}
+  .page.rehearsal .block{padding-right:0;}
+  .page.rehearsal textarea, .page.rehearsal select, .page.rehearsal input{cursor:default;}
+  .block.dialogue.reading{background:#f4e9cf;border-radius:8px;box-shadow:inset 3px 0 0 var(--oro);}
   .pers-stat{
     margin-top:6px;font-size:11px;color:var(--grigio);font-family:'Inter',sans-serif;
     border-top:1px dashed #d6c7a1;padding-top:6px;
@@ -367,11 +417,13 @@
       <button id="btnGuida">📖 Linee guida per la scrittura</button>
       <button class="alt" id="btnVersioni">🕘 Versioni salvate</button>
       <button class="alt" id="btnCerca">🔍 Cerca e sostituisci</button>
+      <button class="alt" id="btnSides">📄 Copione per personaggio</button>
     </div>
   </aside>
 
   <main>
     <div class="stage-controls">
+      <button id="btnRehearsal" title="Modalità prova/lettura">🎭</button>
       <button id="fontDown" title="Riduci il testo">A－</button>
       <span id="fontSizeLabel">14px</span>
       <button id="fontUp" title="Aumenta il testo">A＋</button>
@@ -443,6 +495,19 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalSides">
+  <div class="modal">
+    <h2>Copione per personaggio</h2>
+    <div class="sub">Genera un PDF con le battute complete del personaggio scelto e un breve richiamo (cue) delle battute altrui, utile per lo studio della parte</div>
+    <div class="sr-field">
+      <label>Personaggio</label>
+      <select id="sidesCharacterSelect" style="width:100%;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff8ea;"></select>
+    </div>
+    <button class="modal-close" id="btnGeneraSides">Genera PDF</button>
+    <button class="modal-close" id="closeSides" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+  </div>
+</div>
+
 <script>
 let play = {
   title: "Titolo dell'opera",
@@ -461,6 +526,8 @@ let play = {
           title: "Scena 1",
           setting: "Luogo, momento del giorno",
           directorNotes: "",
+          status: "",
+          presentCharacters: [],
           blocks: [
             { id: uid(), type: "direction", text: "Breve didascalia iniziale: cosa vediamo entrando in scena." },
             { id: uid(), type: "dialogue", character: "PERSONAGGIO A", text: "Prima battuta..." }
@@ -472,6 +539,9 @@ let play = {
 };
 let currentSceneId = play.acts[0].scenes[0].id;
 let openDirNotes = new Set();
+let filterCharacter = null;
+let rehearsalMode = false;
+let readingBlockId = null;
 
 function uid(){ return 'id' + Math.random().toString(36).slice(2,10); }
 
@@ -543,27 +613,45 @@ async function loadSaved(){
 }
 
 /* ---------- RENDER: SIDEBAR STRUTTURA ---------- */
+function sceneMatchesFilter(scena){
+  if(!filterCharacter) return true;
+  if((scena.presentCharacters||[]).includes(filterCharacter)) return true;
+  return scena.blocks.some(b => b.type === 'dialogue' && b.character === filterCharacter);
+}
 function renderStruttura(){
   const panel = document.getElementById('panel-struttura');
   panel.innerHTML = '';
+
+  if(filterCharacter){
+    const banner = document.createElement('div');
+    banner.className = 'filter-banner';
+    banner.innerHTML = `<span>Filtro: <b>${escapeHtml(filterCharacter)}</b></span><button id="clearFilter">✕ Rimuovi</button>`;
+    panel.appendChild(banner);
+  }
+
   play.acts.forEach((atto, ai) => {
+    const scenesToShow = atto.scenes.filter(sceneMatchesFilter);
+    if(filterCharacter && !scenesToShow.length) return;
+
     const wrap = document.createElement('div');
     wrap.className = 'atto-block';
 
     const head = document.createElement('div');
     head.className = 'atto-head';
-    head.innerHTML = `<input value="${escapeAttr(atto.title)}" data-act="${atto.id}" />
+    head.innerHTML = `<input value="${escapeAttr(atto.title)}" data-act="${atto.id}" ${filterCharacter ? 'readonly' : ''} />
       <div>
-        <button class="icon-btn" data-add-scene="${atto.id}" title="Aggiungi scena">＋</button>
-        <button class="icon-btn" data-del-act="${atto.id}" title="Elimina atto">✕</button>
+        ${!filterCharacter ? `<button class="icon-btn" data-add-scene="${atto.id}" title="Aggiungi scena">＋</button>
+        <button class="icon-btn" data-del-act="${atto.id}" title="Elimina atto">✕</button>` : ''}
       </div>`;
     wrap.appendChild(head);
 
-    atto.scenes.forEach((scena) => {
+    scenesToShow.forEach((scena) => {
       const item = document.createElement('div');
       item.className = 'scena-item' + (scena.id === currentSceneId ? ' active' : '');
       item.dataset.scene = scena.id;
-      item.innerHTML = `<span class="dot"></span><span class="lbl">${escapeHtml(scena.title)}</span>
+      const statusClass = scena.status ? ' st-' + scena.status : '';
+      item.innerHTML = `<span class="dot${statusClass}"></span>
+        <input class="scene-name-input" data-scene-name="${scena.id}" value="${escapeAttr(scena.title)}" />
         <button class="icon-btn" data-del-scene="${scena.id}" title="Elimina scena">✕</button>`;
       wrap.appendChild(item);
     });
@@ -571,11 +659,13 @@ function renderStruttura(){
     panel.appendChild(wrap);
   });
 
-  const addAct = document.createElement('button');
-  addAct.className = 'add-btn';
-  addAct.textContent = '+ Nuovo atto';
-  addAct.id = 'addAct';
-  panel.appendChild(addAct);
+  if(!filterCharacter){
+    const addAct = document.createElement('button');
+    addAct.className = 'add-btn';
+    addAct.textContent = '+ Nuovo atto';
+    addAct.id = 'addAct';
+    panel.appendChild(addAct);
+  }
 }
 
 /* ---------- STATISTICHE PERSONAGGI E NUMERAZIONE BATTUTE ---------- */
@@ -612,6 +702,7 @@ function renderPersonaggi(){
     card.className = 'pers-card';
     card.innerHTML = `
       <button class="icon-btn rm" data-del-pers="${p.id}">✕</button>
+      <button class="filter-btn" data-filter-pers="${escapeAttr(p.name)}" title="Mostra solo le scene con questo personaggio">🔎</button>
       <input class="nome" data-pers-name="${p.id}" value="${escapeAttr(p.name)}" />
       <textarea class="desc" rows="2" data-pers-desc="${p.id}">${escapeHtml(p.desc)}</textarea>
       <div class="pers-stat">${s.battute} battute · ${s.words} parole</div>`;
@@ -641,7 +732,7 @@ function renderStage(){
   const scenaIndex = atto.scenes.indexOf(scena) + 1;
 
   const page = document.createElement('div');
-  page.className = 'page';
+  page.className = 'page' + (rehearsalMode ? ' rehearsal' : '');
 
   const head = document.createElement('div');
   head.className = 'scene-head';
@@ -655,6 +746,24 @@ function renderStage(){
   slug.placeholder = 'LUOGO, MOMENTO DEL GIORNO';
   slug.addEventListener('input', e => { scena.setting = e.target.value; scheduleSave(); });
   page.appendChild(slug);
+
+  const metaRow = document.createElement('div');
+  metaRow.className = 'scene-meta-row';
+  const statuses = [['bozza','Bozza'], ['rivedere','Da rivedere'], ['definitiva','Definitiva']];
+  metaRow.innerHTML = statuses.map(([key,label]) =>
+    `<button class="status-btn${scena.status===key ? ' on-'+key : ''}" data-set-status="${key}">${label}</button>`
+  ).join('');
+  page.appendChild(metaRow);
+
+  const presenceWrap = document.createElement('div');
+  presenceWrap.className = 'presence-wrap';
+  const present = scena.presentCharacters || [];
+  presenceWrap.innerHTML = `<div class="presence-label">Personaggi in scena</div>
+    <div class="presence-chips">
+      ${play.characters.map(c => `<button class="chip${present.includes(c.name) ? ' on' : ''}" data-toggle-present="${escapeAttr(c.name)}">${escapeHtml(c.name)}</button>`).join('')}
+      <button class="presence-auto" id="autoDetectPresence">rileva dai dialoghi</button>
+    </div>`;
+  page.appendChild(presenceWrap);
 
   const dirWrap = document.createElement('div');
   dirWrap.className = 'director-wrap';
@@ -693,29 +802,31 @@ function renderStage(){
 
   scena.blocks.forEach(block => {
     const b = document.createElement('div');
+    const ro = rehearsalMode ? 'readonly' : '';
     if(block.type === 'direction'){
       b.className = 'block direction';
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
-        <textarea rows="1" data-block-text="${block.id}" placeholder="(didascalia scenica)">${escapeHtml(block.text)}</textarea>`;
+        <textarea rows="1" ${ro} data-block-text="${block.id}" placeholder="(didascalia scenica)">${escapeHtml(block.text)}</textarea>`;
     } else if(block.type === 'offstage'){
       b.className = 'block offstage';
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
         <div class="offstage-label">Fuori scena</div>
-        <textarea rows="1" data-block-text="${block.id}" placeholder="Voce fuori campo, suono, effetto...">${escapeHtml(block.text)}</textarea>`;
+        <textarea rows="1" ${ro} data-block-text="${block.id}" placeholder="Voce fuori campo, suono, effetto...">${escapeHtml(block.text)}</textarea>`;
     } else {
-      b.className = 'block dialogue';
+      b.className = 'block dialogue' + (rehearsalMode && readingBlockId === block.id ? ' reading' : '');
+      if(rehearsalMode) b.dataset.readBlock = block.id;
       const charOptions = play.characters.map(c => `<option value="${escapeAttr(c.name)}" ${c.name===block.character?'selected':''}>${escapeHtml(c.name)}</option>`).join('');
       const hasNote = block.note !== undefined && block.note !== null;
       const hasDir = block.afterDirection !== undefined && block.afterDirection !== null;
       const noteHtml = hasNote
         ? `<div class="note-row">
-             <input class="note-input" data-block-note="${block.id}" placeholder="nota d'attore (es. sottovoce)" value="${escapeAttr(block.note)}" />
+             <input class="note-input" ${ro} data-block-note="${block.id}" placeholder="nota d'attore (es. sottovoce)" value="${escapeAttr(block.note)}" />
              <button class="ctrl-btn" data-del-note="${block.id}" title="Rimuovi nota">✕</button>
            </div>`
         : '';
       const afterDirHtml = hasDir
         ? `<div class="after-direction-row">
-             <input class="after-direction-input" data-block-afterdir="${block.id}" placeholder="didascalia (azione dopo la battuta)" value="${escapeAttr(block.afterDirection)}" />
+             <input class="after-direction-input" ${ro} data-block-afterdir="${block.id}" placeholder="didascalia (azione dopo la battuta)" value="${escapeAttr(block.afterDirection)}" />
              <button class="ctrl-btn" data-del-direction-after="${block.id}" title="Rimuovi didascalia">✕</button>
            </div>`
         : '';
@@ -726,13 +837,13 @@ function renderStage(){
       const num = dialogueNumbers[block.id];
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
         ${num ? `<span class="block-num">#${num}</span>` : ''}
-        <select class="char-name" data-block-char="${block.id}" style="text-align:center;">
+        <select class="char-name" ${ro ? 'disabled' : ''} data-block-char="${block.id}" style="text-align:center;">
           <option value="${escapeAttr(block.character||'')}" hidden>${escapeHtml(block.character||'PERSONAGGIO')}</option>
           ${charOptions}
         </select>
         ${noteHtml}
         ${miniActions}
-        <textarea class="line" rows="2" data-block-text="${block.id}" placeholder="Battuta...">${escapeHtml(block.text)}</textarea>
+        <textarea class="line" rows="2" ${ro} data-block-text="${block.id}" placeholder="Battuta...">${escapeHtml(block.text)}</textarea>
         ${afterDirHtml}`;
     }
     blocksWrap.appendChild(b);
@@ -813,6 +924,24 @@ document.getElementById('titolo-opera').addEventListener('input', e => { play.ti
 document.getElementById('autore-opera').addEventListener('input', e => { play.author = e.target.value; scheduleSave(); });
 
 document.getElementById('panel-struttura').addEventListener('click', e => {
+  const clearFilterBtn = e.target.closest('#clearFilter');
+  if(clearFilterBtn){
+    filterCharacter = null;
+    renderStruttura();
+    return;
+  }
+
+  const sceneNameInput = e.target.closest('[data-scene-name]');
+  if(sceneNameInput){
+    const id = sceneNameInput.dataset.sceneName;
+    if(currentSceneId !== id){
+      currentSceneId = id;
+      document.querySelectorAll('.scena-item').forEach(el => el.classList.toggle('active', el.dataset.scene === id));
+      renderStage();
+    }
+    return;
+  }
+
   const sceneItem = e.target.closest('[data-scene]');
   const addSceneBtn = e.target.closest('[data-add-scene]');
   const delSceneBtn = e.target.closest('[data-del-scene]');
@@ -847,7 +976,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
     e.stopPropagation();
     const atto = play.acts.find(a => a.id === addSceneBtn.dataset.addScene);
     const n = atto.scenes.length + 1;
-    const newScene = { id: uid(), title: 'Scena ' + n, setting: '', directorNotes: '', blocks: [
+    const newScene = { id: uid(), title: 'Scena ' + n, setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [
       { id: uid(), type: 'direction', text: '' }
     ]};
     atto.scenes.push(newScene);
@@ -856,7 +985,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
   }
   if(addActBtn){
     const n = play.acts.length + 1;
-    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', blocks: [
+    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [
       { id: uid(), type: 'direction', text: '' }
     ]};
     play.acts.push({ id: uid(), title: 'Atto ' + toRoman(n), scenes: [newScene] });
@@ -871,17 +1000,30 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
 
 document.getElementById('panel-struttura').addEventListener('input', e => {
   const actInput = e.target.closest('[data-act]');
+  const sceneNameInput = e.target.closest('[data-scene-name]');
   if(actInput){
     const atto = play.acts.find(a => a.id === actInput.dataset.act);
     atto.title = actInput.value;
     scheduleSave();
     renderStage();
   }
+  if(sceneNameInput){
+    const found = findScene(sceneNameInput.dataset.sceneName);
+    if(found){
+      found.scena.title = sceneNameInput.value;
+      scheduleSave();
+      if(currentSceneId === found.scena.id){
+        const lbl = document.querySelector('.scene-head .scena-lbl');
+        if(lbl) lbl.textContent = found.scena.title.toUpperCase();
+      }
+    }
+  }
 });
 
 document.getElementById('panel-personaggi').addEventListener('click', e => {
   const addBtn = e.target.closest('#addPers');
   const delBtn = e.target.closest('[data-del-pers]');
+  const filterBtn = e.target.closest('[data-filter-pers]');
   if(addBtn){
     play.characters.push({ id: uid(), name: 'NUOVO PERSONAGGIO', desc: '' });
     scheduleSave(); renderPersonaggi(); return;
@@ -889,6 +1031,15 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
   if(delBtn){
     play.characters = play.characters.filter(c => c.id !== delBtn.dataset.delPers);
     scheduleSave(); renderPersonaggi(); return;
+  }
+  if(filterBtn){
+    filterCharacter = filterBtn.dataset.filterPers;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector('.tab-btn[data-tab="struttura"]').classList.add('active');
+    document.getElementById('panel-struttura').classList.add('active');
+    renderStruttura();
+    return;
   }
 });
 
@@ -915,16 +1066,46 @@ document.getElementById('stage').addEventListener('click', e => {
   const delNoteBtn = e.target.closest('[data-del-note]');
   const addDirAfterBtn = e.target.closest('[data-add-direction-after]');
   const delDirAfterBtn = e.target.closest('[data-del-direction-after]');
+  const statusBtn = e.target.closest('[data-set-status]');
+  const presentChip = e.target.closest('[data-toggle-present]');
+  const autoDetectBtn = e.target.closest('#autoDetectPresence');
   const emptyAdd = e.target.closest('#emptyAdd');
 
   if(emptyAdd){
-    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', blocks: [{ id: uid(), type:'direction', text:'' }] };
+    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [{ id: uid(), type:'direction', text:'' }] };
     play.acts[0].scenes.push(newScene);
     currentSceneId = newScene.id;
     scheduleSave(); renderAll(); return;
   }
   if(!currentSceneId) return;
   const { scena } = findScene(currentSceneId);
+
+  if(statusBtn){
+    const key = statusBtn.dataset.setStatus;
+    scena.status = scena.status === key ? '' : key;
+    scheduleSave(); renderStruttura(); renderStage(); return;
+  }
+  if(presentChip){
+    const name = presentChip.dataset.togglePresent;
+    scena.presentCharacters = scena.presentCharacters || [];
+    const idx = scena.presentCharacters.indexOf(name);
+    if(idx > -1) scena.presentCharacters.splice(idx,1); else scena.presentCharacters.push(name);
+    scheduleSave(); renderStage(); return;
+  }
+  if(autoDetectBtn){
+    const names = new Set();
+    scena.blocks.forEach(b => { if(b.type === 'dialogue' && b.character) names.add(b.character); });
+    scena.presentCharacters = Array.from(names);
+    scheduleSave(); renderStage(); return;
+  }
+  if(rehearsalMode){
+    const readBlock = e.target.closest('[data-read-block]');
+    if(readBlock && !e.target.closest('button')){
+      readingBlockId = (readingBlockId === readBlock.dataset.readBlock) ? null : readBlock.dataset.readBlock;
+      renderStage();
+      return;
+    }
+  }
 
   if(addBlockBtn){
     const type = addBlockBtn.dataset.addBlock;
@@ -1008,12 +1189,17 @@ document.getElementById('stage').addEventListener('input', e => {
 });
 
 document.getElementById('fontUp').addEventListener('click', () => {
-  play.fontSize = Math.min(22, (play.fontSize || 14) + 1);
+  play.fontSize = Math.min(30, (play.fontSize || 14) + 1);
   scheduleSave(); renderStage();
 });
 document.getElementById('fontDown').addEventListener('click', () => {
   play.fontSize = Math.max(11, (play.fontSize || 14) - 1);
   scheduleSave(); renderStage();
+});
+document.getElementById('btnRehearsal').addEventListener('click', () => {
+  rehearsalMode = !rehearsalMode;
+  document.getElementById('btnRehearsal').style.background = rehearsalMode ? 'var(--oro)' : '';
+  renderStage();
 });
 
 document.getElementById('btnGuida').addEventListener('click', () => document.getElementById('modalGuida').classList.add('open'));
@@ -1240,73 +1426,67 @@ document.getElementById('btnEsporta').addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-/* ---------- ESPORTAZIONE PDF (formato copione professionale) ---------- */
-function exportPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-
+/* ---------- MOTORE DI RENDERING PDF (condiviso tra copione completo e copione per personaggio) ---------- */
+function makePdfRenderer(doc, startPageNum){
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
   const marginTop = 72, marginBottom = 72;
-  const marginLeft = 108, marginRight = 72;       // 1.5in sx, 1in dx: convenzione da copione
+  const marginLeft = 108, marginRight = 72; // 1.5in sx, 1in dx: convenzione da copione
   const contentW = pageW - marginLeft - marginRight;
   const lineH = 15;
-  let y = marginTop;
-  let pageNum = 1;
+  const state = { y: marginTop, pageNum: startPageNum };
 
+  function footerPageNumber(){
+    if(state.pageNum === 1) return;
+    doc.setFont('courier','normal'); doc.setFontSize(9);
+    doc.text(String(state.pageNum), pageW - marginRight, pageH - 40, { align: 'right' });
+  }
   function newPage(){
     doc.addPage();
-    pageNum++;
-    y = marginTop;
+    state.pageNum++;
+    state.y = marginTop;
     footerPageNumber();
   }
-  function footerPageNumber(){
-    if(pageNum === 1) return;
-    doc.setFont('courier','normal'); doc.setFontSize(9);
-    doc.text(String(pageNum), pageW - marginRight, pageH - 40, { align: 'right' });
-  }
-  function ensureSpace(h){
-    if(y + h > pageH - marginBottom){ newPage(); }
-  }
+  function ensureSpace(h){ if(state.y + h > pageH - marginBottom) newPage(); }
   function centerText(text, size, style){
     doc.setFont('courier', style || 'normal'); doc.setFontSize(size);
     ensureSpace(lineH);
-    doc.text(text, pageW/2, y, { align: 'center' });
-    y += lineH;
+    doc.text(text, pageW/2, state.y, { align: 'center' });
+    state.y += lineH;
   }
   function directionBlock(text){
     if(!text.trim()) return;
     doc.setFont('courier','italic'); doc.setFontSize(11);
     const lines = doc.splitTextToSize('(' + text.trim() + ')', contentW * 0.72);
     ensureSpace(lines.length * lineH + 6);
-    y += 4;
-    lines.forEach(l => { doc.text(l, pageW/2, y, { align: 'center' }); y += lineH; });
-    y += 4;
+    state.y += 4;
+    lines.forEach(l => { doc.text(l, pageW/2, state.y, { align: 'center' }); state.y += lineH; });
+    state.y += 4;
   }
   function offstageBlock(text){
     if(!text.trim()) return;
     doc.setFont('courier','bold'); doc.setFontSize(9);
     ensureSpace(lineH);
-    doc.text('FUORI SCENA', pageW/2, y, { align: 'center' });
-    y += lineH - 3;
+    doc.text('FUORI SCENA', pageW/2, state.y, { align: 'center' });
+    state.y += lineH - 3;
     doc.setFont('courier','italic'); doc.setFontSize(11);
     const lines = doc.splitTextToSize(text.trim(), contentW * 0.65);
     ensureSpace(lines.length * lineH + 6);
-    lines.forEach(l => { doc.text(l, pageW/2, y, { align: 'center' }); y += lineH; });
-    y += 8;
+    lines.forEach(l => { doc.text(l, pageW/2, state.y, { align: 'center' }); state.y += lineH; });
+    state.y += 8;
   }
   function dialogueBlock(character, text, note, num, afterDirection){
     doc.setFont('courier','bold'); doc.setFontSize(11.5);
     ensureSpace(lineH);
     const label = (num ? '#' + num + '  ' : '') + (character || 'PERSONAGGIO').toUpperCase();
-    doc.text(label, pageW/2, y, { align: 'center' });
-    y += lineH;
+    doc.text(label, pageW/2, state.y, { align: 'center' });
+    state.y += lineH;
 
     if(note && note.trim()){
       doc.setFont('courier','italic'); doc.setFontSize(10);
       ensureSpace(lineH - 2);
-      doc.text('(' + note.trim() + ')', pageW/2, y, { align: 'center' });
-      y += lineH - 2;
+      doc.text('(' + note.trim() + ')', pageW/2, state.y, { align: 'center' });
+      state.y += lineH - 2;
     }
 
     doc.setFont('courier','normal'); doc.setFontSize(11.5);
@@ -1315,61 +1495,155 @@ function exportPDF(){
     const lines = doc.splitTextToSize(text.trim() || '…', dialogueW);
     lines.forEach(l => {
       ensureSpace(lineH);
-      doc.text(l, dialogueLeft, y);
-      y += lineH;
+      doc.text(l, dialogueLeft, state.y);
+      state.y += lineH;
     });
-    y += 8;
+    state.y += 8;
 
     if(afterDirection && afterDirection.trim()) directionBlock(afterDirection);
   }
-
-  // Frontespizio
-  doc.setFont('times','bold'); doc.setFontSize(26);
-  doc.text(play.title || 'Senza titolo', pageW/2, pageH/2 - 40, { align: 'center' });
-  doc.setFont('times','italic'); doc.setFontSize(14);
-  doc.text('di', pageW/2, pageH/2, { align: 'center' });
-  doc.setFont('times','normal'); doc.setFontSize(16);
-  doc.text(play.author || '', pageW/2, pageH/2 + 22, { align: 'center' });
-
-  if(play.characters.length){
-    doc.setFont('courier','bold'); doc.setFontSize(11);
-    doc.text('PERSONAGGI', pageW/2, pageH - 170, { align: 'center' });
-    doc.setFont('courier','normal'); doc.setFontSize(10.5);
-    let yy = pageH - 150;
-    play.characters.forEach(c => {
-      const line = c.name.toUpperCase() + (c.desc ? '  —  ' + c.desc : '');
-      const wrapped = doc.splitTextToSize(line, contentW * 0.8);
-      wrapped.forEach(l => { doc.text(l, pageW/2, yy, { align: 'center' }); yy += 13; });
-    });
+  function cueBlock(character, text){
+    if(!text.trim()) return;
+    doc.setFont('courier','italic'); doc.setFontSize(9.5);
+    ensureSpace(lineH - 2);
+    const words = text.trim().split(/\s+/);
+    const tail = words.length > 7 ? '…' + words.slice(-7).join(' ') : words.join(' ');
+    doc.text(`— ${(character||'PERSONAGGIO').toUpperCase()}: ${tail}`, marginLeft, state.y);
+    state.y += lineH - 2;
   }
 
-  newPage();
+  return {
+    pageW, pageH, marginTop, marginBottom, marginLeft, marginRight, contentW, lineH, state,
+    newPage, ensureSpace, centerText, directionBlock, offstageBlock, dialogueBlock, cueBlock,
+    currentPage: () => state.pageNum
+  };
+}
 
+function renderScriptContent(R, options){
+  options = options || {};
   const numbers = computeDialogueNumbers();
+  play.acts.forEach((atto, ai) => {
+    if(R.state.y > R.marginTop){ R.ensureSpace(60); R.state.y += 20; }
+    if(options.record) options.record(ai, -1, R.currentPage());
+    R.centerText(atto.title.toUpperCase(), 15, 'bold');
+    R.state.y += 10;
 
-  play.acts.forEach(atto => {
-    if(y > marginTop) { ensureSpace(60); y += 20; }
-    centerText(atto.title.toUpperCase(), 15, 'bold');
-    y += 10;
-
-    atto.scenes.forEach(scena => {
-      ensureSpace(50);
-      centerText(scena.title.toUpperCase(), 12, 'bold');
-      if(scena.setting){
-        centerText(scena.setting.toUpperCase(), 10.5, 'italic');
-      }
-      y += 8;
+    atto.scenes.forEach((scena, si) => {
+      R.ensureSpace(50);
+      if(options.record) options.record(ai, si, R.currentPage());
+      R.centerText(scena.title.toUpperCase(), 12, 'bold');
+      if(scena.setting) R.centerText(scena.setting.toUpperCase(), 10.5, 'italic');
+      R.state.y += 8;
 
       scena.blocks.forEach(b => {
-        if(b.type === 'direction') directionBlock(b.text);
-        else if(b.type === 'offstage') offstageBlock(b.text);
-        else dialogueBlock(b.character, b.text, b.note, numbers[b.id], b.afterDirection);
+        if(options.character){
+          if(b.type === 'direction') R.directionBlock(b.text);
+          else if(b.type === 'offstage') R.offstageBlock(b.text);
+          else if(b.character === options.character) R.dialogueBlock(b.character, b.text, b.note, numbers[b.id], b.afterDirection);
+          else R.cueBlock(b.character, b.text);
+        } else {
+          if(b.type === 'direction') R.directionBlock(b.text);
+          else if(b.type === 'offstage') R.offstageBlock(b.text);
+          else R.dialogueBlock(b.character, b.text, b.note, numbers[b.id], b.afterDirection);
+        }
       });
-      y += 14;
+      R.state.y += 14;
     });
   });
+}
+
+function drawTitlePage(doc, R, subtitle){
+  doc.setFont('times','bold'); doc.setFontSize(26);
+  doc.text(play.title || 'Senza titolo', R.pageW/2, R.pageH/2 - 40, { align: 'center' });
+  doc.setFont('times','italic'); doc.setFontSize(14);
+  doc.text('di', R.pageW/2, R.pageH/2, { align: 'center' });
+  doc.setFont('times','normal'); doc.setFontSize(16);
+  doc.text(play.author || '', R.pageW/2, R.pageH/2 + 22, { align: 'center' });
+  if(subtitle){
+    doc.setFont('courier','bold'); doc.setFontSize(12);
+    doc.text(subtitle, R.pageW/2, R.pageH/2 + 50, { align: 'center' });
+  }
+  if(play.characters.length){
+    doc.setFont('courier','bold'); doc.setFontSize(11);
+    doc.text('PERSONAGGI', R.pageW/2, R.pageH - 170, { align: 'center' });
+    doc.setFont('courier','normal'); doc.setFontSize(10.5);
+    let yy = R.pageH - 150;
+    play.characters.forEach(c => {
+      const line = c.name.toUpperCase() + (c.desc ? '  —  ' + c.desc : '');
+      const wrapped = doc.splitTextToSize(line, R.contentW * 0.8);
+      wrapped.forEach(l => { doc.text(l, R.pageW/2, yy, { align: 'center' }); yy += 13; });
+    });
+  }
+}
+
+/* ---------- ESPORTAZIONE PDF (formato copione professionale, con indice) ---------- */
+function exportPDF(){
+  const { jsPDF } = window.jspdf;
+
+  // Passo 1: calcolo su un documento "usa e getta" delle pagine in cui inizia ogni atto/scena
+  const measureDoc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const measureR = makePdfRenderer(measureDoc, 1);
+  const tocEntries = [];
+  renderScriptContent(measureR, { record: (ai, si, page) => {
+    if(si === -1) tocEntries.push({ type:'act', ai, page });
+    else tocEntries.push({ type:'scene', ai, si, page });
+  }});
+
+  const tocLinesNeeded = tocEntries.length + play.acts.length; // margine per le intestazioni degli atti
+  const tocPages = Math.max(1, Math.ceil(tocLinesNeeded / 40));
+  const offset = 1 + tocPages; // pagina 1 = frontespizio, poi le pagine di indice
+
+  // Passo 2: documento definitivo
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const R = makePdfRenderer(doc, 1);
+  drawTitlePage(doc, R);
+
+  for(let p = 0; p < tocPages; p++){
+    R.newPage();
+    if(p === 0) R.centerText('INDICE', 16, 'bold');
+    R.state.y += 6;
+  }
+  doc.setPage(2);
+  R.state.y = R.marginTop + (tocPages > 0 ? 30 : 0);
+  let tocPageCursor = 2;
+  tocEntries.forEach(entry => {
+    if(R.state.y + R.lineH > R.pageH - R.marginBottom){
+      tocPageCursor++;
+      doc.setPage(tocPageCursor);
+      R.state.y = R.marginTop;
+    }
+    doc.setPage(tocPageCursor);
+    const finalPage = entry.page + offset;
+    if(entry.type === 'act'){
+      doc.setFont('courier','bold'); doc.setFontSize(11);
+      doc.text(play.acts[entry.ai].title.toUpperCase(), R.marginLeft, R.state.y);
+      doc.text(String(finalPage), R.pageW - R.marginRight, R.state.y, { align: 'right' });
+    } else {
+      doc.setFont('courier','normal'); doc.setFontSize(10);
+      doc.text('   ' + play.acts[entry.ai].scenes[entry.si].title, R.marginLeft, R.state.y);
+      doc.text(String(finalPage), R.pageW - R.marginRight, R.state.y, { align: 'right' });
+    }
+    R.state.y += R.lineH;
+  });
+
+  doc.setPage(doc.internal.getNumberOfPages());
+  R.state.pageNum = offset;
+  R.state.y = R.marginTop;
+  R.newPage();
+  renderScriptContent(R, {});
 
   doc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '.pdf');
+}
+
+/* ---------- ESPORTAZIONE PDF RIDOTTA PER PERSONAGGIO ---------- */
+function exportSidesPDF(characterName){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const R = makePdfRenderer(doc, 1);
+  drawTitlePage(doc, R, 'Copione — parte di ' + characterName.toUpperCase());
+  R.newPage();
+  renderScriptContent(R, { character: characterName });
+  doc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '_' + characterName.replace(/[^a-z0-9]+/gi,'_') + '.pdf');
 }
 
 /* ---------- ESPORTAZIONE / IMPORTAZIONE PROGETTO (.json) ---------- */
@@ -1398,6 +1672,9 @@ function importProject(file){
         if(!atto.id) atto.id = uid();
         (atto.scenes || []).forEach(scena => {
           if(!scena.id) scena.id = uid();
+          if(scena.status === undefined) scena.status = '';
+          if(!Array.isArray(scena.presentCharacters)) scena.presentCharacters = [];
+          if(scena.directorNotes === undefined) scena.directorNotes = '';
           (scena.blocks || []).forEach(b => { if(!b.id) b.id = uid(); });
         });
       });
@@ -1415,6 +1692,18 @@ function importProject(file){
 }
 
 document.getElementById('btnPDF').addEventListener('click', exportPDF);
+document.getElementById('btnSides').addEventListener('click', () => {
+  const sel = document.getElementById('sidesCharacterSelect');
+  sel.innerHTML = play.characters.map(c => `<option value="${escapeAttr(c.name)}">${escapeHtml(c.name)}</option>`).join('');
+  document.getElementById('modalSides').classList.add('open');
+});
+document.getElementById('closeSides').addEventListener('click', () => document.getElementById('modalSides').classList.remove('open'));
+document.getElementById('modalSides').addEventListener('click', e => { if(e.target.id === 'modalSides') e.target.classList.remove('open'); });
+document.getElementById('btnGeneraSides').addEventListener('click', () => {
+  const sel = document.getElementById('sidesCharacterSelect');
+  if(!sel.value){ alert('Aggiungi almeno un personaggio prima di generare il copione ridotto.'); return; }
+  exportSidesPDF(sel.value);
+});
 document.getElementById('btnEsportaProgetto').addEventListener('click', exportProject);
 document.getElementById('btnImportaProgetto').addEventListener('click', () => document.getElementById('fileImporta').click());
 document.getElementById('fileImporta').addEventListener('change', (e) => {
