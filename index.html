@@ -484,26 +484,55 @@ function findScene(id){
   return null;
 }
 
-/* ---------- PERSISTENCE ---------- */
+/* ---------- PERSISTENZA: salvataggio nel browser locale, con Claude come backend aggiuntivo se disponibile ---------- */
+const hasCloudStorage = (typeof window !== 'undefined') && !!window.storage && typeof window.storage.set === 'function';
+
+async function storageSet(key, value){
+  if(hasCloudStorage){
+    try{ await window.storage.set(key, value); return true; }catch(e){ /* si passa al salvataggio locale */ }
+  }
+  try{ localStorage.setItem(key, value); return true; }catch(e){ return false; }
+}
+async function storageGet(key){
+  if(hasCloudStorage){
+    try{
+      const r = await window.storage.get(key);
+      if(r && r.value !== undefined) return r.value;
+    }catch(e){ /* chiave assente o servizio non disponibile: proviamo il locale */ }
+  }
+  try{ return localStorage.getItem(key); }catch(e){ return null; }
+}
+async function storageDelete(key){
+  if(hasCloudStorage){
+    try{ await window.storage.delete(key); }catch(e){}
+  }
+  try{ localStorage.removeItem(key); }catch(e){}
+}
+async function storageList(prefix){
+  if(hasCloudStorage){
+    try{
+      const r = await window.storage.list(prefix);
+      if(r && r.keys) return r.keys;
+    }catch(e){}
+  }
+  try{ return Object.keys(localStorage).filter(k => k.startsWith(prefix)); }catch(e){ return []; }
+}
+
 let saveTimer = null;
 function scheduleSave(){
   const el = document.getElementById('saveState');
   el.textContent = 'salvataggio…';
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
-    try{
-      await window.storage.set('copione:play', JSON.stringify(play));
-      el.textContent = 'salvato ✓';
-    }catch(e){
-      el.textContent = 'salvataggio non disponibile';
-    }
-  }, 500);
+    const ok = await storageSet('copione:play', JSON.stringify(play));
+    el.textContent = ok ? 'salvato ✓' : 'salvataggio non disponibile';
+  }, 400);
 }
 async function loadSaved(){
   try{
-    const res = await window.storage.get('copione:play');
-    if(res && res.value){
-      const parsed = JSON.parse(res.value);
+    const value = await storageGet('copione:play');
+    if(value){
+      const parsed = JSON.parse(value);
       if(parsed && parsed.acts && parsed.acts.length){
         play = parsed;
         currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
@@ -1008,8 +1037,7 @@ async function renderVersionList(){
   const list = document.getElementById('versionList');
   list.innerHTML = '<div class="version-empty">Caricamento…</div>';
   try{
-    const res = await window.storage.list('copione:version:', false);
-    const keys = (res && res.keys) ? res.keys : [];
+    const keys = await storageList('copione:version:');
     if(!keys.length){
       list.innerHTML = '<div class="version-empty">Nessuna versione salvata finora.</div>';
       return;
@@ -1017,9 +1045,9 @@ async function renderVersionList(){
     const versions = [];
     for(const key of keys){
       try{
-        const item = await window.storage.get(key, false);
-        if(item && item.value){
-          const parsed = JSON.parse(item.value);
+        const value = await storageGet(key);
+        if(value){
+          const parsed = JSON.parse(value);
           versions.push({ key, label: parsed.label || 'Senza etichetta', timestamp: parsed.timestamp || 0, snapshot: parsed.snapshot });
         }
       }catch(e){ /* versione illeggibile, la ignoriamo */ }
@@ -1060,11 +1088,11 @@ document.getElementById('btnSalvaVersione').addEventListener('click', async () =
   const labelInput = document.getElementById('versionLabel');
   const label = labelInput.value.trim() || 'Senza etichetta';
   const key = 'copione:version:' + uid();
-  try{
-    await window.storage.set(key, JSON.stringify({ label, timestamp: Date.now(), snapshot: play }), false);
+  const ok = await storageSet(key, JSON.stringify({ label, timestamp: Date.now(), snapshot: play }));
+  if(ok){
     labelInput.value = '';
     renderVersionList();
-  }catch(e){
+  }else{
     alert('Non è stato possibile salvare la versione.');
   }
 });
@@ -1076,9 +1104,9 @@ document.getElementById('versionList').addEventListener('click', async e => {
     const key = restoreBtn.dataset.restoreVersion;
     if(confirm('Ripristinare questa versione sovrascriverà il copione attualmente aperto. Continuare?')){
       try{
-        const item = await window.storage.get(key, false);
-        if(item && item.value){
-          const parsed = JSON.parse(item.value);
+        const value = await storageGet(key);
+        if(value){
+          const parsed = JSON.parse(value);
           if(parsed.snapshot && Array.isArray(parsed.snapshot.acts)){
             play = parsed.snapshot;
             currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
@@ -1094,7 +1122,7 @@ document.getElementById('versionList').addEventListener('click', async e => {
   if(delBtn){
     const key = delBtn.dataset.delVersion;
     if(confirm('Eliminare definitivamente questa versione salvata?')){
-      try{ await window.storage.delete(key, false); }catch(e){}
+      await storageDelete(key);
       renderVersionList();
     }
   }
