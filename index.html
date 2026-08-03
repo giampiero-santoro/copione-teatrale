@@ -20,12 +20,16 @@
     --rosso-avviso:#9C3B3B;
   }
   *{box-sizing:border-box;}
+  html, body{ height:100%; }
   body{
     margin:0;
     background:var(--sipario-dark);
     font-family:'Inter',sans-serif;
     color:var(--inchiostro);
-    min-height:100vh;
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
   }
   /* HEADER */
   header{
@@ -33,6 +37,7 @@
     padding:22px 28px 26px;
     border-bottom:3px solid var(--oro);
     position:relative;
+    flex-shrink:0;
   }
   header::after{
     content:"";
@@ -62,21 +67,42 @@
   }
   #autore-opera:hover,#autore-opera:focus{border-bottom-color:var(--oro);}
   .save-state{position:absolute;top:22px;right:28px;font-size:12px;color:var(--oro-chiaro);opacity:.8;}
+  .quick-save-btn{
+    position:absolute;top:16px;right:130px;background:var(--oro);border:none;color:var(--sipario-dark);
+    width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px;
+  }
+  .quick-save-btn:hover{filter:brightness(1.1);}
+  .file-loc-label{font-family:'Inter',sans-serif;font-size:10.5px;color:var(--grigio);padding:0 2px 6px;word-break:break-all;}
 
   /* LAYOUT */
-  .layout{display:flex;min-height:calc(100vh - 108px);}
+  .layout{display:flex;flex:1;min-height:0;overflow:hidden;}
   aside{
     width:300px;flex-shrink:0;background:var(--carta-scura);
-    border-right:1px solid #d6c7a1;padding:0;display:flex;flex-direction:column;
+    border-right:1px solid #d6c7a1;padding:0;display:flex;flex-direction:column;overflow:hidden;
   }
-  .tabs{display:flex;border-bottom:1px solid #d6c7a1;}
+  .sidebar-fixed-top{flex-shrink:0;border-bottom:2px solid var(--oro);padding:14px 16px;background:var(--carta-scura);}
+  .mini-stats{
+    display:flex;flex-wrap:wrap;gap:6px 10px;font-family:'Inter',sans-serif;font-size:11px;
+    color:var(--grigio);margin-bottom:10px;
+  }
+  .mini-stats b{color:var(--sipario);}
+  .side-tools-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .side-tools-grid button{
+    padding:7px 6px;border:none;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;
+    font-size:10.8px;font-weight:600;line-height:1.25;background:var(--sipario);color:var(--carta);
+  }
+  .side-tools-grid button:hover{background:var(--sipario-dark);}
+  .side-tools-grid button.alt{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
+  .side-tools-grid button.alt:hover{background:#eadfc4;}
+  .side-tools-grid button.wide{grid-column:1 / -1;}
+  .tabs{display:flex;border-bottom:1px solid #d6c7a1;flex-shrink:0;}
   .tab-btn{
     flex:1;padding:12px 8px;background:none;border:none;cursor:pointer;
     font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.03em;
     color:var(--grigio);border-bottom:2px solid transparent;
   }
   .tab-btn.active{color:var(--sipario);border-bottom-color:var(--sipario);}
-  .tab-panel{display:none;padding:16px;overflow-y:auto;flex:1;}
+  .tab-panel{display:none;padding:16px;overflow-y:auto;flex:1;min-height:0;}
   .tab-panel.active{display:block;}
 
   .atto-block{margin-bottom:14px;}
@@ -152,12 +178,12 @@
   .guida-toggle:hover{background:var(--sipario-dark);}
 
   /* MAIN / MANUSCRIPT */
-  main{flex:1;display:flex;flex-direction:column;background:#4a1319;overflow:hidden;position:relative;}
-  .stage{flex:1;overflow-y:auto;padding:36px 40px;display:flex;justify-content:center;}
+  main{flex:1;display:flex;flex-direction:column;background:#4a1319;overflow:hidden;position:relative;min-height:0;}
+  .stage{flex:1;overflow-y:auto;padding:36px 40px;display:flex;justify-content:center;align-items:flex-start;min-height:0;}
   .page{
     background:var(--carta);width:100%;
     max-width:min(96%, calc(680px + (var(--ms-size) - 14px) * 18));
-    min-height:100%;
+    min-height:calc(100vh - 260px);
     padding:52px 56px 90px;box-shadow:0 12px 40px rgba(0,0,0,.45);
     font-family:'Courier Prime',monospace;position:relative;
     --ms-size:14px;
@@ -322,11 +348,9 @@
 
   footer{
     background:var(--sipario-dark);border-top:1px solid #6a2027;padding:10px 24px;
-    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;flex-shrink:0;
   }
-  .stats{display:flex;gap:18px;color:var(--oro-chiaro);font-size:12.5px;font-family:'Inter',sans-serif;}
-  .stats b{color:var(--carta);}
-  .footer-actions{display:flex;gap:10px;}
+  .footer-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
   .footer-actions button{
     background:var(--oro);color:var(--sipario-dark);border:none;padding:9px 16px;border-radius:6px;
     font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;
@@ -351,9 +375,71 @@
   .modal ul{padding-left:18px;margin:0 0 16px;}
   .modal li{margin-bottom:10px;font-size:13.5px;line-height:1.55;}
   .modal li b{color:var(--sipario);}
+  body.dark-mode aside{ background:#241c16; border-color:#3a2c20; }
+  body.dark-mode .tabs{ border-color:#3a2c20; }
+  body.dark-mode .tab-btn{ color:#a8987a; }
+  body.dark-mode .tab-btn.active{ color:#e7c877; border-color:#e7c877; }
+  body.dark-mode .atto-head{ color:#e7c877; border-color:#3a2c20; }
+  body.dark-mode .atto-head input{ color:#e7c877; }
+  body.dark-mode .scena-item{ color:#d9c9a3; }
+  body.dark-mode .scena-item:hover{ background:#00000030; }
+  body.dark-mode .add-btn{ color:#a8987a; border-color:#4a3a2a; }
+  body.dark-mode .pers-card{ background:#2c2219; border-color:#3a2c20; }
+  body.dark-mode .pers-card .nome{ color:#e7c877; }
+  body.dark-mode .pers-card .desc, body.dark-mode .pers-stat{ color:#c9bda3; }
+  body.dark-mode .sidebar-fixed-top{ background:#241c16; border-color:#5c4a30; }
+  body.dark-mode .mini-stats{ color:#a8987a; }
+  body.dark-mode .mini-stats b{ color:#e7c877; }
+  body.dark-mode .side-tools-grid button{ background:#5C1A21; }
+  body.dark-mode .side-tools-grid button.alt{ background:#241c16; color:#e7c877; border-color:#5c4a30; }
+  body.dark-mode .page{ background:#241c16; }
+  body.dark-mode .page::before{ opacity:.3; }
+  body.dark-mode .scene-head .scena-lbl{ color:#e7dcc4; }
+  body.dark-mode .slugline{ color:#a8987a; border-color:#3a2c20; }
+  body.dark-mode .block.direction textarea{ color:#a8987a; }
+  body.dark-mode .block.dialogue .char-name{ color:#e7dcc4; }
+  body.dark-mode .block.dialogue textarea.line{ color:#e7dcc4; }
+  body.dark-mode .note-input, body.dark-mode .after-direction-input{ color:#a8987a; }
+  body.dark-mode .status-btn{ background:#2c2219; color:#a8987a; border-color:#4a3a2a; }
+  body.dark-mode .chip{ background:#2c2219; color:#a8987a; border-color:#4a3a2a; }
+  body.dark-mode .presence-label{ color:#a8987a; }
+  body.dark-mode .director-notes{ background:#332918; border-color:#4a3a2a; color:#e7dcc4; }
+  body.dark-mode .offstage-label{ color:#e7c877; }
+  body.dark-mode .block.offstage textarea{ color:#a8987a; }
+  body.dark-mode .block-num{ background:#2c2219; color:#a8987a; }
+  body.dark-mode .mini-btn{ color:#a8987a; }
+
   .modal-close{
     margin-top:6px;background:var(--sipario);color:var(--carta);border:none;padding:9px 16px;
     border-radius:6px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;
+  }
+  .qa-section{margin-bottom:16px;}
+  .qa-section h3{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sipario);margin:0 0 6px;text-transform:uppercase;letter-spacing:.03em;}
+  .qa-section ul{margin:0;padding-left:18px;}
+  .qa-section li{font-size:13px;line-height:1.6;}
+  .qa-ok{color:#3f8c5c;font-size:13px;font-family:'Inter',sans-serif;}
+  .stat-block{margin-bottom:18px;}
+  .stat-block h3{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sipario);margin:0 0 8px;text-transform:uppercase;letter-spacing:.03em;}
+  .stat-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #e7dbc0;}
+  .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .bar-label{width:110px;font-size:11.5px;font-family:'Courier Prime',monospace;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .bar-track{flex:1;background:#e7dbc0;border-radius:6px;height:14px;overflow:hidden;}
+  .bar-fill{background:var(--sipario);height:100%;border-radius:6px;}
+  .bar-val{width:70px;font-size:11px;color:var(--grigio);}
+  .outline-row{
+    padding:8px 4px;border-bottom:1px solid #e7dbc0;cursor:pointer;
+  }
+  .outline-row:hover{background:#f4ecd8;}
+  .outline-row .ol-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);font-size:12.5px;}
+  .outline-row .ol-preview{font-size:12px;color:var(--grigio);margin-top:2px;font-family:'Courier Prime',monospace;}
+  .import-textarea{
+    width:100%;min-height:180px;font-family:'Courier Prime',monospace;font-size:12.5px;padding:10px;
+    border:1px solid #d6c7a1;border-radius:6px;resize:vertical;background:#fff8ea;
+  }
+  .sr-field{margin-bottom:14px;}
+  .sr-field label{display:block;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--grigio);margin-bottom:4px;}
+  .sr-field select, .sr-field input[type=text]{
+    width:100%;padding:8px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;background:#fff8ea;
   }
   .empty-state{
     font-family:'Inter',sans-serif;color:var(--grigio);text-align:center;padding:60px 20px;
@@ -395,6 +481,7 @@
 
 <header>
   <div class="save-state" id="saveState">pronto</div>
+  <button class="quick-save-btn" id="btnSalvaOra" title="Salva subito">💾</button>
   <div class="brand"><span class="mark">✦ Editor di Copioni</span></div>
   <div class="title-row">
     <input id="titolo-opera" value="Titolo dell'opera" />
@@ -405,6 +492,23 @@
 
 <div class="layout">
   <aside>
+    <div class="sidebar-fixed-top">
+      <div class="mini-stats" id="stats"></div>
+      <div class="side-tools-grid">
+        <button class="wide" id="btnFileLocale">📁 Scegli dove salvare</button>
+        <button id="btnGuida">📖 Guida</button>
+        <button id="btnVersioni">🕘 Versioni</button>
+        <button id="btnCerca">🔍 Cerca</button>
+        <button id="btnSides">📄 Per personaggio</button>
+        <button id="btnQualita">✅ Qualità</button>
+        <button id="btnStatsAvanzate">📊 Statistiche</button>
+        <button id="btnOutline">🗂️ Insieme</button>
+        <button id="btnImportaTesto">📥 Importa testo</button>
+        <button id="btnPdfSettings">⚙️ Impostazioni PDF</button>
+      </div>
+      <div class="file-loc-label" id="fileLocLabel"></div>
+    </div>
+
     <div class="tabs">
       <button class="tab-btn active" data-tab="struttura">Struttura</button>
       <button class="tab-btn" data-tab="personaggi">Personaggi</button>
@@ -412,17 +516,11 @@
 
     <div class="tab-panel active" id="panel-struttura"></div>
     <div class="tab-panel" id="panel-personaggi"></div>
-
-    <div class="side-tools">
-      <button id="btnGuida">📖 Linee guida per la scrittura</button>
-      <button class="alt" id="btnVersioni">🕘 Versioni salvate</button>
-      <button class="alt" id="btnCerca">🔍 Cerca e sostituisci</button>
-      <button class="alt" id="btnSides">📄 Copione per personaggio</button>
-    </div>
   </aside>
 
   <main>
     <div class="stage-controls">
+      <button id="btnDarkMode" title="Tema scuro">🌙</button>
       <button id="btnRehearsal" title="Modalità prova/lettura">🎭</button>
       <button id="fontDown" title="Riduci il testo">A－</button>
       <span id="fontSizeLabel">14px</span>
@@ -430,10 +528,11 @@
     </div>
     <div class="stage" id="stage"></div>
     <footer>
-      <div class="stats" id="stats"></div>
       <div class="footer-actions">
         <button class="ghost" id="btnCopia">Copia testo</button>
         <button class="ghost" id="btnEsporta">Esporta .txt</button>
+        <button class="ghost" id="btnFountain">Esporta .fountain</button>
+        <button class="ghost" id="btnAnteprima">👁️ Anteprima PDF</button>
         <button id="btnPDF">Esporta PDF</button>
         <button class="ghost" id="btnEsportaProgetto">Salva progetto (.json)</button>
         <button class="ghost" id="btnImportaProgetto">Importa progetto</button>
@@ -508,11 +607,87 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalQualita">
+  <div class="modal">
+    <h2>Controllo qualità</h2>
+    <div class="sub">Una scansione rapida del copione, per non dimenticare nulla prima di stampare</div>
+    <div id="qualitaContent"></div>
+    <button class="modal-close" id="closeQualita">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalStats">
+  <div class="modal">
+    <h2>Statistiche avanzate</h2>
+    <div class="sub">Tempo di lettura per atto e bilanciamento delle battute tra i personaggi</div>
+    <div id="statsContent"></div>
+    <button class="modal-close" id="closeStats">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalOutline">
+  <div class="modal">
+    <h2>Vista d'insieme</h2>
+    <div class="sub">Tutte le scene del copione, con un'anteprima. Clicca su una riga per aprirla.</div>
+    <div id="outlineContent"></div>
+    <button class="modal-close" id="closeOutline">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalImporta">
+  <div class="modal">
+    <h2>Importa testo già scritto</h2>
+    <div class="sub">Incolla qui un testo teatrale già scritto altrove. Le righe in MAIUSCOLO diventano nomi di personaggio, le righe tra (parentesi) diventano didascalie, il resto diventa battute. Verrà creata una nuova scena.</div>
+    <textarea class="import-textarea" id="importTextarea" placeholder="MARCO&#10;Non ci posso credere.&#10;&#10;(esce sbattendo la porta)"></textarea>
+    <div style="margin-top:14px;">
+      <button class="modal-close" id="btnEseguiImporta">Importa in una nuova scena</button>
+      <button class="modal-close" id="closeImporta" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Annulla</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalPdfSettings">
+  <div class="modal">
+    <h2>Impostazioni PDF</h2>
+    <div class="sub">Formato e margini usati per tutte le esportazioni PDF (copione completo e copione per personaggio)</div>
+    <div class="sr-field">
+      <label>Formato pagina</label>
+      <select id="pdfFormatSelect">
+        <option value="a4">A4</option>
+        <option value="letter">Letter (US)</option>
+      </select>
+    </div>
+    <div class="sr-field">
+      <label>Margini</label>
+      <select id="pdfMarginsSelect">
+        <option value="normal">Normali (convenzione da copione)</option>
+        <option value="stretti">Stretti (più testo per pagina)</option>
+        <option value="ampi">Ampi (più spazio per annotazioni a mano)</option>
+      </select>
+    </div>
+    <button class="modal-close" id="btnSalvaPdfSettings">Salva impostazioni</button>
+    <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalAnteprima">
+  <div class="modal" style="max-width:820px;">
+    <h2>Anteprima PDF</h2>
+    <div class="sub">Così apparirà il PDF una volta scaricato</div>
+    <iframe id="pdfPreviewFrame" style="width:100%;height:60vh;border:1px solid #d6c7a1;border-radius:6px;"></iframe>
+    <div style="margin-top:14px;">
+      <button class="modal-close" id="btnScaricaDaAnteprima">Scarica PDF</button>
+      <button class="modal-close" id="closeAnteprima" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
 <script>
 let play = {
   title: "Titolo dell'opera",
   author: "Il tuo nome",
   fontSize: 14,
+  pdfSettings: { format: 'a4', margins: 'normal' },
   characters: [
     { id: uid(), name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." }
   ],
@@ -595,6 +770,7 @@ function scheduleSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(async () => {
     const ok = await storageSet('copione:play', JSON.stringify(play));
+    if(typeof fileHandle !== 'undefined' && fileHandle) await writeToFileHandle();
     el.textContent = ok ? 'salvato ✓' : 'salvataggio non disponibile';
   }, 400);
 }
@@ -806,12 +982,12 @@ function renderStage(){
     if(block.type === 'direction'){
       b.className = 'block direction';
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
-        <textarea rows="1" ${ro} data-block-text="${block.id}" placeholder="(didascalia scenica)">${escapeHtml(block.text)}</textarea>`;
+        <textarea rows="1" ${ro} spellcheck="true" lang="it" data-block-text="${block.id}" placeholder="(didascalia scenica)">${escapeHtml(block.text)}</textarea>`;
     } else if(block.type === 'offstage'){
       b.className = 'block offstage';
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
         <div class="offstage-label">Fuori scena</div>
-        <textarea rows="1" ${ro} data-block-text="${block.id}" placeholder="Voce fuori campo, suono, effetto...">${escapeHtml(block.text)}</textarea>`;
+        <textarea rows="1" ${ro} spellcheck="true" lang="it" data-block-text="${block.id}" placeholder="Voce fuori campo, suono, effetto...">${escapeHtml(block.text)}</textarea>`;
     } else {
       b.className = 'block dialogue' + (rehearsalMode && readingBlockId === block.id ? ' reading' : '');
       if(rehearsalMode) b.dataset.readBlock = block.id;
@@ -820,13 +996,13 @@ function renderStage(){
       const hasDir = block.afterDirection !== undefined && block.afterDirection !== null;
       const noteHtml = hasNote
         ? `<div class="note-row">
-             <input class="note-input" ${ro} data-block-note="${block.id}" placeholder="nota d'attore (es. sottovoce)" value="${escapeAttr(block.note)}" />
+             <input class="note-input" ${ro} spellcheck="true" lang="it" data-block-note="${block.id}" placeholder="nota d'attore (es. sottovoce)" value="${escapeAttr(block.note)}" />
              <button class="ctrl-btn" data-del-note="${block.id}" title="Rimuovi nota">✕</button>
            </div>`
         : '';
       const afterDirHtml = hasDir
         ? `<div class="after-direction-row">
-             <input class="after-direction-input" ${ro} data-block-afterdir="${block.id}" placeholder="didascalia (azione dopo la battuta)" value="${escapeAttr(block.afterDirection)}" />
+             <input class="after-direction-input" ${ro} spellcheck="true" lang="it" data-block-afterdir="${block.id}" placeholder="didascalia (azione dopo la battuta)" value="${escapeAttr(block.afterDirection)}" />
              <button class="ctrl-btn" data-del-direction-after="${block.id}" title="Rimuovi didascalia">✕</button>
            </div>`
         : '';
@@ -843,7 +1019,7 @@ function renderStage(){
         </select>
         ${noteHtml}
         ${miniActions}
-        <textarea class="line" rows="2" ${ro} data-block-text="${block.id}" placeholder="Battuta...">${escapeHtml(block.text)}</textarea>
+        <textarea class="line" rows="2" ${ro} spellcheck="true" lang="it" data-block-text="${block.id}" placeholder="Battuta...">${escapeHtml(block.text)}</textarea>
         ${afterDirHtml}`;
     }
     blocksWrap.appendChild(b);
@@ -1203,6 +1379,108 @@ document.getElementById('btnRehearsal').addEventListener('click', () => {
 });
 
 document.getElementById('btnGuida').addEventListener('click', () => document.getElementById('modalGuida').classList.add('open'));
+
+/* ---------- CONTROLLO QUALITÀ ---------- */
+function runQualityCheck(){
+  const unused = [];
+  const empty = [];
+  const noSetting = [];
+  const longLines = [];
+  const usedChars = new Set();
+  const LONG_THRESHOLD = 130;
+  play.acts.forEach(atto => atto.scenes.forEach(scena => {
+    if(!scena.setting || !scena.setting.trim()) noSetting.push(`${atto.title} — ${scena.title}`);
+    scena.blocks.forEach(b => {
+      if(b.type === 'dialogue'){
+        if(b.character) usedChars.add(b.character);
+        if(!b.text || !b.text.trim()) empty.push(`${atto.title} — ${scena.title}: battuta di ${(b.character||'PERSONAGGIO').toUpperCase()}`);
+        else {
+          const wc = b.text.trim().split(/\s+/).filter(Boolean).length;
+          if(wc > LONG_THRESHOLD) longLines.push(`${atto.title} — ${scena.title}: ${(b.character||'PERSONAGGIO').toUpperCase()} (${wc} parole)`);
+        }
+      }
+    });
+  }));
+  play.characters.forEach(c => { if(!usedChars.has(c.name)) unused.push(c.name); });
+  return { unused, empty, noSetting, longLines };
+}
+function renderQualitySection(title, items, okMessage){
+  if(!items.length) return `<div class="qa-section"><h3>${title}</h3><div class="qa-ok">✓ ${okMessage}</div></div>`;
+  return `<div class="qa-section"><h3>${title} (${items.length})</h3><ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul></div>`;
+}
+document.getElementById('btnQualita').addEventListener('click', () => {
+  const r = runQualityCheck();
+  document.getElementById('qualitaContent').innerHTML =
+    renderQualitySection('Personaggi mai usati in una battuta', r.unused, 'tutti i personaggi vengono usati') +
+    renderQualitySection('Battute vuote', r.empty, 'nessuna battuta vuota') +
+    renderQualitySection('Scene senza luogo/momento indicato', r.noSetting, 'ogni scena ha la sua ambientazione') +
+    renderQualitySection('Battute molto lunghe (verifica il ritmo)', r.longLines, 'nessun monologo eccessivamente lungo');
+  document.getElementById('modalQualita').classList.add('open');
+});
+document.getElementById('closeQualita').addEventListener('click', () => document.getElementById('modalQualita').classList.remove('open'));
+document.getElementById('modalQualita').addEventListener('click', e => { if(e.target.id === 'modalQualita') e.target.classList.remove('open'); });
+
+/* ---------- STATISTICHE AVANZATE ---------- */
+function computeActReadingStats(){
+  return play.acts.map(atto => {
+    let words = 0;
+    atto.scenes.forEach(s => s.blocks.forEach(b => { words += (b.text||'').trim().split(/\s+/).filter(Boolean).length; }));
+    const minutes = Math.max(1, Math.round(words / 250));
+    return { title: atto.title, words, minutes };
+  });
+}
+function computeCharWordBalance(){
+  const stats = {};
+  play.characters.forEach(c => stats[c.name] = 0);
+  play.acts.forEach(a => a.scenes.forEach(s => s.blocks.forEach(b => {
+    if(b.type === 'dialogue' && b.text){
+      const w = b.text.trim().split(/\s+/).filter(Boolean).length;
+      stats[b.character] = (stats[b.character] || 0) + w;
+    }
+  })));
+  return stats;
+}
+document.getElementById('btnStatsAvanzate').addEventListener('click', () => {
+  const actStats = computeActReadingStats();
+  const totalWords = actStats.reduce((s,a) => s + a.words, 0);
+  const totalMinutes = Math.max(1, Math.round(totalWords / 250));
+  let html = `<div class="stat-block"><h3>Tempo di lettura per atto</h3>`;
+  actStats.forEach(a => { html += `<div class="stat-row"><span>${escapeHtml(a.title)}</span><span>${a.words} parole · ~${a.minutes} min</span></div>`; });
+  html += `<div class="stat-row"><b>Totale</b><b>${totalWords} parole · ~${totalMinutes} min</b></div></div>`;
+
+  const balance = computeCharWordBalance();
+  const maxWords = Math.max(1, ...Object.values(balance));
+  html += `<div class="stat-block"><h3>Bilanciamento tra personaggi</h3>`;
+  if(!play.characters.length){
+    html += `<div class="qa-ok">Nessun personaggio ancora inserito.</div>`;
+  } else {
+    Object.entries(balance).sort((a,b) => b[1]-a[1]).forEach(([name, words]) => {
+      const pct = Math.round((words / maxWords) * 100);
+      html += `<div class="bar-row"><span class="bar-label">${escapeHtml(name)}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div><span class="bar-val">${words} parole</span></div>`;
+    });
+  }
+  html += `</div>`;
+  document.getElementById('statsContent').innerHTML = html;
+  document.getElementById('modalStats').classList.add('open');
+});
+document.getElementById('closeStats').addEventListener('click', () => document.getElementById('modalStats').classList.remove('open'));
+document.getElementById('modalStats').addEventListener('click', e => { if(e.target.id === 'modalStats') e.target.classList.remove('open'); });
+
+/* ---------- TEMA SCURO ---------- */
+async function loadDarkModePref(){
+  try{
+    const pref = await storageGet('copione:darkmode');
+    if(pref === 'on'){
+      document.body.classList.add('dark-mode');
+      document.getElementById('btnDarkMode').textContent = '☀️';
+    }
+  }catch(e){}
+}
+document.getElementById('btnDarkMode').addEventListener('click', () => {
+  const on = document.body.classList.toggle('dark-mode');
+  document.getElementById('btnDarkMode').textContent = on ? '☀️' : '🌙';
+  storageSet('copione:darkmode', on ? 'on' : 'off');
+});
 document.getElementById('closeGuida').addEventListener('click', () => document.getElementById('modalGuida').classList.remove('open'));
 document.getElementById('modalGuida').addEventListener('click', e => { if(e.target.id === 'modalGuida') e.target.classList.remove('open'); });
 
@@ -1427,11 +1705,18 @@ document.getElementById('btnEsporta').addEventListener('click', () => {
 });
 
 /* ---------- MOTORE DI RENDERING PDF (condiviso tra copione completo e copione per personaggio) ---------- */
+const MARGIN_PRESETS = {
+  normal:  { top: 72, bottom: 72, left: 108, right: 72 },
+  stretti: { top: 54, bottom: 54, left: 72,  right: 54 },
+  ampi:    { top: 90, bottom: 90, left: 126, right: 90 }
+};
+
 function makePdfRenderer(doc, startPageNum){
   const pageW = doc.internal.pageSize.getWidth();
   const pageH = doc.internal.pageSize.getHeight();
-  const marginTop = 72, marginBottom = 72;
-  const marginLeft = 108, marginRight = 72; // 1.5in sx, 1in dx: convenzione da copione
+  const preset = MARGIN_PRESETS[(play.pdfSettings && play.pdfSettings.margins) || 'normal'];
+  const marginTop = preset.top, marginBottom = preset.bottom;
+  const marginLeft = preset.left, marginRight = preset.right; // convenzione da copione: sx più ampio
   const contentW = pageW - marginLeft - marginRight;
   const lineH = 15;
   const state = { y: marginTop, pageNum: startPageNum };
@@ -1475,12 +1760,19 @@ function makePdfRenderer(doc, startPageNum){
     lines.forEach(l => { doc.text(l, pageW/2, state.y, { align: 'center' }); state.y += lineH; });
     state.y += 8;
   }
-  function dialogueBlock(character, text, note, num, afterDirection){
-    doc.setFont('courier','bold'); doc.setFontSize(11.5);
-    ensureSpace(lineH);
+  function dialogueBlock(character, text, note, num, afterDirection, emphasis){
+    // emphasis: undefined = copione normale · 'bold' = battute del personaggio scelto (copione ridotto, font +3) · 'italic' = battute altrui (copione ridotto, font -2)
+    const baseSize = 11.5;
+    const sizeDelta = emphasis === 'bold' ? 3 : (emphasis === 'italic' ? -2 : 0);
+    const size = baseSize + sizeDelta;
+    const lh = lineH * (size / baseSize);
+
+    const nameStyle = emphasis === 'italic' ? 'italic' : 'bold';
+    doc.setFont('courier', nameStyle); doc.setFontSize(size);
+    ensureSpace(lh);
     const label = (num ? '#' + num + '  ' : '') + (character || 'PERSONAGGIO').toUpperCase();
     doc.text(label, pageW/2, state.y, { align: 'center' });
-    state.y += lineH;
+    state.y += lh;
 
     if(note && note.trim()){
       doc.setFont('courier','italic'); doc.setFontSize(10);
@@ -1489,14 +1781,15 @@ function makePdfRenderer(doc, startPageNum){
       state.y += lineH - 2;
     }
 
-    doc.setFont('courier','normal'); doc.setFontSize(11.5);
+    const textStyle = emphasis === 'italic' ? 'italic' : (emphasis === 'bold' ? 'bold' : 'normal');
+    doc.setFont('courier', textStyle); doc.setFontSize(size);
     const dialogueLeft = marginLeft + 45;
     const dialogueW = contentW - 90;
     const lines = doc.splitTextToSize(text.trim() || '…', dialogueW);
     lines.forEach(l => {
-      ensureSpace(lineH);
+      ensureSpace(lh);
       doc.text(l, dialogueLeft, state.y);
-      state.y += lineH;
+      state.y += lh;
     });
     state.y += 8;
 
@@ -1539,8 +1832,8 @@ function renderScriptContent(R, options){
         if(options.character){
           if(b.type === 'direction') R.directionBlock(b.text);
           else if(b.type === 'offstage') R.offstageBlock(b.text);
-          else if(b.character === options.character) R.dialogueBlock(b.character, b.text, b.note, numbers[b.id], b.afterDirection);
-          else R.cueBlock(b.character, b.text);
+          else if(b.character === options.character) R.dialogueBlock(b.character, b.text, b.note, numbers[b.id], b.afterDirection, 'bold');
+          else R.dialogueBlock(b.character, b.text, b.note, null, b.afterDirection, 'italic');
         } else {
           if(b.type === 'direction') R.directionBlock(b.text);
           else if(b.type === 'offstage') R.offstageBlock(b.text);
@@ -1563,11 +1856,15 @@ function drawTitlePage(doc, R, subtitle){
     doc.setFont('courier','bold'); doc.setFontSize(12);
     doc.text(subtitle, R.pageW/2, R.pageH/2 + 50, { align: 'center' });
   }
+  doc.setFont('times','normal'); doc.setFontSize(9.5);
+  doc.setTextColor(120,110,95);
+  doc.text('© ' + new Date().getFullYear() + (play.author ? ' ' + play.author : '') + ' — Tutti i diritti riservati', R.pageW/2, R.pageH - 60, { align: 'center' });
+  doc.setTextColor(0,0,0);
   if(play.characters.length){
     doc.setFont('courier','bold'); doc.setFontSize(11);
-    doc.text('PERSONAGGI', R.pageW/2, R.pageH - 170, { align: 'center' });
+    doc.text('PERSONAGGI', R.pageW/2, R.pageH - 190, { align: 'center' });
     doc.setFont('courier','normal'); doc.setFontSize(10.5);
-    let yy = R.pageH - 150;
+    let yy = R.pageH - 170;
     play.characters.forEach(c => {
       const line = c.name.toUpperCase() + (c.desc ? '  —  ' + c.desc : '');
       const wrapped = doc.splitTextToSize(line, R.contentW * 0.8);
@@ -1576,12 +1873,29 @@ function drawTitlePage(doc, R, subtitle){
   }
 }
 
+function isDraftPlay(){
+  return !play.acts.every(atto => atto.scenes.every(scena => scena.status === 'definitiva'));
+}
+
+function drawDraftWatermark(doc){
+  const total = doc.internal.getNumberOfPages();
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  for(let p = 1; p <= total; p++){
+    doc.setPage(p);
+    doc.setFont('helvetica','bold'); doc.setFontSize(88);
+    doc.setTextColor(215,195,165);
+    doc.text('BOZZA', pageW/2, pageH/2, { angle: 45, align: 'center' });
+    doc.setTextColor(0,0,0);
+  }
+}
+
 /* ---------- ESPORTAZIONE PDF (formato copione professionale, con indice) ---------- */
-function exportPDF(){
+function buildFullScriptPDF(){
   const { jsPDF } = window.jspdf;
 
   // Passo 1: calcolo su un documento "usa e getta" delle pagine in cui inizia ogni atto/scena
-  const measureDoc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const measureDoc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const measureR = makePdfRenderer(measureDoc, 1);
   const tocEntries = [];
   renderScriptContent(measureR, { record: (ai, si, page) => {
@@ -1594,7 +1908,7 @@ function exportPDF(){
   const offset = 1 + tocPages; // pagina 1 = frontespizio, poi le pagine di indice
 
   // Passo 2: documento definitivo
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const R = makePdfRenderer(doc, 1);
   drawTitlePage(doc, R);
 
@@ -1632,17 +1946,26 @@ function exportPDF(){
   R.newPage();
   renderScriptContent(R, {});
 
+  return doc;
+}
+
+function exportPDF(){
+  const doc = buildFullScriptPDF();
   doc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '.pdf');
 }
 
 /* ---------- ESPORTAZIONE PDF RIDOTTA PER PERSONAGGIO ---------- */
-function exportSidesPDF(characterName){
+function buildSidesPDF(characterName){
   const { jsPDF } = window.jspdf;
-  const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+  const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const R = makePdfRenderer(doc, 1);
   drawTitlePage(doc, R, 'Copione — parte di ' + characterName.toUpperCase());
   R.newPage();
   renderScriptContent(R, { character: characterName });
+  return doc;
+}
+function exportSidesPDF(characterName){
+  const doc = buildSidesPDF(characterName);
   doc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '_' + characterName.replace(/[^a-z0-9]+/gi,'_') + '.pdf');
 }
 
@@ -1680,6 +2003,7 @@ function importProject(file){
       });
       if(!Array.isArray(parsed.characters)) parsed.characters = [];
       if(!parsed.fontSize) parsed.fontSize = 14;
+      if(!parsed.pdfSettings) parsed.pdfSettings = { format: 'a4', margins: 'normal' };
       play = parsed;
       currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
       scheduleSave();
@@ -1715,7 +2039,219 @@ document.getElementById('fileImporta').addEventListener('change', (e) => {
   e.target.value = '';
 });
 
+/* ---------- ANTEPRIMA PDF ---------- */
+let lastPreviewDoc = null;
+document.getElementById('btnAnteprima').addEventListener('click', () => {
+  lastPreviewDoc = buildFullScriptPDF();
+  const url = lastPreviewDoc.output('bloburl');
+  document.getElementById('pdfPreviewFrame').src = url;
+  document.getElementById('modalAnteprima').classList.add('open');
+});
+document.getElementById('btnScaricaDaAnteprima').addEventListener('click', () => {
+  if(lastPreviewDoc) lastPreviewDoc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '.pdf');
+});
+document.getElementById('closeAnteprima').addEventListener('click', () => {
+  document.getElementById('modalAnteprima').classList.remove('open');
+  document.getElementById('pdfPreviewFrame').src = '';
+});
+document.getElementById('modalAnteprima').addEventListener('click', e => { if(e.target.id === 'modalAnteprima'){ e.target.classList.remove('open'); document.getElementById('pdfPreviewFrame').src=''; } });
+
+/* ---------- IMPOSTAZIONI PDF ---------- */
+document.getElementById('btnPdfSettings').addEventListener('click', () => {
+  document.getElementById('pdfFormatSelect').value = (play.pdfSettings && play.pdfSettings.format) || 'a4';
+  document.getElementById('pdfMarginsSelect').value = (play.pdfSettings && play.pdfSettings.margins) || 'normal';
+  document.getElementById('modalPdfSettings').classList.add('open');
+});
+document.getElementById('closePdfSettings').addEventListener('click', () => document.getElementById('modalPdfSettings').classList.remove('open'));
+document.getElementById('modalPdfSettings').addEventListener('click', e => { if(e.target.id === 'modalPdfSettings') e.target.classList.remove('open'); });
+document.getElementById('btnSalvaPdfSettings').addEventListener('click', () => {
+  play.pdfSettings = {
+    format: document.getElementById('pdfFormatSelect').value,
+    margins: document.getElementById('pdfMarginsSelect').value
+  };
+  scheduleSave();
+  document.getElementById('modalPdfSettings').classList.remove('open');
+});
+
+/* ---------- VISTA D'INSIEME ---------- */
+document.getElementById('btnOutline').addEventListener('click', () => {
+  const content = document.getElementById('outlineContent');
+  content.innerHTML = '';
+  play.acts.forEach(atto => {
+    atto.scenes.forEach(scena => {
+      const firstLine = scena.blocks.find(b => b.type === 'dialogue' && b.text && b.text.trim());
+      const preview = firstLine ? `${(firstLine.character||'').toUpperCase()}: ${firstLine.text.trim().slice(0,70)}${firstLine.text.trim().length>70?'…':''}` : '(scena ancora vuota)';
+      const row = document.createElement('div');
+      row.className = 'outline-row';
+      row.dataset.jumpScene = scena.id;
+      row.innerHTML = `<div class="ol-title">${escapeHtml(atto.title)} — ${escapeHtml(scena.title)}${scena.setting ? ' · ' + escapeHtml(scena.setting) : ''}</div>
+        <div class="ol-preview">${escapeHtml(preview)}</div>`;
+      content.appendChild(row);
+    });
+  });
+  if(!content.innerHTML) content.innerHTML = '<div class="qa-ok">Nessuna scena ancora creata.</div>';
+  document.getElementById('modalOutline').classList.add('open');
+});
+document.getElementById('outlineContent').addEventListener('click', e => {
+  const row = e.target.closest('[data-jump-scene]');
+  if(row){
+    currentSceneId = row.dataset.jumpScene;
+    document.getElementById('modalOutline').classList.remove('open');
+    renderAll();
+  }
+});
+document.getElementById('closeOutline').addEventListener('click', () => document.getElementById('modalOutline').classList.remove('open'));
+document.getElementById('modalOutline').addEventListener('click', e => { if(e.target.id === 'modalOutline') e.target.classList.remove('open'); });
+
+/* ---------- IMPORTAZIONE TESTO GIÀ SCRITTO ---------- */
+function parsePastedScript(text){
+  const lines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length);
+  const blocks = [];
+  let current = null;
+  const isCharacterLine = (l) => l.length <= 40 && l === l.toUpperCase() && /[A-ZÀ-Ý]/.test(l) && !/^\(.*\)$/.test(l);
+  lines.forEach(line => {
+    if(/^\(.*\)$/.test(line)){
+      blocks.push({ id: uid(), type: 'direction', text: line.replace(/^\(|\)$/g, '') });
+      current = null;
+    } else if(isCharacterLine(line)){
+      current = { id: uid(), type: 'dialogue', character: line, text: '' };
+      blocks.push(current);
+    } else if(current){
+      current.text = (current.text ? current.text + ' ' : '') + line;
+    } else {
+      blocks.push({ id: uid(), type: 'direction', text: line });
+    }
+  });
+  return blocks.length ? blocks : [{ id: uid(), type: 'direction', text: '' }];
+}
+document.getElementById('btnImportaTesto').addEventListener('click', () => {
+  document.getElementById('importTextarea').value = '';
+  document.getElementById('modalImporta').classList.add('open');
+});
+document.getElementById('closeImporta').addEventListener('click', () => document.getElementById('modalImporta').classList.remove('open'));
+document.getElementById('modalImporta').addEventListener('click', e => { if(e.target.id === 'modalImporta') e.target.classList.remove('open'); });
+document.getElementById('btnEseguiImporta').addEventListener('click', () => {
+  const raw = document.getElementById('importTextarea').value;
+  if(!raw.trim()){ alert('Incolla prima del testo da importare.'); return; }
+  const blocks = parsePastedScript(raw);
+  const targetAct = play.acts[play.acts.length - 1];
+  const n = targetAct.scenes.length + 1;
+  const newScene = { id: uid(), title: 'Scena ' + n + ' (importata)', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks };
+  targetAct.scenes.push(newScene);
+  blocks.forEach(b => {
+    if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)){
+      play.characters.push({ id: uid(), name: b.character, desc: '' });
+    }
+  });
+  currentSceneId = newScene.id;
+  scheduleSave();
+  document.getElementById('modalImporta').classList.remove('open');
+  renderAll();
+});
+
+/* ---------- ESPORTAZIONE FOUNTAIN (.fountain) ---------- */
+function buildFountain(){
+  let out = `Title: ${play.title}\nCredit: di\nAuthor: ${play.author}\n\n`;
+  play.acts.forEach(atto => {
+    out += `# ${atto.title}\n\n`;
+    atto.scenes.forEach(scena => {
+      out += `## ${scena.title}\n`;
+      if(scena.setting) out += `> ${scena.setting}\n\n`;
+      scena.blocks.forEach(b => {
+        if(b.type === 'direction'){
+          if(b.text.trim()) out += `${b.text.trim()}\n\n`;
+        } else if(b.type === 'offstage'){
+          if(b.text.trim()) out += `[[FUORI SCENA: ${b.text.trim()}]]\n\n`;
+        } else {
+          out += `${(b.character||'PERSONAGGIO').toUpperCase()}\n`;
+          if(b.note && b.note.trim()) out += `(${b.note.trim()})\n`;
+          out += `${b.text.trim()}\n`;
+          if(b.afterDirection && b.afterDirection.trim()) out += `${b.afterDirection.trim()}\n`;
+          out += `\n`;
+        }
+      });
+    });
+  });
+  return out;
+}
+document.getElementById('btnFountain').addEventListener('click', () => {
+  const blob = new Blob([buildFountain()], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '.fountain';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+/* ---------- SCORCIATOIE DA TASTIERA ---------- */
+document.addEventListener('keydown', e => {
+  // F4: inserisce "Basito" nel campo attivo
+  if(e.key === 'F4'){
+    e.preventDefault();
+    const el = document.activeElement;
+    if(el && (el.tagName === 'TEXTAREA' || el.tagName === 'INPUT') && typeof el.selectionStart === 'number'){
+      const start = el.selectionStart, end = el.selectionEnd, val = el.value;
+      el.value = val.slice(0, start) + 'Basito' + val.slice(end);
+      const newPos = start + 'Basito'.length;
+      el.selectionStart = el.selectionEnd = newPos;
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    return;
+  }
+  // Ctrl/Cmd + S: salvataggio immediato
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's'){
+    e.preventDefault();
+    forceSaveNow();
+    return;
+  }
+  // Ctrl/Cmd + Invio: aggiunge rapidamente una nuova battuta nella scena corrente
+  if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
+    const btn = document.querySelector('.block-toolbar [data-add-block="dialogue"]');
+    if(btn){ e.preventDefault(); btn.click(); }
+  }
+});
+
+/* ---------- SALVATAGGIO RAPIDO ---------- */
+async function forceSaveNow(){
+  clearTimeout(saveTimer);
+  const el = document.getElementById('saveState');
+  el.textContent = 'salvataggio…';
+  const ok = await storageSet('copione:play', JSON.stringify(play));
+  if(fileHandle) await writeToFileHandle();
+  el.textContent = ok ? 'salvato ✓' : 'salvataggio non disponibile';
+}
+document.getElementById('btnSalvaOra').addEventListener('click', forceSaveNow);
+
+/* ---------- SCEGLI DOVE SALVARE (file locale reale) ---------- */
+let fileHandle = null;
+async function writeToFileHandle(){
+  if(!fileHandle) return;
+  try{
+    const writable = await fileHandle.createWritable();
+    await writable.write(JSON.stringify(play, null, 2));
+    await writable.close();
+  }catch(e){ /* scrittura non riuscita, il salvataggio nel browser resta comunque valido */ }
+}
+document.getElementById('btnFileLocale').addEventListener('click', async () => {
+  if(!('showSaveFilePicker' in window)){
+    alert('Questa funzione è disponibile solo su browser basati su Chrome/Edge. Su questo browser continua a funzionare comunque il salvataggio automatico nella memoria del browser, oppure puoi usare "Salva progetto (.json)" manualmente.');
+    return;
+  }
+  try{
+    fileHandle = await window.showSaveFilePicker({
+      suggestedName: (play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '.json',
+      types: [{ description: 'Progetto Copione', accept: { 'application/json': ['.json'] } }]
+    });
+    await writeToFileHandle();
+    document.getElementById('fileLocLabel').textContent = '📁 ' + fileHandle.name;
+  }catch(e){ /* l'utente ha annullato la scelta */ }
+});
+
 loadSaved();
+loadDarkModePref();
 </script>
 </body>
 </html>
