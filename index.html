@@ -222,14 +222,16 @@
   .ctrl-btn.del:hover{color:var(--rosso-avviso);}
   .block.direction textarea{
     font-family:'Courier Prime',monospace;font-style:italic;color:var(--grigio);text-align:center;
-    width:100%;border:none;background:none;outline:none;resize:none;font-size:calc(var(--ms-size) - 1px);line-height:1.5;
+    width:78%;margin:0 auto;display:block;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
+    padding:9px 14px;outline:none;resize:none;font-size:calc(var(--ms-size) - 1px);line-height:1.5;
   }
   .block.dialogue .char-name{
     text-align:center;text-transform:uppercase;font-family:'Courier Prime',monospace;font-weight:700;
     font-size:var(--ms-size);border:none;background:none;outline:none;width:100%;letter-spacing:.03em;color:var(--inchiostro);
   }
   .note-row{
-    display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:2px auto 0;
+    display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:10px auto 14px;
+    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
   }
   .note-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -238,7 +240,8 @@
   .note-row .ctrl-btn{opacity:0;font-size:11px;}
   .note-row:hover .ctrl-btn{opacity:1;}
   .after-direction-row{
-    display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:4px auto 0;
+    display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:14px auto 6px;
+    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
   }
   .after-direction-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -283,6 +286,16 @@
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:60px;outline:none;
   }
+  .scene-info-box{margin:0 0 12px;}
+  .scene-info-box label{
+    display:block;font-family:'Inter',sans-serif;font-size:10.5px;color:var(--grigio);margin-bottom:4px;
+    text-transform:uppercase;letter-spacing:.04em;
+  }
+  .scene-info-box textarea{
+    display:block;width:100%;padding:9px 12px;background:#F2F2F0;border:1px solid #D8D8D4;
+    border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
+    min-height:44px;outline:none;
+  }
   .scene-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 14px;}
   .status-btn{
     border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
@@ -306,6 +319,7 @@
   .page.rehearsal .block-toolbar,
   .page.rehearsal .director-wrap,
   .page.rehearsal .scene-meta-row,
+  .page.rehearsal .scene-info-box,
   .page.rehearsal .presence-wrap,
   .page.rehearsal .block-num{display:none !important;}
   .page.rehearsal .block{padding-right:0;}
@@ -396,14 +410,17 @@
   body.dark-mode .page::before{ opacity:.3; }
   body.dark-mode .scene-head .scena-lbl{ color:#e7dcc4; }
   body.dark-mode .slugline{ color:#a8987a; border-color:#3a2c20; }
-  body.dark-mode .block.direction textarea{ color:#a8987a; }
+  body.dark-mode .block.direction textarea{ color:#a8987a; background:#332918; border-color:#4a3a2a; }
   body.dark-mode .block.dialogue .char-name{ color:#e7dcc4; }
   body.dark-mode .block.dialogue textarea.line{ color:#e7dcc4; }
+  body.dark-mode .note-row, body.dark-mode .after-direction-row{ background:#332918; border-color:#4a3a2a; }
   body.dark-mode .note-input, body.dark-mode .after-direction-input{ color:#a8987a; }
   body.dark-mode .status-btn{ background:#2c2219; color:#a8987a; border-color:#4a3a2a; }
   body.dark-mode .chip{ background:#2c2219; color:#a8987a; border-color:#4a3a2a; }
   body.dark-mode .presence-label{ color:#a8987a; }
   body.dark-mode .director-notes{ background:#332918; border-color:#4a3a2a; color:#e7dcc4; }
+  body.dark-mode .scene-info-box label{ color:#a8987a; }
+  body.dark-mode .scene-info-box textarea{ background:#2c2c2a; border-color:#4a4a46; color:#d8d3c8; }
   body.dark-mode .offstage-label{ color:#e7c877; }
   body.dark-mode .block.offstage textarea{ color:#a8987a; }
   body.dark-mode .block-num{ background:#2c2219; color:#a8987a; }
@@ -495,6 +512,7 @@
     <div class="sidebar-fixed-top">
       <div class="mini-stats" id="stats"></div>
       <div class="side-tools-grid">
+        <button class="wide" id="btnNuovoCopione">🆕 Nuovo copione</button>
         <button class="wide" id="btnFileLocale">📁 Scegli dove salvare</button>
         <button id="btnGuida">📖 Guida</button>
         <button id="btnVersioni">🕘 Versioni</button>
@@ -665,6 +683,10 @@
         <option value="ampi">Ampi (più spazio per annotazioni a mano)</option>
       </select>
     </div>
+    <div class="sr-field">
+      <label>Testo del copyright nel frontespizio (lascia vuoto per generarlo in automatico)</label>
+      <input type="text" id="pdfCopyrightInput" placeholder="es. © 2026 Mario Rossi — Tutti i diritti riservati" />
+    </div>
     <button class="modal-close" id="btnSalvaPdfSettings">Salva impostazioni</button>
     <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
   </div>
@@ -688,6 +710,7 @@ let play = {
   author: "Il tuo nome",
   fontSize: 14,
   pdfSettings: { format: 'a4', margins: 'normal' },
+  copyright: '',
   characters: [
     { id: uid(), name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." }
   ],
@@ -703,6 +726,8 @@ let play = {
           directorNotes: "",
           status: "",
           presentCharacters: [],
+          descrizione: "",
+          scenografia: "",
           blocks: [
             { id: uid(), type: "direction", text: "Breve didascalia iniziale: cosa vediamo entrando in scena." },
             { id: uid(), type: "dialogue", character: "PERSONAGGIO A", text: "Prima battuta..." }
@@ -923,6 +948,18 @@ function renderStage(){
   slug.addEventListener('input', e => { scena.setting = e.target.value; scheduleSave(); });
   page.appendChild(slug);
 
+  const descBox = document.createElement('div');
+  descBox.className = 'scene-info-box';
+  descBox.innerHTML = `<label>Descrizione della scena</label>
+    <textarea data-scene-field="descrizione" ${rehearsalMode ? 'readonly' : ''} spellcheck="true" lang="it" rows="2" placeholder="Cosa succede, atmosfera, contesto...">${escapeHtml(scena.descrizione || '')}</textarea>`;
+  page.appendChild(descBox);
+
+  const setBox = document.createElement('div');
+  setBox.className = 'scene-info-box';
+  setBox.innerHTML = `<label>Scenografia e oggettistica</label>
+    <textarea data-scene-field="scenografia" ${rehearsalMode ? 'readonly' : ''} spellcheck="true" lang="it" rows="2" placeholder="Elementi di scena, mobili, oggetti necessari...">${escapeHtml(scena.scenografia || '')}</textarea>`;
+  page.appendChild(setBox);
+
   const metaRow = document.createElement('div');
   metaRow.className = 'scene-meta-row';
   const statuses = [['bozza','Bozza'], ['rivedere','Da rivedere'], ['definitiva','Definitiva']];
@@ -1003,6 +1040,7 @@ function renderStage(){
       const afterDirHtml = hasDir
         ? `<div class="after-direction-row">
              <input class="after-direction-input" ${ro} spellcheck="true" lang="it" data-block-afterdir="${block.id}" placeholder="didascalia (azione dopo la battuta)" value="${escapeAttr(block.afterDirection)}" />
+             ${!rehearsalMode ? `<button class="ctrl-btn" data-add-same-char="${block.id}" title="Continua il dialogo dello stesso personaggio">↵</button>` : ''}
              <button class="ctrl-btn" data-del-direction-after="${block.id}" title="Rimuovi didascalia">✕</button>
            </div>`
         : '';
@@ -1152,7 +1190,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
     e.stopPropagation();
     const atto = play.acts.find(a => a.id === addSceneBtn.dataset.addScene);
     const n = atto.scenes.length + 1;
-    const newScene = { id: uid(), title: 'Scena ' + n, setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [
+    const newScene = { id: uid(), title: 'Scena ' + n, setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks: [
       { id: uid(), type: 'direction', text: '' }
     ]};
     atto.scenes.push(newScene);
@@ -1161,7 +1199,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
   }
   if(addActBtn){
     const n = play.acts.length + 1;
-    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [
+    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks: [
       { id: uid(), type: 'direction', text: '' }
     ]};
     play.acts.push({ id: uid(), title: 'Atto ' + toRoman(n), scenes: [newScene] });
@@ -1242,13 +1280,14 @@ document.getElementById('stage').addEventListener('click', e => {
   const delNoteBtn = e.target.closest('[data-del-note]');
   const addDirAfterBtn = e.target.closest('[data-add-direction-after]');
   const delDirAfterBtn = e.target.closest('[data-del-direction-after]');
+  const addSameCharBtn = e.target.closest('[data-add-same-char]');
   const statusBtn = e.target.closest('[data-set-status]');
   const presentChip = e.target.closest('[data-toggle-present]');
   const autoDetectBtn = e.target.closest('#autoDetectPresence');
   const emptyAdd = e.target.closest('#emptyAdd');
 
   if(emptyAdd){
-    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks: [{ id: uid(), type:'direction', text:'' }] };
+    const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks: [{ id: uid(), type:'direction', text:'' }] };
     play.acts[0].scenes.push(newScene);
     currentSceneId = newScene.id;
     scheduleSave(); renderAll(); return;
@@ -1333,6 +1372,18 @@ document.getElementById('stage').addEventListener('click', e => {
     delete b.afterDirection;
     scheduleSave(); renderStage(); return;
   }
+  if(addSameCharBtn){
+    const idx = scena.blocks.findIndex(x => x.id === addSameCharBtn.dataset.addSameChar);
+    if(idx > -1){
+      const original = scena.blocks[idx];
+      const newBlock = { id: uid(), type: 'dialogue', character: original.character, text: '' };
+      scena.blocks.splice(idx + 1, 0, newBlock);
+      scheduleSave(); renderStage();
+      const ta = document.querySelector(`[data-block-text="${newBlock.id}"]`);
+      if(ta) ta.focus();
+    }
+    return;
+  }
 });
 
 document.getElementById('stage').addEventListener('input', e => {
@@ -1342,6 +1393,12 @@ document.getElementById('stage').addEventListener('input', e => {
   const charEl = e.target.closest('[data-block-char]');
   const noteEl = e.target.closest('[data-block-note]');
   const afterDirEl = e.target.closest('[data-block-afterdir]');
+  const sceneFieldEl = e.target.closest('[data-scene-field]');
+  if(sceneFieldEl){
+    scena[sceneFieldEl.dataset.sceneField] = sceneFieldEl.value;
+    scheduleSave();
+    return;
+  }
   if(textEl){
     const b = scena.blocks.find(x => x.id === textEl.dataset.blockText);
     b.text = textEl.value;
@@ -1658,6 +1715,8 @@ function buildText(){
       out += `${scena.title}\n`;
       if(scena.setting) out += `(${scena.setting})\n`;
       out += '\n';
+      if(scena.descrizione && scena.descrizione.trim()) out += `[Descrizione della scena: ${scena.descrizione.trim()}]\n\n`;
+      if(scena.scenografia && scena.scenografia.trim()) out += `[Scenografia e oggettistica: ${scena.scenografia.trim()}]\n\n`;
       scena.blocks.forEach(b => {
         if(b.type === 'direction'){
           if(b.text.trim()) out += `(${b.text.trim()})\n\n`;
@@ -1727,10 +1786,16 @@ function makePdfRenderer(doc, startPageNum){
     doc.text(String(state.pageNum), pageW - marginRight, pageH - 40, { align: 'right' });
   }
   function newPage(){
+    let prevFont = null, prevSize = null;
+    try{ prevFont = doc.getFont(); prevSize = doc.internal.getFontSize(); }catch(e){}
     doc.addPage();
     state.pageNum++;
     state.y = marginTop;
     footerPageNumber();
+    if(prevFont){
+      doc.setFont(prevFont.fontName, prevFont.fontStyle);
+      doc.setFontSize(prevSize);
+    }
   }
   function ensureSpace(h){ if(state.y + h > pageH - marginBottom) newPage(); }
   function centerText(text, size, style){
@@ -1739,14 +1804,34 @@ function makePdfRenderer(doc, startPageNum){
     doc.text(text, pageW/2, state.y, { align: 'center' });
     state.y += lineH;
   }
-  function directionBlock(text){
-    if(!text.trim()) return;
-    doc.setFont('courier','italic'); doc.setFontSize(11);
-    const lines = doc.splitTextToSize('(' + text.trim() + ')', contentW * 0.72);
-    ensureSpace(lines.length * lineH + 6);
-    state.y += 4;
-    lines.forEach(l => { doc.text(l, pageW/2, state.y, { align: 'center' }); state.y += lineH; });
-    state.y += 4;
+  function directionBlock(text, fontSize){
+    if(!text || !text.trim()) return;
+    const size = fontSize || 11;
+    const dialogueLeft = marginLeft + 45;
+    const dialogueW = contentW - 90;
+    const boxX = dialogueLeft - 14;
+    const boxW = dialogueW + 28;
+    const centerX = boxX + boxW / 2;
+
+    doc.setFont('courier','italic'); doc.setFontSize(size);
+    const innerW = boxW - 16;
+    const lines = doc.splitTextToSize('(' + text.trim() + ')', innerW);
+    const lineStep = size + 3;
+    const boxH = lines.length * lineStep + 12;
+
+    ensureSpace(boxH + 24);
+    state.y += 12;
+    const boxTop = state.y;
+    doc.setFillColor(240, 240, 238);
+    doc.setDrawColor(210, 210, 206);
+    doc.roundedRect(boxX, boxTop, boxW, boxH, 4, 4, 'FD');
+
+    let ty = boxTop + size + 3;
+    doc.setTextColor(90, 88, 84);
+    lines.forEach(l => { doc.text(l, centerX, ty, { align: 'center' }); ty += lineStep; });
+    doc.setTextColor(0, 0, 0);
+
+    state.y = boxTop + boxH + 12;
   }
   function offstageBlock(text){
     if(!text.trim()) return;
@@ -1761,11 +1846,10 @@ function makePdfRenderer(doc, startPageNum){
     state.y += 8;
   }
   function dialogueBlock(character, text, note, num, afterDirection, emphasis){
-    // emphasis: undefined = copione normale · 'bold' = battute del personaggio scelto (copione ridotto, font +3) · 'italic' = battute altrui (copione ridotto, font -2)
-    const baseSize = 11.5;
-    const sizeDelta = emphasis === 'bold' ? 3 : (emphasis === 'italic' ? -2 : 0);
-    const size = baseSize + sizeDelta;
-    const lh = lineH * (size / baseSize);
+    // emphasis: undefined = copione normale · 'bold' = personaggio scelto (copione ridotto) · 'italic' = altri personaggi (copione ridotto)
+    // la dimensione del font resta sempre la stessa: cambia solo lo stile (grassetto/corsivo)
+    const size = 11.5;
+    const lh = lineH;
 
     const nameStyle = emphasis === 'italic' ? 'italic' : 'bold';
     doc.setFont('courier', nameStyle); doc.setFontSize(size);
@@ -1775,10 +1859,7 @@ function makePdfRenderer(doc, startPageNum){
     state.y += lh;
 
     if(note && note.trim()){
-      doc.setFont('courier','italic'); doc.setFontSize(10);
-      ensureSpace(lineH - 2);
-      doc.text('(' + note.trim() + ')', pageW/2, state.y, { align: 'center' });
-      state.y += lineH - 2;
+      directionBlock(note, 10);
     }
 
     const textStyle = emphasis === 'italic' ? 'italic' : (emphasis === 'bold' ? 'bold' : 'normal');
@@ -1804,10 +1885,39 @@ function makePdfRenderer(doc, startPageNum){
     doc.text(`— ${(character||'PERSONAGGIO').toUpperCase()}: ${tail}`, marginLeft, state.y);
     state.y += lineH - 2;
   }
+  function sceneInfoBox(label, text){
+    if(!text || !text.trim()) return;
+    const boxX = marginLeft - 10;
+    const boxW = contentW + 20;
+    const innerW = boxW - 20;
+    doc.setFont('courier','normal'); doc.setFontSize(9.5);
+    const lines = doc.splitTextToSize(text.trim(), innerW);
+    const lineStep = 12.5;
+    const boxH = lineStep + lines.length * lineStep + 12;
+
+    ensureSpace(boxH + 10);
+    state.y += 2;
+    const boxTop = state.y;
+    doc.setFillColor(240, 240, 238);
+    doc.setDrawColor(210, 210, 206);
+    doc.roundedRect(boxX, boxTop, boxW, boxH, 3, 3, 'FD');
+
+    doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
+    doc.setTextColor(120, 115, 105);
+    doc.text(label.toUpperCase(), boxX + 10, boxTop + 12);
+
+    doc.setFont('courier','normal'); doc.setFontSize(9.5);
+    doc.setTextColor(50, 45, 40);
+    let ty = boxTop + 12 + lineStep;
+    lines.forEach(l => { doc.text(l, boxX + 10, ty); ty += lineStep; });
+    doc.setTextColor(0, 0, 0);
+
+    state.y = boxTop + boxH + 8;
+  }
 
   return {
     pageW, pageH, marginTop, marginBottom, marginLeft, marginRight, contentW, lineH, state,
-    newPage, ensureSpace, centerText, directionBlock, offstageBlock, dialogueBlock, cueBlock,
+    newPage, ensureSpace, centerText, directionBlock, offstageBlock, dialogueBlock, cueBlock, sceneInfoBox,
     currentPage: () => state.pageNum
   };
 }
@@ -1827,6 +1937,8 @@ function renderScriptContent(R, options){
       R.centerText(scena.title.toUpperCase(), 12, 'bold');
       if(scena.setting) R.centerText(scena.setting.toUpperCase(), 10.5, 'italic');
       R.state.y += 8;
+      R.sceneInfoBox('Descrizione della scena', scena.descrizione);
+      R.sceneInfoBox('Scenografia e oggettistica', scena.scenografia);
 
       scena.blocks.forEach(b => {
         if(options.character){
@@ -1858,7 +1970,10 @@ function drawTitlePage(doc, R, subtitle){
   }
   doc.setFont('times','normal'); doc.setFontSize(9.5);
   doc.setTextColor(120,110,95);
-  doc.text('© ' + new Date().getFullYear() + (play.author ? ' ' + play.author : '') + ' — Tutti i diritti riservati', R.pageW/2, R.pageH - 60, { align: 'center' });
+  const copyrightLine = (play.copyright && play.copyright.trim())
+    ? play.copyright.trim()
+    : '© ' + new Date().getFullYear() + (play.author ? ' ' + play.author : '') + ' — Tutti i diritti riservati';
+  doc.text(copyrightLine, R.pageW/2, R.pageH - 60, { align: 'center' });
   doc.setTextColor(0,0,0);
   if(play.characters.length){
     doc.setFont('courier','bold'); doc.setFontSize(11);
@@ -1998,12 +2113,15 @@ function importProject(file){
           if(scena.status === undefined) scena.status = '';
           if(!Array.isArray(scena.presentCharacters)) scena.presentCharacters = [];
           if(scena.directorNotes === undefined) scena.directorNotes = '';
+          if(scena.descrizione === undefined) scena.descrizione = '';
+          if(scena.scenografia === undefined) scena.scenografia = '';
           (scena.blocks || []).forEach(b => { if(!b.id) b.id = uid(); });
         });
       });
       if(!Array.isArray(parsed.characters)) parsed.characters = [];
       if(!parsed.fontSize) parsed.fontSize = 14;
       if(!parsed.pdfSettings) parsed.pdfSettings = { format: 'a4', margins: 'normal' };
+      if(parsed.copyright === undefined) parsed.copyright = '';
       play = parsed;
       currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
       scheduleSave();
@@ -2060,6 +2178,7 @@ document.getElementById('modalAnteprima').addEventListener('click', e => { if(e.
 document.getElementById('btnPdfSettings').addEventListener('click', () => {
   document.getElementById('pdfFormatSelect').value = (play.pdfSettings && play.pdfSettings.format) || 'a4';
   document.getElementById('pdfMarginsSelect').value = (play.pdfSettings && play.pdfSettings.margins) || 'normal';
+  document.getElementById('pdfCopyrightInput').value = play.copyright || '';
   document.getElementById('modalPdfSettings').classList.add('open');
 });
 document.getElementById('closePdfSettings').addEventListener('click', () => document.getElementById('modalPdfSettings').classList.remove('open'));
@@ -2069,6 +2188,7 @@ document.getElementById('btnSalvaPdfSettings').addEventListener('click', () => {
     format: document.getElementById('pdfFormatSelect').value,
     margins: document.getElementById('pdfMarginsSelect').value
   };
+  play.copyright = document.getElementById('pdfCopyrightInput').value;
   scheduleSave();
   document.getElementById('modalPdfSettings').classList.remove('open');
 });
@@ -2136,7 +2256,7 @@ document.getElementById('btnEseguiImporta').addEventListener('click', () => {
   const blocks = parsePastedScript(raw);
   const targetAct = play.acts[play.acts.length - 1];
   const n = targetAct.scenes.length + 1;
-  const newScene = { id: uid(), title: 'Scena ' + n + ' (importata)', setting: '', directorNotes: '', status: '', presentCharacters: [], blocks };
+  const newScene = { id: uid(), title: 'Scena ' + n + ' (importata)', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks };
   targetAct.scenes.push(newScene);
   blocks.forEach(b => {
     if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)){
@@ -2157,6 +2277,8 @@ function buildFountain(){
     atto.scenes.forEach(scena => {
       out += `## ${scena.title}\n`;
       if(scena.setting) out += `> ${scena.setting}\n\n`;
+      if(scena.descrizione && scena.descrizione.trim()) out += `${scena.descrizione.trim()}\n\n`;
+      if(scena.scenografia && scena.scenografia.trim()) out += `[[Scenografia e oggettistica: ${scena.scenografia.trim()}]]\n\n`;
       scena.blocks.forEach(b => {
         if(b.type === 'direction'){
           if(b.text.trim()) out += `${b.text.trim()}\n\n`;
@@ -2235,6 +2357,59 @@ async function writeToFileHandle(){
     await writable.close();
   }catch(e){ /* scrittura non riuscita, il salvataggio nel browser resta comunque valido */ }
 }
+/* ---------- NUOVO COPIONE ---------- */
+function buildBlankPlay(){
+  return {
+    title: "Titolo dell'opera",
+    author: "Il tuo nome",
+    fontSize: 14,
+    pdfSettings: { format: 'a4', margins: 'normal' },
+    copyright: '',
+    characters: [
+      { id: uid(), name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." }
+    ],
+    acts: [
+      {
+        id: uid(),
+        title: "Atto I",
+        scenes: [
+          {
+            id: uid(),
+            title: "Scena 1",
+            setting: "Luogo, momento del giorno",
+            directorNotes: "",
+            status: "",
+            presentCharacters: [],
+            descrizione: "",
+            scenografia: "",
+            blocks: [
+              { id: uid(), type: "direction", text: "" },
+              { id: uid(), type: "dialogue", character: "PERSONAGGIO A", text: "" }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+}
+document.getElementById('btnNuovoCopione').addEventListener('click', () => {
+  const ok = confirm(
+    'Creare un nuovo copione sostituirà quello attualmente aperto in questa pagina.\n\n' +
+    'Se vuoi conservare il lavoro attuale, annulla e usa prima "Salva progetto (.json)" o "🕘 Versioni salvate".\n\n' +
+    'Continuare con un copione nuovo e vuoto?'
+  );
+  if(!ok) return;
+  play = buildBlankPlay();
+  currentSceneId = play.acts[0].scenes[0].id;
+  filterCharacter = null;
+  rehearsalMode = false;
+  readingBlockId = null;
+  fileHandle = null;
+  document.getElementById('fileLocLabel').textContent = '';
+  scheduleSave();
+  renderAll();
+});
+
 document.getElementById('btnFileLocale').addEventListener('click', async () => {
   if(!('showSaveFilePicker' in window)){
     alert('Questa funzione è disponibile solo su browser basati su Chrome/Edge. Su questo browser continua a funzionare comunque il salvataggio automatico nella memoria del browser, oppure puoi usare "Salva progetto (.json)" manualmente.');
