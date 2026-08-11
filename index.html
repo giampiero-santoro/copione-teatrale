@@ -9,15 +9,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
-    --sipario:#5C1A21;
-    --sipario-dark:#3A1014;
-    --oro:#B8923C;
-    --oro-chiaro:#D9BE7E;
-    --carta:#F3ECDD;
-    --carta-scura:#E7DBC0;
-    --inchiostro:#2A211B;
-    --grigio:#83786A;
-    --rosso-avviso:#9C3B3B;
+    --sipario:#6B0E1C;
+    --sipario-dark:#2B0509;
+    --oro:#C9A227;
+    --oro-chiaro:#E8C766;
+    --carta:#F3E9D0;
+    --carta-scura:#E6D5A3;
+    --inchiostro:#241812;
+    --grigio:#8C7A56;
+    --rosso-avviso:#8A2A2A;
   }
   *{box-sizing:border-box;}
   html, body{ height:100%; }
@@ -33,18 +33,28 @@
   }
   /* HEADER */
   header{
-    background:linear-gradient(180deg,var(--sipario) 0%,var(--sipario-dark) 100%);
-    padding:22px 28px 26px;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 3px, rgba(255,255,255,.03) 3px 6px),
+      radial-gradient(120% 180% at 50% -40%, rgba(232,199,102,.14) 0%, transparent 55%),
+      linear-gradient(180deg,var(--sipario) 0%,var(--sipario-dark) 100%);
+    padding:24px 28px 28px;
     border-bottom:3px solid var(--oro);
+    box-shadow:0 4px 18px rgba(0,0,0,.5);
     position:relative;
     flex-shrink:0;
+  }
+  header::before{
+    content:"";
+    position:absolute;top:0;left:0;right:0;height:8px;
+    background:linear-gradient(180deg, rgba(0,0,0,.35), transparent);
   }
   header::after{
     content:"";
     position:absolute;
-    bottom:-3px;left:0;right:0;height:3px;
-    background:repeating-linear-gradient(90deg,var(--oro) 0 14px, transparent 14px 22px);
-    opacity:.6;
+    bottom:-4px;left:0;right:0;height:4px;
+    background:repeating-linear-gradient(90deg,var(--oro) 0 14px, transparent 14px 22px),
+      linear-gradient(90deg, var(--oro-chiaro), var(--oro) 50%, var(--oro-chiaro));
+    opacity:.75;
   }
   .brand{
     display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
@@ -78,8 +88,10 @@
   .layout{display:flex;flex:1;min-height:0;overflow:hidden;}
   aside{
     width:300px;flex-shrink:0;background:var(--carta-scura);
-    border-right:1px solid #d6c7a1;padding:0;display:flex;flex-direction:column;overflow:hidden;
+    border-right:1px solid #D8C088;padding:0;display:flex;flex-direction:column;overflow:hidden;
   }
+  .mobile-sidebar-launcher{display:none;}
+  .mobile-aside-close{display:none;}
   .sidebar-fixed-top{flex-shrink:0;border-bottom:2px solid var(--oro);padding:14px 16px;background:var(--carta-scura);}
   .mini-stats{
     display:flex;flex-wrap:wrap;gap:6px 10px;font-family:'Inter',sans-serif;font-size:11px;
@@ -93,9 +105,9 @@
   }
   .side-tools-grid button:hover{background:var(--sipario-dark);}
   .side-tools-grid button.alt{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
-  .side-tools-grid button.alt:hover{background:#eadfc4;}
+  .side-tools-grid button.alt:hover{background:#E0CC93;}
   .side-tools-grid button.wide{grid-column:1 / -1;}
-  .tabs{display:flex;border-bottom:1px solid #d6c7a1;flex-shrink:0;}
+  .tabs{display:flex;border-bottom:1px solid #D8C088;flex-shrink:0;}
   .tab-btn{
     flex:1;padding:12px 8px;background:none;border:none;cursor:pointer;
     font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.03em;
@@ -109,7 +121,7 @@
   .atto-head{
     display:flex;align-items:center;justify-content:space-between;gap:6px;
     font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
-    font-size:15px;padding:6px 4px;border-bottom:1px solid #d6c7a1;
+    font-size:15px;padding:6px 4px;border-bottom:1px solid #D8C088;
   }
   .atto-head input{
     font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
@@ -148,28 +160,71 @@
   .filter-banner button{background:none;border:none;color:var(--oro-chiaro);cursor:pointer;font-weight:700;font-size:13px;}
 
   .add-btn{
-    width:100%;margin-top:6px;padding:8px;background:none;border:1px dashed #b8a879;
+    width:100%;margin-top:6px;padding:8px;background:none;border:1px dashed #B89A55;
     border-radius:6px;color:var(--grigio);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
     cursor:pointer;letter-spacing:.02em;
   }
   .add-btn:hover{border-color:var(--sipario);color:var(--sipario);}
 
   .pers-card{
-    background:var(--carta);border:1px solid #d6c7a1;border-radius:8px;padding:10px 12px;margin-bottom:10px;
+    background:var(--carta);border:1px solid #D8C088;border-radius:8px;padding:10px 12px;margin-bottom:10px;
   }
+  .pers-card-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+  .pers-color{
+    width:22px;height:22px;padding:0;border:2px solid var(--carta-scura);border-radius:50%;cursor:pointer;
+    flex-shrink:0;background:none;-webkit-appearance:none;appearance:none;overflow:hidden;
+  }
+  .pers-color::-webkit-color-swatch-wrapper{padding:0;}
+  .pers-color::-webkit-color-swatch{border:none;border-radius:50%;}
+  .pers-color::-moz-color-swatch{border:none;border-radius:50%;}
   .pers-card input.nome{
-    width:100%;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--sipario);
-    border:none;background:none;outline:none;margin-bottom:4px;
+    flex:1;min-width:0;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--sipario);
+    border:none;background:none;outline:none;margin-bottom:0;
   }
   .pers-card textarea.desc{
     width:100%;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);border:none;background:none;
     outline:none;resize:none;line-height:1.4;
   }
-  .pers-card .rm{float:right;}
+  .pers-card .rm{flex-shrink:0;}
   .pers-card .filter-btn{
-    float:right;margin-right:4px;background:none;border:none;color:var(--grigio);cursor:pointer;font-size:12px;
+    flex-shrink:0;background:none;border:none;color:var(--grigio);cursor:pointer;font-size:12px;
   }
   .pers-card .filter-btn:hover{color:var(--sipario);}
+  .pers-role{
+    width:100%;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--grigio);border:1px solid #D8C088;
+    border-radius:5px;padding:4px 6px;margin:2px 0 6px;background:var(--carta);cursor:pointer;
+  }
+  .pers-details-toggle{
+    background:none;border:none;color:var(--grigio);font-family:'Inter',sans-serif;font-size:11px;
+    text-decoration:underline dotted;cursor:pointer;padding:3px 0;margin-top:3px;
+  }
+  .pers-details-toggle:hover{color:var(--sipario);}
+  .pers-details{
+    margin-top:8px;padding-top:8px;border-top:1px dashed #D8C088;display:flex;flex-direction:column;gap:8px;
+  }
+  .pers-field-row{display:flex;gap:8px;}
+  .pers-field{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .pers-field label, .pers-relationships > label{
+    font-family:'Inter',sans-serif;font-size:10px;color:var(--grigio);text-transform:uppercase;letter-spacing:.03em;
+  }
+  .pers-relationships > label{display:block;margin-bottom:2px;}
+  .pers-field input, .pers-field textarea{
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--inchiostro);border:1px solid #D8C088;
+    border-radius:5px;padding:4px 6px;background:var(--carta);resize:none;outline:none;
+  }
+  .pers-rel-row{display:flex;gap:5px;margin-bottom:5px;align-items:center;}
+  .pers-rel-row select, .pers-rel-row input{
+    font-size:11.5px;font-family:'Inter',sans-serif;border:1px solid #D8C088;border-radius:5px;
+    padding:3px 5px;background:var(--carta);color:var(--inchiostro);outline:none;
+  }
+  .pers-rel-row select{flex:0 0 34%;min-width:0;}
+  .pers-rel-row input{flex:1;min-width:0;}
+  .pers-rel-row .icon-btn{flex-shrink:0;}
+  .pers-rel-add{
+    width:100%;padding:5px;background:none;border:1px dashed #B89A55;border-radius:5px;color:var(--grigio);
+    font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
+  }
+  .pers-rel-add:hover{border-color:var(--sipario);color:var(--sipario);}
 
   .guida-toggle{
     margin:10px 16px 16px;padding:10px 12px;background:var(--sipario);color:var(--carta);
@@ -178,13 +233,20 @@
   .guida-toggle:hover{background:var(--sipario-dark);}
 
   /* MAIN / MANUSCRIPT */
-  main{flex:1;display:flex;flex-direction:column;background:#4a1319;overflow:hidden;position:relative;min-height:0;}
+  main{
+    flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-height:0;
+    background:
+      radial-gradient(60% 40% at 50% 0%, rgba(232,199,102,.10) 0%, transparent 60%),
+      repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 4px, rgba(255,255,255,.02) 4px 9px),
+      linear-gradient(180deg, #3A0A12 0%, #2B0509 100%);
+  }
   .stage{flex:1;overflow-y:auto;padding:36px 40px;display:flex;justify-content:center;align-items:flex-start;min-height:0;}
   .page{
     background:var(--carta);width:100%;
     max-width:min(96%, calc(680px + (var(--ms-size) - 14px) * 18));
     min-height:calc(100vh - 260px);
-    padding:52px 56px 90px;box-shadow:0 12px 40px rgba(0,0,0,.45);
+    padding:52px 56px 90px;
+    box-shadow:0 18px 50px rgba(0,0,0,.55), 0 2px 0 var(--oro);
     font-family:'Courier Prime',monospace;position:relative;
     --ms-size:14px;
     transition:max-width .15s ease;
@@ -205,7 +267,7 @@
   }
   .slugline{
     text-align:center;font-family:'Courier Prime',monospace;text-transform:uppercase;font-size:calc(var(--ms-size) - 1px);
-    letter-spacing:.04em;color:var(--grigio);border-top:1px solid #d6c7a1;border-bottom:1px solid #d6c7a1;
+    letter-spacing:.04em;color:var(--grigio);border-top:1px solid #D8C088;border-bottom:1px solid #D8C088;
     padding:6px 0;margin:14px 0 22px;background:transparent;width:100%;text-align:center;outline:none;
   }
   .blocks{display:flex;flex-direction:column;gap:16px;}
@@ -222,7 +284,7 @@
   .ctrl-btn.del:hover{color:var(--rosso-avviso);}
   .block.direction textarea{
     font-family:'Courier Prime',monospace;font-style:italic;color:var(--grigio);text-align:center;
-    width:78%;margin:0 auto;display:block;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
+    width:78%;margin:0 auto;display:block;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
     padding:9px 14px;outline:none;resize:none;font-size:calc(var(--ms-size) - 1px);line-height:1.5;
   }
   .block.dialogue .char-name{
@@ -231,7 +293,7 @@
   }
   .note-row{
     display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:10px auto 14px;
-    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
+    padding:8px 14px;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
   }
   .note-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -241,7 +303,7 @@
   .note-row:hover .ctrl-btn{opacity:1;}
   .after-direction-row{
     display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:14px auto 6px;
-    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
+    padding:8px 14px;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
   }
   .after-direction-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -265,7 +327,7 @@
     width:78%;margin:4px auto 0;display:block;border:none;background:none;outline:none;resize:none;
   }
   .block.offstage{
-    background:#efe3c8;border:1px dashed #b8a879;border-radius:8px;padding:12px 78px 12px 16px;
+    background:#EBDCB4;border:1px dashed #B89A55;border-radius:8px;padding:12px 78px 12px 16px;
   }
   .offstage-label{
     font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;color:var(--grigio);
@@ -282,7 +344,7 @@
   }
   .director-toggle:hover{color:var(--sipario);}
   .director-notes{
-    display:block;width:100%;margin-top:8px;padding:10px 12px;background:#efe3c8;border:1px dashed #c9b688;
+    display:block;width:100%;margin-top:8px;padding:10px 12px;background:#EBDCB4;border:1px dashed #BFA05A;
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:60px;outline:none;
   }
@@ -292,13 +354,13 @@
     text-transform:uppercase;letter-spacing:.04em;
   }
   .scene-info-box textarea{
-    display:block;width:100%;padding:9px 12px;background:#F2F2F0;border:1px solid #D8D8D4;
+    display:block;width:100%;padding:9px 12px;background:#F0EAD8;border:1px solid #D9CBA0;
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:44px;outline:none;
   }
   .scene-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 14px;}
   .status-btn{
-    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    border:1px solid #D8C088;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
     padding:4px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .status-btn.on-bozza{background:#8a93a8;color:#fff;border-color:#8a93a8;}
@@ -308,7 +370,7 @@
   .presence-label{font-family:'Inter',sans-serif;font-size:11px;color:var(--grigio);margin-bottom:5px;}
   .presence-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
   .chip{
-    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    border:1px solid #D8C088;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
     padding:3px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .chip.on{background:var(--sipario);color:var(--carta);border-color:var(--sipario);}
@@ -324,19 +386,19 @@
   .page.rehearsal .block-num{display:none !important;}
   .page.rehearsal .block{padding-right:0;}
   .page.rehearsal textarea, .page.rehearsal select, .page.rehearsal input{cursor:default;}
-  .block.dialogue.reading{background:#f4e9cf;border-radius:8px;box-shadow:inset 3px 0 0 var(--oro);}
+  .block.dialogue.reading{background:#EFDFB8;border-radius:8px;box-shadow:inset 3px 0 0 var(--oro);}
   .pers-stat{
     margin-top:6px;font-size:11px;color:var(--grigio);font-family:'Inter',sans-serif;
-    border-top:1px dashed #d6c7a1;padding-top:6px;
+    border-top:1px dashed #D8C088;padding-top:6px;
   }
   .block-toolbar{
-    display:flex;gap:10px;justify-content:center;margin-top:26px;padding-top:18px;border-top:1px dashed #d6c7a1;
+    display:flex;gap:10px;justify-content:center;margin-top:26px;padding-top:18px;border-top:1px dashed #D8C088;
   }
   .block-toolbar button{
     background:var(--sipario);color:var(--carta);border:none;padding:8px 14px;border-radius:6px;cursor:pointer;
     font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
   }
-  .block-toolbar button.secondary{background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;}
+  .block-toolbar button.secondary{background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;}
   .block-toolbar button:hover{opacity:.88;}
 
   .side-tools{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;}
@@ -346,12 +408,12 @@
   }
   .side-tools button:hover{background:var(--sipario-dark);}
   .side-tools button.alt{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
-  .side-tools button.alt:hover{background:#eadfc4;}
+  .side-tools button.alt:hover{background:#E0CC93;}
 
   .stage-controls{
     position:absolute;top:14px;right:28px;z-index:5;display:flex;align-items:center;gap:4px;
     background:var(--carta-scura);padding:5px 6px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.35);
-    border:1px solid #d6c7a1;
+    border:1px solid #D8C088;
   }
   .stage-controls button{
     width:26px;height:26px;border-radius:50%;border:none;background:var(--sipario);color:var(--carta);
@@ -360,8 +422,48 @@
   .stage-controls button:hover{background:var(--sipario-dark);}
   .stage-controls span{font-family:'Inter',sans-serif;font-size:11px;color:var(--grigio);min-width:32px;text-align:center;}
 
+  /* PANNELLO "SPAZIO DI SCRITTURA": mostra/nascondi intestazione, menù laterale, barra inferiore */
+  .layout-toggle-panel{
+    display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:20;
+    background:var(--carta);border:1px solid #D8C088;border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);padding:12px 14px;min-width:210px;
+  }
+  .layout-toggle-panel.open{display:block;}
+  .layout-toggle-panel .ltp-title{
+    font-family:'Inter',sans-serif;font-weight:700;font-size:11px;color:var(--grigio);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;
+  }
+  .layout-toggle-panel label{
+    display:flex;align-items:center;gap:8px;font-family:'Inter',sans-serif;font-size:13px;
+    color:var(--inchiostro);padding:5px 0;cursor:pointer;
+  }
+  .layout-toggle-panel input[type=checkbox]{width:15px;height:15px;flex-shrink:0;cursor:pointer;}
+  body.dark-mode .layout-toggle-panel{ background:#2c2219; border-color:#3a2c20; }
+  body.dark-mode .layout-toggle-panel label{ color:#e7dcc4; }
+  body.dark-mode .layout-toggle-panel .ltp-title{ color:#a8987a; }
+
+  body.hide-topbar header{display:none;}
+  body.hide-sidebar aside{display:none;}
+  body.hide-bottombar footer{display:none;}
+
+  /* TASTO RAPIDO "AGGIUNGI" — sempre visibile a lato, indipendente dallo scroll del copione */
+  .quick-add-fab{
+    position:fixed;right:20px;bottom:calc(var(--footer-h, 54px) + 20px);z-index:8;
+    display:flex;flex-direction:column;align-items:flex-end;gap:8px;
+    transition:bottom .15s ease;
+  }
+  .quick-add-fab.hidden{display:none;}
+  .quick-add-fab button{
+    display:flex;align-items:center;gap:7px;background:var(--sipario);color:var(--carta);border:none;
+    padding:10px 16px;border-radius:24px;box-shadow:0 6px 18px rgba(0,0,0,.4);
+    font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;cursor:pointer;white-space:nowrap;
+  }
+  .quick-add-fab button .ic{font-size:15px;line-height:1;}
+  .quick-add-fab button.secondary{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
+  .quick-add-fab button:hover{filter:brightness(1.08);}
+
   footer{
-    background:var(--sipario-dark);border-top:1px solid #6a2027;padding:10px 24px;
+    background:var(--sipario-dark);border-top:1px solid #4A0A12;padding:10px 24px;
     display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;flex-shrink:0;
   }
   .footer-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
@@ -395,16 +497,24 @@
   body.dark-mode .tab-btn.active{ color:#e7c877; border-color:#e7c877; }
   body.dark-mode .atto-head{ color:#e7c877; border-color:#3a2c20; }
   body.dark-mode .atto-head input{ color:#e7c877; }
-  body.dark-mode .scena-item{ color:#d9c9a3; }
+  body.dark-mode .scena-item{ color:#D2BA7E; }
   body.dark-mode .scena-item:hover{ background:#00000030; }
   body.dark-mode .add-btn{ color:#a8987a; border-color:#4a3a2a; }
   body.dark-mode .pers-card{ background:#2c2219; border-color:#3a2c20; }
   body.dark-mode .pers-card .nome{ color:#e7c877; }
   body.dark-mode .pers-card .desc, body.dark-mode .pers-stat{ color:#c9bda3; }
+  body.dark-mode .pers-role{ background:#241c16; border-color:#3a2c20; color:#a8987a; }
+  body.dark-mode .pers-details{ border-color:#3a2c20; }
+  body.dark-mode .pers-field label, body.dark-mode .pers-relationships > label{ color:#a8987a; }
+  body.dark-mode .pers-field input, body.dark-mode .pers-field textarea,
+  body.dark-mode .pers-rel-row select, body.dark-mode .pers-rel-row input{
+    background:#241c16; border-color:#3a2c20; color:#e7dcc4;
+  }
+  body.dark-mode .pers-color{ border-color:#3a2c20; }
   body.dark-mode .sidebar-fixed-top{ background:#241c16; border-color:#5c4a30; }
   body.dark-mode .mini-stats{ color:#a8987a; }
   body.dark-mode .mini-stats b{ color:#e7c877; }
-  body.dark-mode .side-tools-grid button{ background:#5C1A21; }
+  body.dark-mode .side-tools-grid button{ background:#6B0E1C; }
   body.dark-mode .side-tools-grid button.alt{ background:#241c16; color:#e7c877; border-color:#5c4a30; }
   body.dark-mode .page{ background:#241c16; }
   body.dark-mode .page::before{ opacity:.3; }
@@ -437,26 +547,26 @@
   .qa-ok{color:#3f8c5c;font-size:13px;font-family:'Inter',sans-serif;}
   .stat-block{margin-bottom:18px;}
   .stat-block h3{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sipario);margin:0 0 8px;text-transform:uppercase;letter-spacing:.03em;}
-  .stat-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #e7dbc0;}
+  .stat-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #E6D5A3;}
   .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .bar-label{width:110px;font-size:11.5px;font-family:'Courier Prime',monospace;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .bar-track{flex:1;background:#e7dbc0;border-radius:6px;height:14px;overflow:hidden;}
+  .bar-track{flex:1;background:#E6D5A3;border-radius:6px;height:14px;overflow:hidden;}
   .bar-fill{background:var(--sipario);height:100%;border-radius:6px;}
   .bar-val{width:70px;font-size:11px;color:var(--grigio);}
   .outline-row{
-    padding:8px 4px;border-bottom:1px solid #e7dbc0;cursor:pointer;
+    padding:8px 4px;border-bottom:1px solid #E6D5A3;cursor:pointer;
   }
-  .outline-row:hover{background:#f4ecd8;}
+  .outline-row:hover{background:#EFDFB8;}
   .outline-row .ol-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);font-size:12.5px;}
   .outline-row .ol-preview{font-size:12px;color:var(--grigio);margin-top:2px;font-family:'Courier Prime',monospace;}
   .import-textarea{
     width:100%;min-height:180px;font-family:'Courier Prime',monospace;font-size:12.5px;padding:10px;
-    border:1px solid #d6c7a1;border-radius:6px;resize:vertical;background:#fff8ea;
+    border:1px solid #D8C088;border-radius:6px;resize:vertical;background:#fff8ea;
   }
   .sr-field{margin-bottom:14px;}
   .sr-field label{display:block;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--grigio);margin-bottom:4px;}
   .sr-field select, .sr-field input[type=text]{
-    width:100%;padding:8px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;background:#fff8ea;
+    width:100%;padding:8px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;background:#fff8ea;
   }
   .empty-state{
     font-family:'Inter',sans-serif;color:var(--grigio);text-align:center;padding:60px 20px;
@@ -467,10 +577,10 @@
   }
   .version-row{display:flex;gap:8px;margin-bottom:16px;}
   .version-row input{
-    flex:1;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;
+    flex:1;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;
     background:#fff8ea;
   }
-  .version-item{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid #e4d8ba;}
+  .version-item{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid #DCC896;}
   .version-item .v-label{font-weight:600;font-size:13.5px;color:var(--sipario);}
   .version-item .v-date{font-size:11.5px;color:var(--grigio);}
   .version-item .v-actions button{
@@ -482,107 +592,100 @@
   .sr-field{margin-bottom:12px;}
   .sr-field label{display:block;font-size:11.5px;color:var(--grigio);margin-bottom:4px;font-family:'Inter',sans-serif;}
   .sr-field input{
-    width:100%;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;
+    width:100%;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;
     font-size:13.5px;background:#fff8ea;
   }
   .sr-check{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--grigio);margin-bottom:14px;font-family:'Inter',sans-serif;}
+  .field-hint{font-size:11.5px;color:var(--grigio);margin-top:5px;line-height:1.45;font-family:'Inter',sans-serif;}
   #searchResult{font-size:12.5px;color:var(--grigio);margin-bottom:10px;min-height:16px;}
+  /* ---------- OTTIMIZZAZIONE PER TABLET E SMARTPHONE ---------- */
   @media(max-width:820px){
+    html, body{ height:100vh; height:100dvh; }
     .layout{flex-direction:column;}
-    aside{width:100%;max-height:280px;}
-    .page{padding:32px 24px 70px;}
-  }
 
-  /* ---------- TOGGLE UI (header / sidebar / footer) ---------- */
-  body.header-hidden header { display:none !important; }
-  body.sidebar-hidden .layout > aside { display:none !important; }
-  body.footer-hidden footer { display:none !important; }
-  body.sidebar-hidden .layout { flex-direction:column; }
+    /* Struttura/Personaggi diventano un pannello a schermo intero, aperto dal pulsante sotto l'intestazione */
+    .mobile-sidebar-launcher{
+      display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
+      padding:11px 14px;background:var(--carta-scura);border:none;border-bottom:1px solid #D8C088;
+      color:var(--sipario);font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;
+    }
+    body.hide-sidebar .mobile-sidebar-launcher{display:none;}
 
-  /* ---------- COPYRIGHT ROW ---------- */
-  .copyright-row { margin-top:6px; display:none; }
-  .copyright-row input {
-    font-family:'Inter',sans-serif;font-size:12px;color:var(--oro-chiaro);
-    background:transparent;border:none;border-bottom:1px dashed var(--oro);outline:none;
-    width:100%;max-width:420px;padding:2px 0;
-  }
-  .copyright-row input::placeholder { color:var(--grigio); }
+    aside{
+      position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100vh;height:100dvh;
+      max-height:none;z-index:45;border-right:none;
+      transform:translateX(100%);transition:transform .22s ease;
+    }
+    aside.mobile-open{transform:translateX(0);}
 
-  /* ---------- SIDE FAB (toolbar laterale fissa) ---------- */
-  .side-fab {
-    position:fixed; right:18px; top:50%; transform:translateY(-50%);
-    display:flex; flex-direction:column; gap:10px; z-index:15;
-  }
-  .side-fab button {
-    width:52px; height:52px; border-radius:50%; border:none;
-    background:var(--sipario); color:var(--carta); cursor:pointer;
-    box-shadow:0 4px 14px rgba(0,0,0,.35);
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    line-height:1; transition:transform .15s ease, background .15s ease;
-  }
-  .side-fab button:hover { background:var(--sipario-dark); transform:scale(1.08); }
-  .side-fab button .fab-icon { font-size:18px; }
-  .side-fab button .fab-label { font-size:9px; font-weight:700; letter-spacing:.04em; margin-top:1px; }
+    .mobile-aside-close{
+      display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+      padding:14px 16px;background:var(--sipario);color:var(--carta);
+    }
+    .mobile-aside-close span{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;}
+    .mobile-aside-close button{
+      background:none;border:1px solid var(--carta-scura);color:var(--carta);border-radius:6px;
+      padding:6px 12px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;
+    }
 
-  /* ---------- RESPONSIVE MIGLIORATO ---------- */
-  @media(max-width:1024px){
-    .page { padding:40px 36px 80px; }
-    .side-fab { right:10px; gap:8px; }
-    .side-fab button { width:48px; height:48px; }
-  }
-  @media(max-width:820px){
-    .layout { flex-direction:column; }
-    aside { width:100%; max-height:260px; border-right:none; border-bottom:2px solid var(--oro); }
-    .page { padding:28px 20px 60px; max-width:100%; }
-    .stage { padding:20px 14px; }
-    header { padding:16px 18px 20px; }
-    .title-row { gap:10px; }
-    #titolo-opera { font-size:24px; min-width:160px; }
-    .save-state { top:12px; right:18px; }
-    .quick-save-btn { top:10px; right:120px; width:28px; height:28px; }
-    .side-fab { right:8px; gap:6px; }
-    .side-fab button { width:44px; height:44px; }
-    .side-fab button .fab-icon { font-size:16px; }
-    .block { padding-right:0; }
-    .block-controls { opacity:1; position:static; margin-bottom:4px; justify-content:flex-end; }
-    .block-num { left:auto; right:0; top:auto; bottom:2px; background:transparent; padding:0; font-size:9px; opacity:.5; }
-    .stage-controls { top:8px; right:8px; padding:4px 5px; }
-    .stage-controls button { width:28px; height:28px; font-size:11px; }
-    footer { padding:8px 12px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
-    .footer-actions { flex-wrap:nowrap; gap:6px; min-width:min-content; }
-    .footer-actions button { padding:8px 10px; font-size:11px; white-space:nowrap; }
+    .page{padding:28px 20px 64px;}
+    .stage{padding:20px 16px;-webkit-overflow-scrolling:touch;}
+    .tab-panel, .modal, .stage{-webkit-overflow-scrolling:touch;}
+
+    /* le manopole a scomparsa (sposta/elimina/aggiungi nota) non funzionano al tocco: restano sempre visibili */
+    .block-controls, .mini-actions, .note-row .ctrl-btn, .after-direction-row .ctrl-btn, .scena-item .icon-btn{
+      opacity:1;
+    }
+    .block{padding-right:56px;}
+    .block-controls{gap:1px;}
+    .ctrl-btn{padding:7px 8px;font-size:13px;}
+    .block-num{left:-32px;}
+
+    /* niente zoom automatico di iOS quando si tocca un campo di testo: font minimo 16px */
+    input, select, textarea{font-size:16px;}
+    .block.dialogue textarea.line{font-size:max(16px, calc(var(--ms-size) + 0.5px));}
+    .block.direction textarea, .block.offstage textarea{font-size:max(16px, calc(var(--ms-size) - 1px));}
+    .char-name{font-size:max(16px, var(--ms-size));}
+    .note-input, .after-direction-input{font-size:max(16px, calc(var(--ms-size) - 1.5px));}
+    .slugline{font-size:max(16px, calc(var(--ms-size) - 1px));}
+    #titolo-opera{font-size:24px;min-width:160px;}
+    #autore-opera{font-size:14px;}
+
+    header{padding:16px 18px 18px;}
+    .save-state{top:16px;right:18px;font-size:10.5px;}
+    .quick-save-btn{top:12px;right:84px;width:26px;height:26px;}
+
+    /* bersagli più grandi per il tocco */
+    .icon-btn{padding:6px 8px;font-size:15px;}
+    .side-tools-grid button{padding:10px 8px;font-size:11.5px;}
+    .tab-btn{padding:14px 8px;}
+    .stage-controls{padding:5px 5px;gap:3px;}
+    .stage-controls button{width:30px;height:30px;font-size:13px;}
+    .footer-actions button{padding:10px 14px;font-size:12.5px;}
+    footer{padding:10px 14px;}
+
+    .block-toolbar{flex-wrap:wrap;}
+    .modal-overlay{padding:14px;}
+    .modal{padding:22px 20px;max-height:88vh;}
+
+    .quick-add-fab{right:14px;bottom:calc(var(--footer-h, 60px) + 14px);}
+    .quick-add-fab button{padding:9px 13px;font-size:12px;}
+    .layout-toggle-panel{right:-4px;min-width:190px;}
   }
   @media(max-width:480px){
-    .title-row { flex-direction:column; align-items:flex-start; gap:4px; }
-    .di { display:none; }
-    #titolo-opera { font-size:20px; }
-    #autore-opera { font-size:14px; }
-    .brand .mark { font-size:12px; }
-    .page { padding:18px 12px 40px; }
-    .stage { padding:12px 6px; }
-    .slugline { font-size:calc(var(--ms-size) - 2px); padding:5px 0; margin:10px 0 16px; }
-    .block.dialogue textarea.line, .block.direction textarea { width:92%; }
-    .note-row, .after-direction-row { width:92%; }
-    .scene-head .atto-lbl { font-size:11px; }
-    .scene-head .scena-lbl { font-size:14px; }
-    .sidebar-fixed-top { padding:10px 12px; }
-    .side-tools-grid { grid-template-columns:1fr 1fr; }
-    .side-tools-grid button { font-size:10px; padding:6px 4px; }
-    .tab-btn { padding:10px 6px; font-size:12px; }
-    .side-fab button { width:40px; height:40px; }
-    .side-fab button .fab-icon { font-size:14px; }
-    .side-fab button .fab-label { font-size:8px; }
+    header{padding:14px 14px 16px;}
+    #titolo-opera{font-size:20px;min-width:120px;}
+    .brand .mark{font-size:12px;}
+    .save-state{display:none;}
+    .quick-save-btn{top:12px;right:14px;}
+    .page{padding:22px 14px 58px;}
+    .stage{padding:14px 8px;}
+    .block{padding-right:48px;}
+    .side-tools-grid{grid-template-columns:1fr 1fr;}
+    .quick-add-fab button .lbl{display:none;}
+    .quick-add-fab button{padding:11px;border-radius:50%;}
+    .stage-controls{right:10px;}
   }
-  /* Touch-friendly generale */
-  button, .tab-btn, .scena-item, .chip, .status-btn, .add-btn {
-    min-height:36px;
-  }
-  @media(max-width:820px){
-    button, .tab-btn, .scena-item, .chip, .status-btn, .add-btn {
-      min-height:40px;
-    }
-  }
-
 </style>
 </head>
 <body>
@@ -590,20 +693,22 @@
 <header>
   <div class="save-state" id="saveState">pronto</div>
   <button class="quick-save-btn" id="btnSalvaOra" title="Salva subito">💾</button>
-  <button class="quick-save-btn" id="btnCopyright" title="Copyright" style="right:170px;">©</button>
   <div class="brand"><span class="mark">✦ Editor di Copioni</span></div>
   <div class="title-row">
     <input id="titolo-opera" value="Titolo dell'opera" />
     <span class="di">di</span>
     <input id="autore-opera" value="Il tuo nome" />
   </div>
-  <div class="copyright-row" id="copyrightRow">
-    <input id="copyright-opera" placeholder="© Anno, Titolare dei diritti (es. © 2026 Mario Rossi)" />
-  </div>
 </header>
+
+<button class="mobile-sidebar-launcher" id="mobileSidebarLauncher">🗂️ Struttura e personaggi</button>
 
 <div class="layout">
   <aside>
+    <div class="mobile-aside-close">
+      <span>Struttura e personaggi</span>
+      <button id="btnCloseMobileSidebar">✕ Chiudi</button>
+    </div>
     <div class="sidebar-fixed-top">
       <div class="mini-stats" id="stats"></div>
       <div class="side-tools-grid">
@@ -633,22 +738,26 @@
 
   <main>
     <div class="stage-controls">
-      <button id="btnToggleHeader" title="Mostra/nascondi header">👁️</button>
-      <button id="btnToggleSidebar" title="Mostra/nascondi sidebar">☰</button>
-      <button id="btnToggleFooter" title="Mostra/nascondi footer">👁️</button>
+      <button id="btnLayout" title="Mostra/nascondi intestazione, menù laterale e barra inferiore">▦</button>
       <button id="btnDarkMode" title="Tema scuro">🌙</button>
       <button id="btnRehearsal" title="Modalità prova/lettura">🎭</button>
       <button id="fontDown" title="Riduci il testo">A－</button>
       <span id="fontSizeLabel">14px</span>
       <button id="fontUp" title="Aumenta il testo">A＋</button>
-    </div>
-    <div class="side-fab" id="sideFab">
-      <button data-add-block="dialogue" title="Aggiungi battuta"><span class="fab-icon">💬</span><span class="fab-label">BAT</span></button>
-      <button data-add-block="direction" title="Aggiungi didascalia"><span class="fab-icon">🎬</span><span class="fab-label">DID</span></button>
-      <button data-add-block="offstage" title="Aggiungi fuori scena"><span class="fab-icon">📢</span><span class="fab-label">FS</span></button>
+      <div class="layout-toggle-panel" id="layoutTogglePanel">
+        <div class="ltp-title">Spazio di scrittura</div>
+        <label><input type="checkbox" id="chkShowHeader" checked /> Intestazione (in alto)</label>
+        <label><input type="checkbox" id="chkShowSidebar" checked /> Menù laterale (a sinistra)</label>
+        <label><input type="checkbox" id="chkShowFooter" checked /> Barra inferiore (in basso)</label>
+      </div>
     </div>
     <div class="stage" id="stage"></div>
-    <footer id="mainFooter">
+    <div class="quick-add-fab hidden" id="quickAddFab">
+      <button data-add-block="dialogue" title="Aggiungi battuta (Ctrl+Invio)"><span class="ic">🗣️</span><span class="lbl"> Battuta</span></button>
+      <button data-add-block="direction" class="secondary" title="Aggiungi didascalia"><span class="ic">📝</span><span class="lbl"> Didascalia</span></button>
+      <button data-add-block="offstage" class="secondary" title="Aggiungi voce fuori scena"><span class="ic">🔈</span><span class="lbl"> Fuori scena</span></button>
+    </div>
+    <footer>
       <div class="footer-actions">
         <button class="ghost" id="btnCopia">Copia testo</button>
         <button class="ghost" id="btnEsporta">Esporta .txt</button>
@@ -692,7 +801,7 @@
       <button class="modal-close" id="btnSalvaVersione" style="margin:0;">Salva versione</button>
     </div>
     <div id="versionList"><div class="version-empty">Caricamento…</div></div>
-    <button class="modal-close" id="closeVersioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-top:14px;">Chiudi</button>
+    <button class="modal-close" id="closeVersioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-top:14px;">Chiudi</button>
   </div>
 </div>
 
@@ -711,7 +820,7 @@
     <label class="sr-check"><input type="checkbox" id="caseSensitive" /> Distingui maiuscole/minuscole</label>
     <div id="searchResult"></div>
     <button class="modal-close" id="btnSostituisci">Sostituisci tutto</button>
-    <button class="modal-close" id="closeCerca" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closeCerca" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -721,10 +830,10 @@
     <div class="sub">Genera un PDF con le battute complete del personaggio scelto e un breve richiamo (cue) delle battute altrui, utile per lo studio della parte</div>
     <div class="sr-field">
       <label>Personaggio</label>
-      <select id="sidesCharacterSelect" style="width:100%;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff8ea;"></select>
+      <select id="sidesCharacterSelect" style="width:100%;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff8ea;"></select>
     </div>
     <button class="modal-close" id="btnGeneraSides">Genera PDF</button>
-    <button class="modal-close" id="closeSides" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closeSides" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -762,7 +871,7 @@
     <textarea class="import-textarea" id="importTextarea" placeholder="MARCO&#10;Non ci posso credere.&#10;&#10;(esce sbattendo la porta)"></textarea>
     <div style="margin-top:14px;">
       <button class="modal-close" id="btnEseguiImporta">Importa in una nuova scena</button>
-      <button class="modal-close" id="closeImporta" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Annulla</button>
+      <button class="modal-close" id="closeImporta" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Annulla</button>
     </div>
   </div>
 </div>
@@ -787,11 +896,12 @@
       </select>
     </div>
     <div class="sr-field">
-      <label>Testo del copyright nel frontespizio (lascia vuoto per generarlo in automatico)</label>
-      <input type="text" id="pdfCopyrightInput" placeholder="es. © 2026 Mario Rossi — Tutti i diritti riservati" />
+      <label>Copyright (facoltativo)</label>
+      <input type="text" id="copyrightText" placeholder="es. © 2026 Mario Rossi — Tutti i diritti riservati" />
+      <div class="field-hint">Se lasci vuoto, viene generata in automatico la dicitura con l'anno corrente e il nome dell'autore. Compare nella copertina del PDF, nel copione .txt e nel file .fountain.</div>
     </div>
     <button class="modal-close" id="btnSalvaPdfSettings">Salva impostazioni</button>
-    <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -799,10 +909,22 @@
   <div class="modal" style="max-width:820px;">
     <h2>Anteprima PDF</h2>
     <div class="sub">Così apparirà il PDF una volta scaricato</div>
-    <iframe id="pdfPreviewFrame" style="width:100%;height:60vh;border:1px solid #d6c7a1;border-radius:6px;"></iframe>
+    <iframe id="pdfPreviewFrame" style="width:100%;height:60vh;border:1px solid #D8C088;border-radius:6px;"></iframe>
     <div style="margin-top:14px;">
       <button class="modal-close" id="btnScaricaDaAnteprima">Scarica PDF</button>
-      <button class="modal-close" id="closeAnteprima" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+      <button class="modal-close" id="closeAnteprima" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalRelazioni">
+  <div class="modal" style="max-width:820px;">
+    <h2>Diagramma delle relazioni</h2>
+    <div class="sub">Generato automaticamente dalle relazioni inserite nella scheda di ogni personaggio</div>
+    <div id="relazioniContent" style="background:var(--carta);border:1px solid #D8C088;border-radius:8px;padding:10px;"></div>
+    <div style="margin-top:14px;">
+      <button class="modal-close" id="btnScaricaRelazioni">Scarica come SVG</button>
+      <button class="modal-close" id="closeRelazioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
     </div>
   </div>
 </div>
@@ -812,10 +934,10 @@ let play = {
   title: "Titolo dell'opera",
   author: "Il tuo nome",
   fontSize: 14,
-  pdfSettings: { format: 'a4', margins: 'normal' },
   copyright: '',
+  pdfSettings: { format: 'a4', margins: 'normal' },
   characters: [
-    { id: uid(), name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." }
+    { id: uid(), name: "PERSONAGGIO A", role: "", age: "", height: "", physical: "", costume: "", desc: "Breve descrizione: età, ruolo, cosa vuole.", backstory: "", color: "#8a3b3b", relationships: [] }
   ],
   acts: [
     {
@@ -842,33 +964,14 @@ let play = {
 };
 let currentSceneId = play.acts[0].scenes[0].id;
 let openDirNotes = new Set();
+let openPersDetails = new Set();
 let filterCharacter = null;
 let rehearsalMode = false;
 let readingBlockId = null;
-let uiState = { headerVisible: true, sidebarVisible: true, footerVisible: true };
 
 function uid(){ return 'id' + Math.random().toString(36).slice(2,10); }
-
-/* ---------- UI TOGGLE & COPYRIGHT ---------- */
-function applyUIState(){
-  document.body.classList.toggle('header-hidden', !uiState.headerVisible);
-  document.body.classList.toggle('sidebar-hidden', !uiState.sidebarVisible);
-  document.body.classList.toggle('footer-hidden', !uiState.footerVisible);
-  const hBtn = document.getElementById('btnToggleHeader');
-  const fBtn = document.getElementById('btnToggleFooter');
-  if(hBtn) hBtn.textContent = uiState.headerVisible ? '👁️' : '🙈';
-  if(fBtn) fBtn.textContent = uiState.footerVisible ? '👁️' : '🙈';
-}
-async function saveUIState(){
-  try{ await storageSet('copione:uiState', JSON.stringify(uiState)); }catch(e){}
-}
-async function loadUIState(){
-  try{
-    const raw = await storageGet('copione:uiState');
-    if(raw){ uiState = { ...uiState, ...JSON.parse(raw) }; }
-  }catch(e){}
-  applyUIState();
-}
+const CHAR_PALETTE = ['#8a3b3b','#3b5f8a','#4a7a4a','#8a6b2c','#6b4a8a','#2c6b6b','#8a4a6b','#5c5c2c'];
+function nextCharColor(){ return CHAR_PALETTE[play.characters.length % CHAR_PALETTE.length]; }
 
 function findScene(id){
   for(const atto of play.acts){
@@ -1018,19 +1121,56 @@ function computeDialogueNumbers(){
 }
 
 /* ---------- RENDER: SIDEBAR PERSONAGGI ---------- */
+const ROLE_OPTIONS = ['Protagonista','Antagonista','Comprimario','Caratterista','Comparsa'];
 function renderPersonaggi(){
   const panel = document.getElementById('panel-personaggi');
   panel.innerHTML = '';
   const stats = computeCharacterStats();
   play.characters.forEach(p => {
     const s = stats[p.name] || { battute: 0, words: 0 };
+    const isOpen = openPersDetails.has(p.id);
+    const others = play.characters.filter(c => c.id !== p.id);
+    const rels = p.relationships || [];
     const card = document.createElement('div');
     card.className = 'pers-card';
     card.innerHTML = `
-      <button class="icon-btn rm" data-del-pers="${p.id}">✕</button>
-      <button class="filter-btn" data-filter-pers="${escapeAttr(p.name)}" title="Mostra solo le scene con questo personaggio">🔎</button>
-      <input class="nome" data-pers-name="${p.id}" value="${escapeAttr(p.name)}" />
-      <textarea class="desc" rows="2" data-pers-desc="${p.id}">${escapeHtml(p.desc)}</textarea>
+      <div class="pers-card-top">
+        <input type="color" class="pers-color" data-pers-color="${p.id}" value="${p.color || '#8a3b3b'}" title="Colore identificativo" />
+        <input class="nome" data-pers-name="${p.id}" value="${escapeAttr(p.name)}" />
+        <button class="filter-btn" data-filter-pers="${escapeAttr(p.name)}" title="Mostra solo le scene con questo personaggio">🔎</button>
+        <button class="icon-btn rm" data-del-pers="${p.id}" title="Elimina personaggio">✕</button>
+      </div>
+      <select class="pers-role" data-pers-role="${p.id}">
+        <option value="">Ruolo drammaturgico…</option>
+        ${ROLE_OPTIONS.map(r => `<option value="${r}" ${p.role === r ? 'selected' : ''}>${r}</option>`).join('')}
+      </select>
+      <textarea class="desc" rows="2" data-pers-desc="${p.id}" placeholder="Breve descrizione: età, ruolo, cosa vuole...">${escapeHtml(p.desc || '')}</textarea>
+      <button class="pers-details-toggle" data-toggle-pers-details="${p.id}">${isOpen ? '▴ Nascondi dettagli' : '▾ Altri dettagli (età, aspetto, costume, relazioni…)'}</button>
+      ${isOpen ? `
+      <div class="pers-details" data-details-for="${p.id}">
+        <div class="pers-field-row">
+          <div class="pers-field"><label>Età</label><input type="text" data-pers-age="${p.id}" value="${escapeAttr(p.age || '')}" placeholder="es. 35" /></div>
+          <div class="pers-field"><label>Altezza</label><input type="text" data-pers-height="${p.id}" value="${escapeAttr(p.height || '')}" placeholder="es. 1,75 m" /></div>
+        </div>
+        <div class="pers-field"><label>Aspetto fisico</label><textarea rows="2" data-pers-physical="${p.id}" placeholder="corporatura, tratti distintivi...">${escapeHtml(p.physical || '')}</textarea></div>
+        <div class="pers-field"><label>Costume</label><textarea rows="2" data-pers-costume="${p.id}" placeholder="cosa indossa...">${escapeHtml(p.costume || '')}</textarea></div>
+        <div class="pers-field"><label>Retroscena / note per l'attore</label><textarea rows="2" data-pers-backstory="${p.id}" placeholder="motivazioni, storia pregressa (non compare nel copione stampato)">${escapeHtml(p.backstory || '')}</textarea></div>
+        <div class="pers-relationships">
+          <label>Relazioni con altri personaggi</label>
+          <div class="pers-rel-list">
+            ${rels.map((r, i) => `
+              <div class="pers-rel-row">
+                <select data-rel-char="${p.id}" data-rel-index="${i}">
+                  <option value="">— chi —</option>
+                  ${others.map(oc => `<option value="${oc.id}" ${r.targetId === oc.id ? 'selected' : ''}>${escapeHtml(oc.name)}</option>`).join('')}
+                </select>
+                <input type="text" data-rel-label="${p.id}" data-rel-index="${i}" value="${escapeAttr(r.label || '')}" placeholder="es. madre di, rivale di..." />
+                <button class="icon-btn" data-del-rel="${p.id}" data-rel-index="${i}" title="Rimuovi relazione">✕</button>
+              </div>`).join('') || '<div class="field-hint">Nessuna relazione aggiunta.</div>'}
+          </div>
+          <button class="pers-rel-add" data-add-rel="${p.id}" ${others.length ? '' : 'disabled'}>+ Aggiungi relazione</button>
+        </div>
+      </div>` : ''}
       <div class="pers-stat">${s.battute} battute · ${s.words} parole</div>`;
     panel.appendChild(card);
   });
@@ -1039,7 +1179,97 @@ function renderPersonaggi(){
   addBtn.textContent = '+ Nuovo personaggio';
   addBtn.id = 'addPers';
   panel.appendChild(addBtn);
+  if(play.characters.length > 1){
+    const relBtn = document.createElement('button');
+    relBtn.className = 'add-btn';
+    relBtn.id = 'btnDiagrammaRelazioni';
+    relBtn.style.marginTop = '4px';
+    relBtn.textContent = '🕸️ Diagramma delle relazioni';
+    panel.appendChild(relBtn);
+  }
 }
+
+/* ---------- DIAGRAMMA DELLE RELAZIONI TRA PERSONAGGI ---------- */
+function buildRelationshipSVG(){
+  const chars = play.characters;
+  const N = chars.length;
+  const R = N <= 4 ? 140 : Math.min(230, 120 + N * 10);
+  const cx = 380, cy = R + 100;
+  const H = cy + R + 90, W = 760;
+  const nodePos = {};
+  chars.forEach((c, i) => {
+    const angle = -Math.PI/2 + i * (2*Math.PI/N);
+    nodePos[c.id] = { x: cx + R*Math.cos(angle), y: cy + R*Math.sin(angle) };
+  });
+
+  const edges = [];
+  chars.forEach(c => {
+    (c.relationships || []).forEach(r => {
+      if(r.targetId && nodePos[r.targetId] && r.targetId !== c.id) edges.push({ from: c.id, to: r.targetId, label: (r.label || '').trim() });
+    });
+  });
+  const pairGroups = {};
+  edges.forEach(e => {
+    const key = [e.from, e.to].sort().join('|');
+    (pairGroups[key] = pairGroups[key] || []).push(e);
+  });
+
+  const nodeR = 24;
+  let edgeMarkup = '';
+  Object.values(pairGroups).forEach(group => {
+    const n = group.length;
+    group.forEach((e, idx) => {
+      const p1 = nodePos[e.from], p2 = nodePos[e.to];
+      const dx = p2.x - p1.x, dy = p2.y - p1.y;
+      const len = Math.sqrt(dx*dx + dy*dy) || 1;
+      const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2;
+      const perpX = -dy/len, perpY = dx/len;
+      const offset = (idx - (n-1)/2) * 26;
+      const ctrlX = mx + perpX*offset, ctrlY = my + perpY*offset;
+      const startX = p1.x + (dx/len)*nodeR, startY = p1.y + (dy/len)*nodeR;
+      const endX = p2.x - (dx/len)*nodeR, endY = p2.y - (dy/len)*nodeR;
+      edgeMarkup += `<path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="var(--grigio)" stroke-width="1.6" marker-end="url(#relArrow)" opacity="0.85"/>`;
+      if(e.label){
+        const w = Math.min(150, 14 + e.label.length*5.6);
+        edgeMarkup += `<rect x="${(ctrlX-w/2).toFixed(1)}" y="${(ctrlY-9).toFixed(1)}" width="${w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#D8C088" stroke-width="1"/>`;
+        edgeMarkup += `<text x="${ctrlX.toFixed(1)}" y="${(ctrlY+3).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--sipario)">${escapeHtml(e.label)}</text>`;
+      }
+    });
+  });
+
+  let nodeMarkup = '';
+  chars.forEach(c => {
+    const pos = nodePos[c.id];
+    nodeMarkup += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}" fill="${c.color || '#8a3b3b'}" stroke="var(--carta)" stroke-width="3"/>`;
+    nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+40).toFixed(1)}" text-anchor="middle" font-family="'Playfair Display', serif" font-weight="700" font-size="12.5" fill="var(--inchiostro)">${escapeHtml(c.name)}</text>`;
+    if(c.role) nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+53).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--grigio)">${escapeHtml(c.role)}</text>`;
+  });
+
+  const hint = edges.length ? '' : `<div class="field-hint" style="margin-bottom:8px;">Nessuna relazione è stata ancora inserita: apri la scheda di un personaggio → "Altri dettagli" → "+ Aggiungi relazione".</div>`;
+  return hint + `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+    <defs><marker id="relArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--grigio)"/></marker></defs>
+    ${edgeMarkup}
+    ${nodeMarkup}
+  </svg>`;
+}
+function openRelationshipDiagram(){
+  document.getElementById('relazioniContent').innerHTML = buildRelationshipSVG();
+  document.getElementById('modalRelazioni').classList.add('open');
+}
+document.getElementById('closeRelazioni').addEventListener('click', () => document.getElementById('modalRelazioni').classList.remove('open'));
+document.getElementById('modalRelazioni').addEventListener('click', e => { if(e.target.id === 'modalRelazioni') e.target.classList.remove('open'); });
+document.getElementById('btnScaricaRelazioni').addEventListener('click', () => {
+  const svg = document.querySelector('#relazioniContent svg');
+  if(!svg) return;
+  const svgData = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([svgData], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (play.title || 'relazioni').replace(/[^\wàèéìòù\-]+/gi,'_') + '_relazioni.svg';
+  a.click();
+  URL.revokeObjectURL(url);
+});
 
 /* ---------- RENDER: MAIN STAGE ---------- */
 function renderStage(){
@@ -1140,6 +1370,7 @@ function renderStage(){
 
   scena.blocks.forEach(block => {
     const b = document.createElement('div');
+    b.dataset.blockId = block.id;
     const ro = rehearsalMode ? 'readonly' : '';
     if(block.type === 'direction'){
       b.className = 'block direction';
@@ -1153,6 +1384,12 @@ function renderStage(){
     } else {
       b.className = 'block dialogue' + (rehearsalMode && readingBlockId === block.id ? ' reading' : '');
       if(rehearsalMode) b.dataset.readBlock = block.id;
+      const charObj = play.characters.find(c => c.name === block.character);
+      const charColor = charObj ? charObj.color : null;
+      if(charColor && !(rehearsalMode && readingBlockId === block.id)){
+        b.style.boxShadow = `inset 3px 0 0 ${charColor}`;
+        b.style.borderRadius = '4px';
+      }
       const charOptions = play.characters.map(c => `<option value="${escapeAttr(c.name)}" ${c.name===block.character?'selected':''}>${escapeHtml(c.name)}</option>`).join('');
       const hasNote = block.note !== undefined && block.note !== null;
       const hasDir = block.afterDirection !== undefined && block.afterDirection !== null;
@@ -1176,7 +1413,7 @@ function renderStage(){
       const num = dialogueNumbers[block.id];
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
         ${num ? `<span class="block-num">#${num}</span>` : ''}
-        <select class="char-name" ${ro ? 'disabled' : ''} data-block-char="${block.id}" style="text-align:center;">
+        <select class="char-name" ${ro ? 'disabled' : ''} data-block-char="${block.id}" style="text-align:center;${charColor ? 'color:'+charColor+';font-weight:700;' : ''}">
           <option value="${escapeAttr(block.character||'')}" hidden>${escapeHtml(block.character||'PERSONAGGIO')}</option>
           ${charOptions}
         </select>
@@ -1194,6 +1431,7 @@ function renderStage(){
   toolbar.className = 'block-toolbar';
   toolbar.innerHTML = `
     <button data-add-block="dialogue">+ Battuta</button>
+    <button class="secondary" data-add-block="direction">+ Didascalia</button>
     <button class="secondary" data-add-block="offstage">+ Fuori scena</button>`;
   page.appendChild(toolbar);
 
@@ -1204,6 +1442,7 @@ function renderStage(){
 
   document.getElementById('fontSizeLabel').textContent = (play.fontSize || 14) + 'px';
   autoResizeAll();
+  updateQuickAddFab();
 }
 
 function autoResizeAll(){
@@ -1237,8 +1476,6 @@ function renderStats(){
 function renderAll(){
   document.getElementById('titolo-opera').value = play.title;
   document.getElementById('autore-opera').value = play.author;
-  const copInput = document.getElementById('copyright-opera');
-  if(copInput) copInput.value = play.copyright || '';
   renderStruttura();
   renderPersonaggi();
   renderStage();
@@ -1322,7 +1559,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
     ]};
     atto.scenes.push(newScene);
     currentSceneId = newScene.id;
-    scheduleSave(); renderAll(); return;
+    scheduleSave(); renderAll(); closeMobileSidebar(); return;
   }
   if(addActBtn){
     const n = play.acts.length + 1;
@@ -1331,11 +1568,12 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
     ]};
     play.acts.push({ id: uid(), title: 'Atto ' + toRoman(n), scenes: [newScene] });
     currentSceneId = newScene.id;
-    scheduleSave(); renderAll(); return;
+    scheduleSave(); renderAll(); closeMobileSidebar(); return;
   }
   if(sceneItem){
     currentSceneId = sceneItem.dataset.scene;
     renderStruttura(); renderStage();
+    closeMobileSidebar();
   }
 });
 
@@ -1365,13 +1603,19 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
   const addBtn = e.target.closest('#addPers');
   const delBtn = e.target.closest('[data-del-pers]');
   const filterBtn = e.target.closest('[data-filter-pers]');
+  const toggleDetails = e.target.closest('[data-toggle-pers-details]');
+  const addRelBtn = e.target.closest('[data-add-rel]');
+  const delRelBtn = e.target.closest('[data-del-rel]');
+  const diagramBtn = e.target.closest('#btnDiagrammaRelazioni');
   if(addBtn){
-    play.characters.push({ id: uid(), name: 'NUOVO PERSONAGGIO', desc: '' });
+    play.characters.push({ id: uid(), name: 'NUOVO PERSONAGGIO', role: '', age: '', height: '', physical: '', costume: '', desc: '', backstory: '', color: nextCharColor(), relationships: [] });
     scheduleSave(); renderPersonaggi(); return;
   }
   if(delBtn){
-    play.characters = play.characters.filter(c => c.id !== delBtn.dataset.delPers);
-    scheduleSave(); renderPersonaggi(); return;
+    const delId = delBtn.dataset.delPers;
+    play.characters.forEach(c => { if(c.relationships) c.relationships = c.relationships.filter(r => r.targetId !== delId); });
+    play.characters = play.characters.filter(c => c.id !== delId);
+    scheduleSave(); renderPersonaggi(); renderStage(); return;
   }
   if(filterBtn){
     filterCharacter = filterBtn.dataset.filterPers;
@@ -1382,14 +1626,56 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
     renderStruttura();
     return;
   }
+  if(toggleDetails){
+    const id = toggleDetails.dataset.togglePersDetails;
+    if(openPersDetails.has(id)) openPersDetails.delete(id); else openPersDetails.add(id);
+    renderPersonaggi();
+    return;
+  }
+  if(addRelBtn){
+    const p = play.characters.find(c => c.id === addRelBtn.dataset.addRel);
+    if(!p.relationships) p.relationships = [];
+    p.relationships.push({ targetId: '', label: '' });
+    openPersDetails.add(p.id);
+    scheduleSave(); renderPersonaggi();
+    return;
+  }
+  if(delRelBtn){
+    const p = play.characters.find(c => c.id === delRelBtn.dataset.delRel);
+    p.relationships.splice(Number(delRelBtn.dataset.relIndex), 1);
+    scheduleSave(); renderPersonaggi();
+    return;
+  }
+  if(diagramBtn){
+    openRelationshipDiagram();
+    return;
+  }
 });
 
 document.getElementById('panel-personaggi').addEventListener('input', e => {
   const nameInput = e.target.closest('[data-pers-name]');
   const descInput = e.target.closest('[data-pers-desc]');
+  const colorInput = e.target.closest('[data-pers-color]');
+  const ageInput = e.target.closest('[data-pers-age]');
+  const heightInput = e.target.closest('[data-pers-height]');
+  const physicalInput = e.target.closest('[data-pers-physical]');
+  const costumeInput = e.target.closest('[data-pers-costume]');
+  const backstoryInput = e.target.closest('[data-pers-backstory]');
+  const roleSelect = e.target.closest('[data-pers-role]');
+  const relCharSelect = e.target.closest('[data-rel-char]');
+  const relLabelInput = e.target.closest('[data-rel-label]');
   if(nameInput){
     const p = play.characters.find(c => c.id === nameInput.dataset.persName);
-    p.name = nameInput.value;
+    const oldName = p.name;
+    const newName = nameInput.value;
+    if(oldName !== newName){
+      play.acts.forEach(a => a.scenes.forEach(s => {
+        if(Array.isArray(s.presentCharacters)) s.presentCharacters = s.presentCharacters.map(n => n === oldName ? newName : n);
+        s.blocks.forEach(b => { if(b.type === 'dialogue' && b.character === oldName) b.character = newName; });
+      }));
+      if(filterCharacter === oldName) filterCharacter = newName;
+    }
+    p.name = newName;
     scheduleSave(); renderStage();
   }
   if(descInput){
@@ -1397,7 +1683,47 @@ document.getElementById('panel-personaggi').addEventListener('input', e => {
     p.desc = descInput.value;
     scheduleSave();
   }
+  if(colorInput){
+    const p = play.characters.find(c => c.id === colorInput.dataset.persColor);
+    p.color = colorInput.value;
+    scheduleSave(); renderStage();
+  }
+  if(ageInput){
+    const p = play.characters.find(c => c.id === ageInput.dataset.persAge);
+    p.age = ageInput.value; scheduleSave();
+  }
+  if(heightInput){
+    const p = play.characters.find(c => c.id === heightInput.dataset.persHeight);
+    p.height = heightInput.value; scheduleSave();
+  }
+  if(physicalInput){
+    const p = play.characters.find(c => c.id === physicalInput.dataset.persPhysical);
+    p.physical = physicalInput.value; scheduleSave();
+  }
+  if(costumeInput){
+    const p = play.characters.find(c => c.id === costumeInput.dataset.persCostume);
+    p.costume = costumeInput.value; scheduleSave();
+  }
+  if(backstoryInput){
+    const p = play.characters.find(c => c.id === backstoryInput.dataset.persBackstory);
+    p.backstory = backstoryInput.value; scheduleSave();
+  }
+  if(roleSelect){
+    const p = play.characters.find(c => c.id === roleSelect.dataset.persRole);
+    p.role = roleSelect.value; scheduleSave();
+  }
+  if(relCharSelect){
+    const p = play.characters.find(c => c.id === relCharSelect.dataset.relChar);
+    p.relationships[Number(relCharSelect.dataset.relIndex)].targetId = relCharSelect.value;
+    scheduleSave();
+  }
+  if(relLabelInput){
+    const p = play.characters.find(c => c.id === relLabelInput.dataset.relChar);
+    p.relationships[Number(relLabelInput.dataset.relIndex)].label = relLabelInput.value;
+    scheduleSave();
+  }
 });
+
 
 document.getElementById('stage').addEventListener('click', e => {
   const addBlockBtn = e.target.closest('[data-add-block]');
@@ -1450,15 +1776,8 @@ document.getElementById('stage').addEventListener('click', e => {
   }
 
   if(addBlockBtn){
-    const type = addBlockBtn.dataset.addBlock;
-    if(type === 'dialogue'){
-      scena.blocks.push({ id: uid(), type: 'dialogue', character: play.characters[0] ? play.characters[0].name : 'PERSONAGGIO', text: '' });
-    } else if(type === 'offstage'){
-      scena.blocks.push({ id: uid(), type: 'offstage', text: '' });
-    } else {
-      scena.blocks.push({ id: uid(), type: 'direction', text: '' });
-    }
-    scheduleSave(); renderStage(); return;
+    addSceneBlock(addBlockBtn.dataset.addBlock);
+    return;
   }
   if(delBlockBtn){
     scena.blocks = scena.blocks.filter(b => b.id !== delBlockBtn.dataset.delBlock);
@@ -1563,55 +1882,6 @@ document.getElementById('btnRehearsal').addEventListener('click', () => {
 });
 
 document.getElementById('btnGuida').addEventListener('click', () => document.getElementById('modalGuida').classList.add('open'));
-
-/* ---------- TOGGLE HEADER / SIDEBAR / FOOTER ---------- */
-document.getElementById('btnToggleHeader').addEventListener('click', () => {
-  uiState.headerVisible = !uiState.headerVisible; applyUIState(); saveUIState();
-});
-document.getElementById('btnToggleSidebar').addEventListener('click', () => {
-  uiState.sidebarVisible = !uiState.sidebarVisible; applyUIState(); saveUIState();
-});
-document.getElementById('btnToggleFooter').addEventListener('click', () => {
-  uiState.footerVisible = !uiState.footerVisible; applyUIState(); saveUIState();
-});
-
-/* ---------- COPYRIGHT HEADER ---------- */
-document.getElementById('btnCopyright').addEventListener('click', () => {
-  const row = document.getElementById('copyrightRow');
-  row.style.display = row.style.display === 'none' ? 'block' : 'none';
-  if(row.style.display !== 'none'){
-    const inp = document.getElementById('copyright-opera');
-    inp.focus();
-    inp.setSelectionRange(inp.value.length, inp.value.length);
-  }
-});
-document.getElementById('copyright-opera').addEventListener('input', e => {
-  play.copyright = e.target.value;
-  scheduleSave();
-});
-
-/* ---------- SIDE FAB (toolbar laterale) ---------- */
-document.getElementById('sideFab').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if(!btn) return;
-  const type = btn.dataset.addBlock;
-  if(!currentSceneId) return;
-  const { scena } = findScene(currentSceneId);
-  if(!scena) return;
-  if(type === 'dialogue'){
-    scena.blocks.push({ id: uid(), type: 'dialogue', character: play.characters[0] ? play.characters[0].name : 'PERSONAGGIO', text: '' });
-  } else if(type === 'offstage'){
-    scena.blocks.push({ id: uid(), type: 'offstage', text: '' });
-  } else {
-    scena.blocks.push({ id: uid(), type: 'direction', text: '' });
-  }
-  scheduleSave(); renderStage();
-  setTimeout(() => {
-    const lastId = scena.blocks[scena.blocks.length-1].id;
-    const ta = document.querySelector(`[data-block-text="${lastId}"]`);
-    if(ta){ ta.focus(); ta.scrollIntoView({ behavior:'smooth', block:'center' }); }
-  }, 60);
-});
 
 /* ---------- CONTROLLO QUALITÀ ---------- */
 function runQualityCheck(){
@@ -1910,6 +2180,7 @@ function buildText(){
       out += '\n';
     });
   });
+  out += '\n' + copyrightLine() + '\n';
   return out;
 }
 
@@ -2146,22 +2417,57 @@ function drawTitlePage(doc, R, subtitle){
   }
   doc.setFont('times','normal'); doc.setFontSize(9.5);
   doc.setTextColor(120,110,95);
-  const copyrightLine = (play.copyright && play.copyright.trim())
-    ? play.copyright.trim()
-    : '© ' + new Date().getFullYear() + (play.author ? ' ' + play.author : '') + ' — Tutti i diritti riservati';
-  doc.text(copyrightLine, R.pageW/2, R.pageH - 60, { align: 'center' });
+  doc.text(copyrightLine(), R.pageW/2, R.pageH - 60, { align: 'center' });
   doc.setTextColor(0,0,0);
-  if(play.characters.length){
-    doc.setFont('courier','bold'); doc.setFontSize(11);
-    doc.text('PERSONAGGI', R.pageW/2, R.pageH - 190, { align: 'center' });
-    doc.setFont('courier','normal'); doc.setFontSize(10.5);
-    let yy = R.pageH - 170;
-    play.characters.forEach(c => {
-      const line = c.name.toUpperCase() + (c.desc ? '  —  ' + c.desc : '');
-      const wrapped = doc.splitTextToSize(line, R.contentW * 0.8);
-      wrapped.forEach(l => { doc.text(l, R.pageW/2, yy, { align: 'center' }); yy += 13; });
-    });
-  }
+}
+
+function hexToRgb(hex){
+  const m = (hex || '').replace('#','').match(/.{1,2}/g);
+  if(!m || m.length < 3) return [138,59,59];
+  return m.slice(0,3).map(h => parseInt(h,16));
+}
+
+/* Pagina "Personaggi" (dramatis personae): ruolo, età/altezza, aspetto fisico, costume, descrizione */
+function drawCastPage(doc, R){
+  if(!play.characters.length) return;
+  R.newPage();
+  R.centerText('PERSONAGGI', 15, 'bold');
+  R.state.y += 12;
+  const left = R.marginLeft;
+  const textLeft = left + 20;
+  const textW = R.contentW - 20;
+  play.characters.forEach(c => {
+    doc.setFont('courier','bold'); doc.setFontSize(11.5);
+    const nameLines = doc.splitTextToSize(c.name.toUpperCase() + (c.role ? '  (' + c.role + ')' : ''), textW);
+    const metaBits = [];
+    if(c.age) metaBits.push(c.age + (/^\d+$/.test(c.age.trim()) ? ' anni' : ''));
+    if(c.height) metaBits.push(c.height);
+    const metaLine = metaBits.join(' · ');
+    doc.setFont('courier','normal'); doc.setFontSize(9);
+    const descLines = c.desc && c.desc.trim() ? doc.splitTextToSize(c.desc.trim(), textW) : [];
+    const physLines = c.physical && c.physical.trim() ? doc.splitTextToSize('Aspetto: ' + c.physical.trim(), textW) : [];
+    const costLines = c.costume && c.costume.trim() ? doc.splitTextToSize('Costume: ' + c.costume.trim(), textW) : [];
+
+    const blockH = 14*nameLines.length + (metaLine ? 12 : 0) + (descLines.length+physLines.length+costLines.length)*11.5 + 16;
+    R.ensureSpace(blockH);
+
+    const [rr,gg,bb] = hexToRgb(c.color);
+    doc.setFillColor(rr,gg,bb);
+    doc.roundedRect(left, R.state.y - 9, 10, 10, 2, 2, 'F');
+
+    doc.setFont('courier','bold'); doc.setFontSize(11.5); doc.setTextColor(0,0,0);
+    nameLines.forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 14; });
+
+    if(metaLine){
+      doc.setFont('courier','italic'); doc.setFontSize(9); doc.setTextColor(110,105,95);
+      doc.text(metaLine, textLeft, R.state.y);
+      doc.setTextColor(0,0,0);
+      R.state.y += 12;
+    }
+    doc.setFont('courier','normal'); doc.setFontSize(9);
+    descLines.concat(physLines, costLines).forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 11.5; });
+    R.state.y += 12;
+  });
 }
 
 function isDraftPlay(){
@@ -2196,21 +2502,23 @@ function buildFullScriptPDF(){
 
   const tocLinesNeeded = tocEntries.length + play.acts.length; // margine per le intestazioni degli atti
   const tocPages = Math.max(1, Math.ceil(tocLinesNeeded / 40));
-  const offset = 1 + tocPages; // pagina 1 = frontespizio, poi le pagine di indice
 
   // Passo 2: documento definitivo
   const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const R = makePdfRenderer(doc, 1);
   drawTitlePage(doc, R);
+  drawCastPage(doc, R);
+  const introPages = R.currentPage(); // frontespizio (+ pagina personaggi, se presente)
+  const offset = introPages + tocPages;
 
   for(let p = 0; p < tocPages; p++){
     R.newPage();
     if(p === 0) R.centerText('INDICE', 16, 'bold');
     R.state.y += 6;
   }
-  doc.setPage(2);
+  doc.setPage(introPages + 1);
   R.state.y = R.marginTop + (tocPages > 0 ? 30 : 0);
-  let tocPageCursor = 2;
+  let tocPageCursor = introPages + 1;
   tocEntries.forEach(entry => {
     if(R.state.y + R.lineH > R.pageH - R.marginBottom){
       tocPageCursor++;
@@ -2251,6 +2559,7 @@ function buildSidesPDF(characterName){
   const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const R = makePdfRenderer(doc, 1);
   drawTitlePage(doc, R, 'Copione — parte di ' + characterName.toUpperCase());
+  drawCastPage(doc, R);
   R.newPage();
   renderScriptContent(R, { character: characterName });
   return doc;
@@ -2297,7 +2606,6 @@ function importProject(file){
       if(!Array.isArray(parsed.characters)) parsed.characters = [];
       if(!parsed.fontSize) parsed.fontSize = 14;
       if(!parsed.pdfSettings) parsed.pdfSettings = { format: 'a4', margins: 'normal' };
-      if(parsed.copyright === undefined) parsed.copyright = '';
       play = parsed;
       currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
       scheduleSave();
@@ -2354,7 +2662,7 @@ document.getElementById('modalAnteprima').addEventListener('click', e => { if(e.
 document.getElementById('btnPdfSettings').addEventListener('click', () => {
   document.getElementById('pdfFormatSelect').value = (play.pdfSettings && play.pdfSettings.format) || 'a4';
   document.getElementById('pdfMarginsSelect').value = (play.pdfSettings && play.pdfSettings.margins) || 'normal';
-  document.getElementById('pdfCopyrightInput').value = play.copyright || '';
+  document.getElementById('copyrightText').value = play.copyright || '';
   document.getElementById('modalPdfSettings').classList.add('open');
 });
 document.getElementById('closePdfSettings').addEventListener('click', () => document.getElementById('modalPdfSettings').classList.remove('open'));
@@ -2364,10 +2672,17 @@ document.getElementById('btnSalvaPdfSettings').addEventListener('click', () => {
     format: document.getElementById('pdfFormatSelect').value,
     margins: document.getElementById('pdfMarginsSelect').value
   };
-  play.copyright = document.getElementById('pdfCopyrightInput').value;
+  play.copyright = document.getElementById('copyrightText').value.trim();
   scheduleSave();
   document.getElementById('modalPdfSettings').classList.remove('open');
 });
+
+function defaultCopyrightLine(){
+  return '© ' + new Date().getFullYear() + (play.author ? ' ' + play.author : '') + ' — Tutti i diritti riservati';
+}
+function copyrightLine(){
+  return (play.copyright && play.copyright.trim()) ? play.copyright.trim() : defaultCopyrightLine();
+}
 
 /* ---------- VISTA D'INSIEME ---------- */
 document.getElementById('btnOutline').addEventListener('click', () => {
@@ -2436,18 +2751,19 @@ document.getElementById('btnEseguiImporta').addEventListener('click', () => {
   targetAct.scenes.push(newScene);
   blocks.forEach(b => {
     if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)){
-      play.characters.push({ id: uid(), name: b.character, desc: '' });
+      play.characters.push({ id: uid(), name: b.character, role: '', age: '', height: '', physical: '', costume: '', desc: '', backstory: '', color: nextCharColor(), relationships: [] });
     }
   });
   currentSceneId = newScene.id;
   scheduleSave();
   document.getElementById('modalImporta').classList.remove('open');
   renderAll();
+  closeMobileSidebar();
 });
 
 /* ---------- ESPORTAZIONE FOUNTAIN (.fountain) ---------- */
 function buildFountain(){
-  let out = `Title: ${play.title}\nCredit: di\nAuthor: ${play.author}\n\n`;
+  let out = `Title: ${play.title}\nCredit: di\nAuthor: ${play.author}\nCopyright: ${copyrightLine()}\n\n`;
   play.acts.forEach(atto => {
     out += `# ${atto.title}\n\n`;
     atto.scenes.forEach(scena => {
@@ -2539,10 +2855,10 @@ function buildBlankPlay(){
     title: "Titolo dell'opera",
     author: "Il tuo nome",
     fontSize: 14,
-    pdfSettings: { format: 'a4', margins: 'normal' },
     copyright: '',
+    pdfSettings: { format: 'a4', margins: 'normal' },
     characters: [
-      { id: uid(), name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." }
+      { id: uid(), name: "PERSONAGGIO A", role: "", age: "", height: "", physical: "", costume: "", desc: "Breve descrizione: età, ruolo, cosa vuole.", backstory: "", color: "#8a3b3b", relationships: [] }
     ],
     acts: [
       {
@@ -2584,6 +2900,7 @@ document.getElementById('btnNuovoCopione').addEventListener('click', () => {
   document.getElementById('fileLocLabel').textContent = '';
   scheduleSave();
   renderAll();
+  closeMobileSidebar();
 });
 
 document.getElementById('btnFileLocale').addEventListener('click', async () => {
@@ -2601,9 +2918,102 @@ document.getElementById('btnFileLocale').addEventListener('click', async () => {
   }catch(e){ /* l'utente ha annullato la scelta */ }
 });
 
+/* ---------- TASTO RAPIDO "AGGIUNGI BATTUTA/DIDASCALIA" (sempre a portata di mano) ---------- */
+let lastFocusedBlockId = null;
+document.getElementById('stage').addEventListener('focusin', e => {
+  const blockEl = e.target.closest('.block');
+  if(blockEl && blockEl.dataset.blockId) lastFocusedBlockId = blockEl.dataset.blockId;
+});
+function addSceneBlock(type, afterId){
+  if(!currentSceneId) return null;
+  const { scena } = findScene(currentSceneId);
+  let newBlock;
+  if(type === 'dialogue'){
+    newBlock = { id: uid(), type: 'dialogue', character: play.characters[0] ? play.characters[0].name : 'PERSONAGGIO', text: '' };
+  } else if(type === 'offstage'){
+    newBlock = { id: uid(), type: 'offstage', text: '' };
+  } else {
+    newBlock = { id: uid(), type: 'direction', text: '' };
+  }
+  const afterIdx = afterId ? scena.blocks.findIndex(b => b.id === afterId) : -1;
+  if(afterIdx > -1) scena.blocks.splice(afterIdx + 1, 0, newBlock);
+  else scena.blocks.push(newBlock);
+  lastFocusedBlockId = newBlock.id;
+  scheduleSave();
+  renderStage();
+  requestAnimationFrame(() => {
+    const el = document.querySelector(`[data-block-text="${newBlock.id}"]`);
+    if(el){
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.focus();
+    }
+  });
+  return newBlock;
+}
+function updateQuickAddFab(){
+  const fab = document.getElementById('quickAddFab');
+  if(!fab) return;
+  fab.classList.toggle('hidden', !currentSceneId || rehearsalMode);
+}
+document.getElementById('quickAddFab').addEventListener('click', e => {
+  const btn = e.target.closest('[data-add-block]');
+  if(!btn) return;
+  addSceneBlock(btn.dataset.addBlock, lastFocusedBlockId);
+});
+
+/* ---------- SPAZIO DI SCRITTURA: mostra/nascondi intestazione, menù laterale, barra inferiore ---------- */
+let layoutPrefs = { header: true, sidebar: true, footer: true };
+function closeMobileSidebar(){
+  const as = document.querySelector('aside');
+  if(as) as.classList.remove('mobile-open');
+}
+function updateFabPosition(){
+  const footer = document.querySelector('footer');
+  const h = (layoutPrefs.footer && footer) ? footer.offsetHeight : 0;
+  document.documentElement.style.setProperty('--footer-h', h + 'px');
+}
+function applyLayoutPrefs(){
+  document.body.classList.toggle('hide-topbar', !layoutPrefs.header);
+  document.body.classList.toggle('hide-sidebar', !layoutPrefs.sidebar);
+  document.body.classList.toggle('hide-bottombar', !layoutPrefs.footer);
+  if(!layoutPrefs.sidebar) closeMobileSidebar();
+  const chkHeader = document.getElementById('chkShowHeader');
+  const chkSidebar = document.getElementById('chkShowSidebar');
+  const chkFooter = document.getElementById('chkShowFooter');
+  if(chkHeader) chkHeader.checked = layoutPrefs.header;
+  if(chkSidebar) chkSidebar.checked = layoutPrefs.sidebar;
+  if(chkFooter) chkFooter.checked = layoutPrefs.footer;
+  const anyHidden = !layoutPrefs.header || !layoutPrefs.sidebar || !layoutPrefs.footer;
+  const btnL = document.getElementById('btnLayout');
+  if(btnL) btnL.style.background = anyHidden ? 'var(--oro)' : '';
+  updateFabPosition();
+}
+async function loadLayoutPrefs(){
+  try{
+    const raw = await storageGet('copione:layoutPrefs');
+    if(raw) layoutPrefs = Object.assign(layoutPrefs, JSON.parse(raw));
+  }catch(e){ /* si parte con tutti i menù visibili */ }
+  applyLayoutPrefs();
+}
+function saveLayoutPrefs(){ storageSet('copione:layoutPrefs', JSON.stringify(layoutPrefs)); }
+document.getElementById('mobileSidebarLauncher').addEventListener('click', () => {
+  document.querySelector('aside').classList.add('mobile-open');
+});
+document.getElementById('btnCloseMobileSidebar').addEventListener('click', closeMobileSidebar);
+document.getElementById('btnLayout').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('layoutTogglePanel').classList.toggle('open');
+});
+document.getElementById('layoutTogglePanel').addEventListener('click', e => e.stopPropagation());
+document.addEventListener('click', () => document.getElementById('layoutTogglePanel').classList.remove('open'));
+document.getElementById('chkShowHeader').addEventListener('change', e => { layoutPrefs.header = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
+document.getElementById('chkShowSidebar').addEventListener('change', e => { layoutPrefs.sidebar = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
+document.getElementById('chkShowFooter').addEventListener('change', e => { layoutPrefs.footer = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
+window.addEventListener('resize', () => updateFabPosition());
+
 loadSaved();
 loadDarkModePref();
-loadUIState();
+loadLayoutPrefs();
 </script>
 </body>
 </html>
