@@ -9,15 +9,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
-    --sipario:#6B0E1C;
-    --sipario-dark:#2B0509;
-    --oro:#C9A227;
-    --oro-chiaro:#E8C766;
-    --carta:#F3E9D0;
-    --carta-scura:#E6D5A3;
-    --inchiostro:#241812;
-    --grigio:#8C7A56;
-    --rosso-avviso:#8A2A2A;
+    --sipario:#5C1A21;
+    --sipario-dark:#3A1014;
+    --oro:#B8923C;
+    --oro-chiaro:#D9BE7E;
+    --carta:#F3ECDD;
+    --carta-scura:#E7DBC0;
+    --inchiostro:#2A211B;
+    --grigio:#83786A;
+    --rosso-avviso:#9C3B3B;
   }
   *{box-sizing:border-box;}
   html, body{ height:100%; }
@@ -33,28 +33,18 @@
   }
   /* HEADER */
   header{
-    background:
-      repeating-linear-gradient(90deg, rgba(0,0,0,.16) 0 3px, rgba(255,255,255,.03) 3px 6px),
-      radial-gradient(120% 180% at 50% -40%, rgba(232,199,102,.14) 0%, transparent 55%),
-      linear-gradient(180deg,var(--sipario) 0%,var(--sipario-dark) 100%);
-    padding:24px 28px 28px;
+    background:linear-gradient(180deg,var(--sipario) 0%,var(--sipario-dark) 100%);
+    padding:22px 28px 26px;
     border-bottom:3px solid var(--oro);
-    box-shadow:0 4px 18px rgba(0,0,0,.5);
     position:relative;
     flex-shrink:0;
-  }
-  header::before{
-    content:"";
-    position:absolute;top:0;left:0;right:0;height:8px;
-    background:linear-gradient(180deg, rgba(0,0,0,.35), transparent);
   }
   header::after{
     content:"";
     position:absolute;
-    bottom:-4px;left:0;right:0;height:4px;
-    background:repeating-linear-gradient(90deg,var(--oro) 0 14px, transparent 14px 22px),
-      linear-gradient(90deg, var(--oro-chiaro), var(--oro) 50%, var(--oro-chiaro));
-    opacity:.75;
+    bottom:-3px;left:0;right:0;height:3px;
+    background:repeating-linear-gradient(90deg,var(--oro) 0 14px, transparent 14px 22px);
+    opacity:.6;
   }
   .brand{
     display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
@@ -88,7 +78,7 @@
   .layout{display:flex;flex:1;min-height:0;overflow:hidden;}
   aside{
     width:300px;flex-shrink:0;background:var(--carta-scura);
-    border-right:1px solid #D8C088;padding:0;display:flex;flex-direction:column;overflow:hidden;
+    border-right:1px solid #d6c7a1;padding:0;display:flex;flex-direction:column;overflow:hidden;
   }
   .mobile-sidebar-launcher{display:none;}
   .mobile-aside-close{display:none;}
@@ -105,9 +95,9 @@
   }
   .side-tools-grid button:hover{background:var(--sipario-dark);}
   .side-tools-grid button.alt{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
-  .side-tools-grid button.alt:hover{background:#E0CC93;}
+  .side-tools-grid button.alt:hover{background:#eadfc4;}
   .side-tools-grid button.wide{grid-column:1 / -1;}
-  .tabs{display:flex;border-bottom:1px solid #D8C088;flex-shrink:0;}
+  .tabs{display:flex;border-bottom:1px solid #d6c7a1;flex-shrink:0;}
   .tab-btn{
     flex:1;padding:12px 8px;background:none;border:none;cursor:pointer;
     font-family:'Inter',sans-serif;font-weight:600;font-size:13px;letter-spacing:.03em;
@@ -121,7 +111,7 @@
   .atto-head{
     display:flex;align-items:center;justify-content:space-between;gap:6px;
     font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
-    font-size:15px;padding:6px 4px;border-bottom:1px solid #D8C088;
+    font-size:15px;padding:6px 4px;border-bottom:1px solid #d6c7a1;
   }
   .atto-head input{
     font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
@@ -160,71 +150,90 @@
   .filter-banner button{background:none;border:none;color:var(--oro-chiaro);cursor:pointer;font-weight:700;font-size:13px;}
 
   .add-btn{
-    width:100%;margin-top:6px;padding:8px;background:none;border:1px dashed #B89A55;
+    width:100%;margin-top:6px;padding:8px;background:none;border:1px dashed #b8a879;
     border-radius:6px;color:var(--grigio);font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
     cursor:pointer;letter-spacing:.02em;
   }
   .add-btn:hover{border-color:var(--sipario);color:var(--sipario);}
 
   .pers-card{
-    background:var(--carta);border:1px solid #D8C088;border-radius:8px;padding:10px 12px;margin-bottom:10px;
+    background:var(--carta);border:1px solid #d6c7a1;border-radius:8px;padding:10px 12px;margin-bottom:10px;
   }
   .pers-card-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+  .pers-color, .pers-thumb{
+    width:24px;height:24px;flex-shrink:0;border-radius:50%;
+  }
   .pers-color{
-    width:22px;height:22px;padding:0;border:2px solid var(--carta-scura);border-radius:50%;cursor:pointer;
-    flex-shrink:0;background:none;-webkit-appearance:none;appearance:none;overflow:hidden;
+    padding:0;border:2px solid var(--carta-scura);cursor:pointer;
+    background:none;-webkit-appearance:none;appearance:none;overflow:hidden;
   }
   .pers-color::-webkit-color-swatch-wrapper{padding:0;}
   .pers-color::-webkit-color-swatch{border:none;border-radius:50%;}
   .pers-color::-moz-color-swatch{border:none;border-radius:50%;}
+  .pers-thumb{object-fit:cover;border:2px solid var(--carta-scura);}
   .pers-card input.nome{
     flex:1;min-width:0;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--sipario);
     border:none;background:none;outline:none;margin-bottom:0;
-  }
-  .pers-card textarea.desc{
-    width:100%;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);border:none;background:none;
-    outline:none;resize:none;line-height:1.4;
   }
   .pers-card .rm{flex-shrink:0;}
   .pers-card .filter-btn{
     flex-shrink:0;background:none;border:none;color:var(--grigio);cursor:pointer;font-size:12px;
   }
   .pers-card .filter-btn:hover{color:var(--sipario);}
-  .pers-role{
-    width:100%;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--grigio);border:1px solid #D8C088;
-    border-radius:5px;padding:4px 6px;margin:2px 0 6px;background:var(--carta);cursor:pointer;
+  .pers-role-badge{
+    display:inline-block;font-family:'Inter',sans-serif;font-size:10px;font-weight:700;color:var(--sipario);
+    background:var(--oro-chiaro);border-radius:4px;padding:2px 7px;margin-bottom:6px;letter-spacing:.02em;
   }
-  .pers-details-toggle{
-    background:none;border:none;color:var(--grigio);font-family:'Inter',sans-serif;font-size:11px;
-    text-decoration:underline dotted;cursor:pointer;padding:3px 0;margin-top:3px;
+  .pers-desc-preview{
+    font-family:'Inter',sans-serif;font-size:12px;color:var(--grigio);line-height:1.4;margin-bottom:7px;
   }
-  .pers-details-toggle:hover{color:var(--sipario);}
-  .pers-details{
-    margin-top:8px;padding-top:8px;border-top:1px dashed #D8C088;display:flex;flex-direction:column;gap:8px;
+  .pers-open-sheet{
+    width:100%;padding:6px;background:none;border:1px dashed #b8a879;border-radius:5px;color:var(--grigio);
+    font-family:'Inter',sans-serif;font-size:11.5px;font-weight:600;cursor:pointer;
   }
+  .pers-open-sheet:hover{border-color:var(--sipario);color:var(--sipario);}
+
+  /* Campi riutilizzati dentro la scheda personaggio a schermo intero (#modalPersonaggio) */
   .pers-field-row{display:flex;gap:8px;}
-  .pers-field{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .pers-field{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;margin-bottom:10px;}
   .pers-field label, .pers-relationships > label{
     font-family:'Inter',sans-serif;font-size:10px;color:var(--grigio);text-transform:uppercase;letter-spacing:.03em;
   }
-  .pers-relationships > label{display:block;margin-bottom:2px;}
+  .pers-relationships > label{display:block;margin-bottom:4px;}
   .pers-field input, .pers-field textarea{
-    font-family:'Inter',sans-serif;font-size:12px;color:var(--inchiostro);border:1px solid #D8C088;
-    border-radius:5px;padding:4px 6px;background:var(--carta);resize:none;outline:none;
+    font-family:'Inter',sans-serif;font-size:13px;color:var(--inchiostro);border:1px solid #d6c7a1;
+    border-radius:5px;padding:6px 8px;background:var(--carta);resize:none;outline:none;
   }
   .pers-rel-row{display:flex;gap:5px;margin-bottom:5px;align-items:center;}
   .pers-rel-row select, .pers-rel-row input{
-    font-size:11.5px;font-family:'Inter',sans-serif;border:1px solid #D8C088;border-radius:5px;
-    padding:3px 5px;background:var(--carta);color:var(--inchiostro);outline:none;
+    font-size:12px;font-family:'Inter',sans-serif;border:1px solid #d6c7a1;border-radius:5px;
+    padding:4px 6px;background:var(--carta);color:var(--inchiostro);outline:none;
   }
   .pers-rel-row select{flex:0 0 34%;min-width:0;}
   .pers-rel-row input{flex:1;min-width:0;}
   .pers-rel-row .icon-btn{flex-shrink:0;}
   .pers-rel-add{
-    width:100%;padding:5px;background:none;border:1px dashed #B89A55;border-radius:5px;color:var(--grigio);
+    width:100%;padding:5px;background:none;border:1px dashed #b8a879;border-radius:5px;color:var(--grigio);
     font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .pers-rel-add:hover{border-color:var(--sipario);color:var(--sipario);}
+
+  .mp-top-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:12px;}
+  .mp-photo-wrap{position:relative;flex-shrink:0;}
+  .mp-photo{
+    width:84px;height:84px;border-radius:10px;object-fit:cover;background:var(--carta-scura);
+    border:1px solid #d6c7a1;display:block;
+  }
+  .mp-photo-btn{
+    position:absolute;bottom:-6px;right:-6px;width:26px;height:26px;border-radius:50%;
+    background:var(--sipario);color:var(--carta);border:2px solid var(--carta);cursor:pointer;font-size:12px;
+  }
+  .mp-photo-remove{
+    position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;
+    background:var(--rosso-avviso);color:#fff;border:2px solid var(--carta);cursor:pointer;font-size:10px;
+    line-height:1;display:none;
+  }
+  .mp-top-fields{flex:1;min-width:0;}
 
   .guida-toggle{
     margin:10px 16px 16px;padding:10px 12px;background:var(--sipario);color:var(--carta);
@@ -233,20 +242,13 @@
   .guida-toggle:hover{background:var(--sipario-dark);}
 
   /* MAIN / MANUSCRIPT */
-  main{
-    flex:1;display:flex;flex-direction:column;overflow:hidden;position:relative;min-height:0;
-    background:
-      radial-gradient(60% 40% at 50% 0%, rgba(232,199,102,.10) 0%, transparent 60%),
-      repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 4px, rgba(255,255,255,.02) 4px 9px),
-      linear-gradient(180deg, #3A0A12 0%, #2B0509 100%);
-  }
+  main{flex:1;display:flex;flex-direction:column;background:#4a1319;overflow:hidden;position:relative;min-height:0;}
   .stage{flex:1;overflow-y:auto;padding:36px 40px;display:flex;justify-content:center;align-items:flex-start;min-height:0;}
   .page{
     background:var(--carta);width:100%;
     max-width:min(96%, calc(680px + (var(--ms-size) - 14px) * 18));
     min-height:calc(100vh - 260px);
-    padding:52px 56px 90px;
-    box-shadow:0 18px 50px rgba(0,0,0,.55), 0 2px 0 var(--oro);
+    padding:52px 56px 90px;box-shadow:0 12px 40px rgba(0,0,0,.45);
     font-family:'Courier Prime',monospace;position:relative;
     --ms-size:14px;
     transition:max-width .15s ease;
@@ -267,7 +269,7 @@
   }
   .slugline{
     text-align:center;font-family:'Courier Prime',monospace;text-transform:uppercase;font-size:calc(var(--ms-size) - 1px);
-    letter-spacing:.04em;color:var(--grigio);border-top:1px solid #D8C088;border-bottom:1px solid #D8C088;
+    letter-spacing:.04em;color:var(--grigio);border-top:1px solid #d6c7a1;border-bottom:1px solid #d6c7a1;
     padding:6px 0;margin:14px 0 22px;background:transparent;width:100%;text-align:center;outline:none;
   }
   .blocks{display:flex;flex-direction:column;gap:16px;}
@@ -284,7 +286,7 @@
   .ctrl-btn.del:hover{color:var(--rosso-avviso);}
   .block.direction textarea{
     font-family:'Courier Prime',monospace;font-style:italic;color:var(--grigio);text-align:center;
-    width:78%;margin:0 auto;display:block;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
+    width:78%;margin:0 auto;display:block;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
     padding:9px 14px;outline:none;resize:none;font-size:calc(var(--ms-size) - 1px);line-height:1.5;
   }
   .block.dialogue .char-name{
@@ -293,7 +295,7 @@
   }
   .note-row{
     display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:10px auto 14px;
-    padding:8px 14px;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
+    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
   }
   .note-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -303,7 +305,7 @@
   .note-row:hover .ctrl-btn{opacity:1;}
   .after-direction-row{
     display:flex;align-items:center;justify-content:center;gap:6px;width:78%;margin:14px auto 6px;
-    padding:8px 14px;border:1px solid #D2BA7E;background:#EBDCB4;border-radius:6px;
+    padding:8px 14px;border:1px solid #d9c9a3;background:#efe3c8;border-radius:6px;
   }
   .after-direction-input{
     font-family:'Courier Prime',monospace;font-style:italic;font-size:calc(var(--ms-size) - 1.5px);color:var(--grigio);
@@ -327,7 +329,7 @@
     width:78%;margin:4px auto 0;display:block;border:none;background:none;outline:none;resize:none;
   }
   .block.offstage{
-    background:#EBDCB4;border:1px dashed #B89A55;border-radius:8px;padding:12px 78px 12px 16px;
+    background:#efe3c8;border:1px dashed #b8a879;border-radius:8px;padding:12px 78px 12px 16px;
   }
   .offstage-label{
     font-family:'Inter',sans-serif;font-weight:700;font-size:10px;letter-spacing:.1em;color:var(--grigio);
@@ -344,7 +346,7 @@
   }
   .director-toggle:hover{color:var(--sipario);}
   .director-notes{
-    display:block;width:100%;margin-top:8px;padding:10px 12px;background:#EBDCB4;border:1px dashed #BFA05A;
+    display:block;width:100%;margin-top:8px;padding:10px 12px;background:#efe3c8;border:1px dashed #c9b688;
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:60px;outline:none;
   }
@@ -354,13 +356,13 @@
     text-transform:uppercase;letter-spacing:.04em;
   }
   .scene-info-box textarea{
-    display:block;width:100%;padding:9px 12px;background:#F0EAD8;border:1px solid #D9CBA0;
+    display:block;width:100%;padding:9px 12px;background:#F2F2F0;border:1px solid #D8D8D4;
     border-radius:8px;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--inchiostro);resize:vertical;
     min-height:44px;outline:none;
   }
   .scene-meta-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:6px 0 14px;}
   .status-btn{
-    border:1px solid #D8C088;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
     padding:4px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .status-btn.on-bozza{background:#8a93a8;color:#fff;border-color:#8a93a8;}
@@ -370,7 +372,7 @@
   .presence-label{font-family:'Inter',sans-serif;font-size:11px;color:var(--grigio);margin-bottom:5px;}
   .presence-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
   .chip{
-    border:1px solid #D8C088;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
+    border:1px solid #d6c7a1;background:var(--carta-scura);color:var(--grigio);border-radius:14px;
     padding:3px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .chip.on{background:var(--sipario);color:var(--carta);border-color:var(--sipario);}
@@ -386,19 +388,19 @@
   .page.rehearsal .block-num{display:none !important;}
   .page.rehearsal .block{padding-right:0;}
   .page.rehearsal textarea, .page.rehearsal select, .page.rehearsal input{cursor:default;}
-  .block.dialogue.reading{background:#EFDFB8;border-radius:8px;box-shadow:inset 3px 0 0 var(--oro);}
+  .block.dialogue.reading{background:#f4e9cf;border-radius:8px;box-shadow:inset 3px 0 0 var(--oro);}
   .pers-stat{
     margin-top:6px;font-size:11px;color:var(--grigio);font-family:'Inter',sans-serif;
-    border-top:1px dashed #D8C088;padding-top:6px;
+    border-top:1px dashed #d6c7a1;padding-top:6px;
   }
   .block-toolbar{
-    display:flex;gap:10px;justify-content:center;margin-top:26px;padding-top:18px;border-top:1px dashed #D8C088;
+    display:flex;gap:10px;justify-content:center;margin-top:26px;padding-top:18px;border-top:1px dashed #d6c7a1;
   }
   .block-toolbar button{
     background:var(--sipario);color:var(--carta);border:none;padding:8px 14px;border-radius:6px;cursor:pointer;
     font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
   }
-  .block-toolbar button.secondary{background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;}
+  .block-toolbar button.secondary{background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;}
   .block-toolbar button:hover{opacity:.88;}
 
   .side-tools{padding:0 16px 16px;display:flex;flex-direction:column;gap:8px;}
@@ -408,12 +410,12 @@
   }
   .side-tools button:hover{background:var(--sipario-dark);}
   .side-tools button.alt{background:var(--carta);color:var(--sipario);border:1px solid var(--oro);}
-  .side-tools button.alt:hover{background:#E0CC93;}
+  .side-tools button.alt:hover{background:#eadfc4;}
 
   .stage-controls{
     position:absolute;top:14px;right:28px;z-index:5;display:flex;align-items:center;gap:4px;
     background:var(--carta-scura);padding:5px 6px;border-radius:20px;box-shadow:0 4px 12px rgba(0,0,0,.35);
-    border:1px solid #D8C088;
+    border:1px solid #d6c7a1;
   }
   .stage-controls button{
     width:26px;height:26px;border-radius:50%;border:none;background:var(--sipario);color:var(--carta);
@@ -425,7 +427,7 @@
   /* PANNELLO "SPAZIO DI SCRITTURA": mostra/nascondi intestazione, menù laterale, barra inferiore */
   .layout-toggle-panel{
     display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:20;
-    background:var(--carta);border:1px solid #D8C088;border-radius:10px;
+    background:var(--carta);border:1px solid #d6c7a1;border-radius:10px;
     box-shadow:0 10px 30px rgba(0,0,0,.35);padding:12px 14px;min-width:210px;
   }
   .layout-toggle-panel.open{display:block;}
@@ -463,7 +465,7 @@
   .quick-add-fab button:hover{filter:brightness(1.08);}
 
   footer{
-    background:var(--sipario-dark);border-top:1px solid #4A0A12;padding:10px 24px;
+    background:var(--sipario-dark);border-top:1px solid #6a2027;padding:10px 24px;
     display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;flex-shrink:0;
   }
   .footer-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
@@ -497,24 +499,25 @@
   body.dark-mode .tab-btn.active{ color:#e7c877; border-color:#e7c877; }
   body.dark-mode .atto-head{ color:#e7c877; border-color:#3a2c20; }
   body.dark-mode .atto-head input{ color:#e7c877; }
-  body.dark-mode .scena-item{ color:#D2BA7E; }
+  body.dark-mode .scena-item{ color:#d9c9a3; }
   body.dark-mode .scena-item:hover{ background:#00000030; }
   body.dark-mode .add-btn{ color:#a8987a; border-color:#4a3a2a; }
   body.dark-mode .pers-card{ background:#2c2219; border-color:#3a2c20; }
   body.dark-mode .pers-card .nome{ color:#e7c877; }
-  body.dark-mode .pers-card .desc, body.dark-mode .pers-stat{ color:#c9bda3; }
-  body.dark-mode .pers-role{ background:#241c16; border-color:#3a2c20; color:#a8987a; }
-  body.dark-mode .pers-details{ border-color:#3a2c20; }
+  body.dark-mode .pers-desc-preview, body.dark-mode .pers-stat{ color:#c9bda3; }
+  body.dark-mode .pers-role-badge{ background:#4a3a1c; color:#e7c877; }
+  body.dark-mode .pers-open-sheet{ border-color:#4a3a2a; color:#a8987a; }
   body.dark-mode .pers-field label, body.dark-mode .pers-relationships > label{ color:#a8987a; }
   body.dark-mode .pers-field input, body.dark-mode .pers-field textarea,
   body.dark-mode .pers-rel-row select, body.dark-mode .pers-rel-row input{
     background:#241c16; border-color:#3a2c20; color:#e7dcc4;
   }
-  body.dark-mode .pers-color{ border-color:#3a2c20; }
+  body.dark-mode .pers-color, body.dark-mode .pers-thumb{ border-color:#3a2c20; }
+  body.dark-mode .mp-photo{ background:#241c16; border-color:#3a2c20; }
   body.dark-mode .sidebar-fixed-top{ background:#241c16; border-color:#5c4a30; }
   body.dark-mode .mini-stats{ color:#a8987a; }
   body.dark-mode .mini-stats b{ color:#e7c877; }
-  body.dark-mode .side-tools-grid button{ background:#6B0E1C; }
+  body.dark-mode .side-tools-grid button{ background:#5C1A21; }
   body.dark-mode .side-tools-grid button.alt{ background:#241c16; color:#e7c877; border-color:#5c4a30; }
   body.dark-mode .page{ background:#241c16; }
   body.dark-mode .page::before{ opacity:.3; }
@@ -547,26 +550,26 @@
   .qa-ok{color:#3f8c5c;font-size:13px;font-family:'Inter',sans-serif;}
   .stat-block{margin-bottom:18px;}
   .stat-block h3{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sipario);margin:0 0 8px;text-transform:uppercase;letter-spacing:.03em;}
-  .stat-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #E6D5A3;}
+  .stat-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;border-bottom:1px solid #e7dbc0;}
   .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
   .bar-label{width:110px;font-size:11.5px;font-family:'Courier Prime',monospace;text-align:right;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .bar-track{flex:1;background:#E6D5A3;border-radius:6px;height:14px;overflow:hidden;}
+  .bar-track{flex:1;background:#e7dbc0;border-radius:6px;height:14px;overflow:hidden;}
   .bar-fill{background:var(--sipario);height:100%;border-radius:6px;}
   .bar-val{width:70px;font-size:11px;color:var(--grigio);}
   .outline-row{
-    padding:8px 4px;border-bottom:1px solid #E6D5A3;cursor:pointer;
+    padding:8px 4px;border-bottom:1px solid #e7dbc0;cursor:pointer;
   }
-  .outline-row:hover{background:#EFDFB8;}
+  .outline-row:hover{background:#f4ecd8;}
   .outline-row .ol-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);font-size:12.5px;}
   .outline-row .ol-preview{font-size:12px;color:var(--grigio);margin-top:2px;font-family:'Courier Prime',monospace;}
   .import-textarea{
     width:100%;min-height:180px;font-family:'Courier Prime',monospace;font-size:12.5px;padding:10px;
-    border:1px solid #D8C088;border-radius:6px;resize:vertical;background:#fff8ea;
+    border:1px solid #d6c7a1;border-radius:6px;resize:vertical;background:#fff8ea;
   }
   .sr-field{margin-bottom:14px;}
   .sr-field label{display:block;font-family:'Inter',sans-serif;font-size:11.5px;color:var(--grigio);margin-bottom:4px;}
   .sr-field select, .sr-field input[type=text]{
-    width:100%;padding:8px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;background:#fff8ea;
+    width:100%;padding:8px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;background:#fff8ea;
   }
   .empty-state{
     font-family:'Inter',sans-serif;color:var(--grigio);text-align:center;padding:60px 20px;
@@ -577,10 +580,10 @@
   }
   .version-row{display:flex;gap:8px;margin-bottom:16px;}
   .version-row input{
-    flex:1;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;
+    flex:1;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13px;
     background:#fff8ea;
   }
-  .version-item{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid #DCC896;}
+  .version-item{display:flex;align-items:center;justify-content:space-between;padding:10px 4px;border-bottom:1px solid #e4d8ba;}
   .version-item .v-label{font-weight:600;font-size:13.5px;color:var(--sipario);}
   .version-item .v-date{font-size:11.5px;color:var(--grigio);}
   .version-item .v-actions button{
@@ -592,7 +595,7 @@
   .sr-field{margin-bottom:12px;}
   .sr-field label{display:block;font-size:11.5px;color:var(--grigio);margin-bottom:4px;font-family:'Inter',sans-serif;}
   .sr-field input{
-    width:100%;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;
+    width:100%;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;
     font-size:13.5px;background:#fff8ea;
   }
   .sr-check{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--grigio);margin-bottom:14px;font-family:'Inter',sans-serif;}
@@ -606,7 +609,7 @@
     /* Struttura/Personaggi diventano un pannello a schermo intero, aperto dal pulsante sotto l'intestazione */
     .mobile-sidebar-launcher{
       display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
-      padding:11px 14px;background:var(--carta-scura);border:none;border-bottom:1px solid #D8C088;
+      padding:11px 14px;background:var(--carta-scura);border:none;border-bottom:1px solid #d6c7a1;
       color:var(--sipario);font-family:'Inter',sans-serif;font-weight:700;font-size:13px;cursor:pointer;
     }
     body.hide-sidebar .mobile-sidebar-launcher{display:none;}
@@ -685,6 +688,8 @@
     .quick-add-fab button .lbl{display:none;}
     .quick-add-fab button{padding:11px;border-radius:50%;}
     .stage-controls{right:10px;}
+    .mp-photo{width:64px;height:64px;}
+    .mp-photo-btn{width:23px;height:23px;font-size:11px;}
   }
 </style>
 </head>
@@ -801,7 +806,7 @@
       <button class="modal-close" id="btnSalvaVersione" style="margin:0;">Salva versione</button>
     </div>
     <div id="versionList"><div class="version-empty">Caricamento…</div></div>
-    <button class="modal-close" id="closeVersioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-top:14px;">Chiudi</button>
+    <button class="modal-close" id="closeVersioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-top:14px;">Chiudi</button>
   </div>
 </div>
 
@@ -820,7 +825,7 @@
     <label class="sr-check"><input type="checkbox" id="caseSensitive" /> Distingui maiuscole/minuscole</label>
     <div id="searchResult"></div>
     <button class="modal-close" id="btnSostituisci">Sostituisci tutto</button>
-    <button class="modal-close" id="closeCerca" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closeCerca" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -830,10 +835,10 @@
     <div class="sub">Genera un PDF con le battute complete del personaggio scelto e un breve richiamo (cue) delle battute altrui, utile per lo studio della parte</div>
     <div class="sr-field">
       <label>Personaggio</label>
-      <select id="sidesCharacterSelect" style="width:100%;padding:9px 10px;border:1px solid #D8C088;border-radius:6px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff8ea;"></select>
+      <select id="sidesCharacterSelect" style="width:100%;padding:9px 10px;border:1px solid #d6c7a1;border-radius:6px;font-family:'Inter',sans-serif;font-size:13.5px;background:#fff8ea;"></select>
     </div>
     <button class="modal-close" id="btnGeneraSides">Genera PDF</button>
-    <button class="modal-close" id="closeSides" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closeSides" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -871,7 +876,7 @@
     <textarea class="import-textarea" id="importTextarea" placeholder="MARCO&#10;Non ci posso credere.&#10;&#10;(esce sbattendo la porta)"></textarea>
     <div style="margin-top:14px;">
       <button class="modal-close" id="btnEseguiImporta">Importa in una nuova scena</button>
-      <button class="modal-close" id="closeImporta" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Annulla</button>
+      <button class="modal-close" id="closeImporta" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Annulla</button>
     </div>
   </div>
 </div>
@@ -901,7 +906,7 @@
       <div class="field-hint">Se lasci vuoto, viene generata in automatico la dicitura con l'anno corrente e il nome dell'autore. Compare nella copertina del PDF, nel copione .txt e nel file .fountain.</div>
     </div>
     <button class="modal-close" id="btnSalvaPdfSettings">Salva impostazioni</button>
-    <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+    <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
   </div>
 </div>
 
@@ -909,10 +914,10 @@
   <div class="modal" style="max-width:820px;">
     <h2>Anteprima PDF</h2>
     <div class="sub">Così apparirà il PDF una volta scaricato</div>
-    <iframe id="pdfPreviewFrame" style="width:100%;height:60vh;border:1px solid #D8C088;border-radius:6px;"></iframe>
+    <iframe id="pdfPreviewFrame" style="width:100%;height:60vh;border:1px solid #d6c7a1;border-radius:6px;"></iframe>
     <div style="margin-top:14px;">
       <button class="modal-close" id="btnScaricaDaAnteprima">Scarica PDF</button>
-      <button class="modal-close" id="closeAnteprima" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+      <button class="modal-close" id="closeAnteprima" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
     </div>
   </div>
 </div>
@@ -921,15 +926,80 @@
   <div class="modal" style="max-width:820px;">
     <h2>Diagramma delle relazioni</h2>
     <div class="sub">Generato automaticamente dalle relazioni inserite nella scheda di ogni personaggio</div>
-    <div id="relazioniContent" style="background:var(--carta);border:1px solid #D8C088;border-radius:8px;padding:10px;"></div>
+    <div id="relazioniContent" style="background:var(--carta);border:1px solid #d6c7a1;border-radius:8px;padding:10px;"></div>
     <div style="margin-top:14px;">
       <button class="modal-close" id="btnScaricaRelazioni">Scarica come SVG</button>
-      <button class="modal-close" id="closeRelazioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #D8C088;margin-left:8px;">Chiudi</button>
+      <button class="modal-close" id="closeRelazioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalPersonaggio">
+  <div class="modal" style="max-width:640px;">
+    <h2 id="mpNomeHeader">Personaggio</h2>
+    <div class="sub">Scheda completa — tutti i dettagli in un unico posto</div>
+    <div class="mp-body">
+      <div class="mp-top-row">
+        <div class="mp-photo-wrap">
+          <img id="mpPhotoPreview" class="mp-photo" alt="" />
+          <input type="file" accept="image/*" id="mpPhotoInput" style="display:none;" />
+          <button id="mpPhotoBtn" class="mp-photo-btn" title="Carica foto di riferimento">📷</button>
+          <button id="mpPhotoRemove" class="mp-photo-remove" title="Rimuovi foto">✕</button>
+        </div>
+        <div class="mp-top-fields">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input type="color" id="mpColor" class="pers-color" data-mp="color" title="Colore identificativo" />
+            <input type="text" id="mpName" data-mp="name" placeholder="Nome personaggio" style="flex:1;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--sipario);border:1px solid #d6c7a1;border-radius:5px;padding:6px 8px;background:var(--carta);outline:none;" />
+          </div>
+          <select id="mpRole" data-mp="role" style="margin-top:8px;width:100%;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--grigio);border:1px solid #d6c7a1;border-radius:5px;padding:6px 8px;background:var(--carta);cursor:pointer;">
+            <option value="">Ruolo drammaturgico…</option>
+          </select>
+        </div>
+      </div>
+      <div class="pers-field"><label>Breve descrizione</label><textarea rows="2" data-mp="desc" placeholder="Età, ruolo, cosa vuole..."></textarea></div>
+      <div class="pers-field-row">
+        <div class="pers-field"><label>Età</label><input type="text" data-mp="age" placeholder="es. 35" /></div>
+        <div class="pers-field"><label>Altezza</label><input type="text" data-mp="height" placeholder="es. 1,75 m" /></div>
+      </div>
+      <div class="pers-field"><label>Attore/attrice assegnato</label><input type="text" data-mp="actor" placeholder="chi lo interpreta in questa produzione" /></div>
+      <div class="pers-field"><label>Aspetto fisico</label><textarea rows="2" data-mp="physical" placeholder="corporatura, tratti distintivi..."></textarea></div>
+      <div class="pers-field"><label>Costume</label><textarea rows="2" data-mp="costume" placeholder="cosa indossa..."></textarea></div>
+      <div class="pers-field"><label>Voce e modo di parlare</label><textarea rows="2" data-mp="voice" placeholder="accento, cadenza, tic linguistici..."></textarea></div>
+      <div class="pers-field"><label>Oggetti caratteristici</label><textarea rows="2" data-mp="objects" placeholder="es. bastone, occhiali, pipa..."></textarea></div>
+      <div class="pers-field"><label>Obiettivo drammaturgico</label><textarea rows="2" data-mp="goal" placeholder="cosa vuole ottenere nella storia..."></textarea></div>
+      <div class="pers-field"><label>Conflitto principale</label><textarea rows="2" data-mp="conflict" placeholder="cosa/chi si oppone al suo obiettivo..."></textarea></div>
+      <div class="pers-field"><label>Arco di trasformazione</label><textarea rows="2" data-mp="arc" placeholder="come cambia dall'inizio alla fine..."></textarea></div>
+      <div class="pers-field"><label>Note di trucco e parrucco</label><textarea rows="2" data-mp="makeup" placeholder="es. cicatrice finta, parrucca grigia, barba posticcia..."></textarea></div>
+      <div class="pers-field"><label>Nomignoli</label><input type="text" data-mp="nicknames" placeholder="come lo chiamano gli altri personaggi nel testo" /></div>
+      <div class="pers-field"><label>Retroscena / note per l'attore</label><textarea rows="2" data-mp="backstory" placeholder="motivazioni, storia pregressa (non compare nel copione stampato)"></textarea></div>
+      <div class="pers-field"><label>Note di regia sul personaggio (private)</label><textarea rows="2" data-mp="directorNotes" placeholder="indicazioni di regia, diverse dalle note per l'attore (non compare nel copione stampato)"></textarea></div>
+      <div class="pers-field"><label>Etichette libere</label><input type="text" data-mp="tags" placeholder="es. comico, secondario, voce fuori scena ricorrente" /></div>
+      <div class="pers-relationships">
+        <label>Relazioni con altri personaggi</label>
+        <div class="pers-rel-list" id="mpRelList"></div>
+        <button class="pers-rel-add" id="mpAddRel">+ Aggiungi relazione</button>
+      </div>
+    </div>
+    <div style="margin-top:14px;">
+      <button class="modal-close" id="closePersonaggioModal">Chiudi</button>
     </div>
   </div>
 </div>
 
 <script>
+function uid(){ return 'id' + Math.random().toString(36).slice(2,10); }
+const CHAR_PALETTE = ['#8a3b3b','#3b5f8a','#4a7a4a','#8a6b2c','#6b4a8a','#2c6b6b','#8a4a6b','#5c5c2c'];
+let charColorCounter = 0;
+function nextCharColor(){ return CHAR_PALETTE[(charColorCounter++) % CHAR_PALETTE.length]; }
+function blankCharacter(overrides){
+  return Object.assign({
+    id: uid(), name: 'NUOVO PERSONAGGIO', role: '', age: '', height: '', physical: '', costume: '',
+    desc: '', backstory: '', color: nextCharColor(), relationships: [],
+    voice: '', objects: '', goal: '', arc: '', actor: '', directorNotes: '', tags: '',
+    conflict: '', makeup: '', nicknames: '',
+    photo: '', photoW: 0, photoH: 0
+  }, overrides || {});
+}
 let play = {
   title: "Titolo dell'opera",
   author: "Il tuo nome",
@@ -937,7 +1007,7 @@ let play = {
   copyright: '',
   pdfSettings: { format: 'a4', margins: 'normal' },
   characters: [
-    { id: uid(), name: "PERSONAGGIO A", role: "", age: "", height: "", physical: "", costume: "", desc: "Breve descrizione: età, ruolo, cosa vuole.", backstory: "", color: "#8a3b3b", relationships: [] }
+    blankCharacter({ name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." })
   ],
   acts: [
     {
@@ -964,14 +1034,10 @@ let play = {
 };
 let currentSceneId = play.acts[0].scenes[0].id;
 let openDirNotes = new Set();
-let openPersDetails = new Set();
 let filterCharacter = null;
 let rehearsalMode = false;
 let readingBlockId = null;
 
-function uid(){ return 'id' + Math.random().toString(36).slice(2,10); }
-const CHAR_PALETTE = ['#8a3b3b','#3b5f8a','#4a7a4a','#8a6b2c','#6b4a8a','#2c6b6b','#8a4a6b','#5c5c2c'];
-function nextCharColor(){ return CHAR_PALETTE[play.characters.length % CHAR_PALETTE.length]; }
 
 function findScene(id){
   for(const atto of play.acts){
@@ -1122,55 +1188,30 @@ function computeDialogueNumbers(){
 
 /* ---------- RENDER: SIDEBAR PERSONAGGI ---------- */
 const ROLE_OPTIONS = ['Protagonista','Antagonista','Comprimario','Caratterista','Comparsa'];
+function truncate(str, n){
+  if(!str) return '';
+  return str.length > n ? str.slice(0, n).trim() + '…' : str;
+}
 function renderPersonaggi(){
   const panel = document.getElementById('panel-personaggi');
   panel.innerHTML = '';
   const stats = computeCharacterStats();
   play.characters.forEach(p => {
     const s = stats[p.name] || { battute: 0, words: 0 };
-    const isOpen = openPersDetails.has(p.id);
-    const others = play.characters.filter(c => c.id !== p.id);
-    const rels = p.relationships || [];
     const card = document.createElement('div');
     card.className = 'pers-card';
     card.innerHTML = `
       <div class="pers-card-top">
-        <input type="color" class="pers-color" data-pers-color="${p.id}" value="${p.color || '#8a3b3b'}" title="Colore identificativo" />
+        ${p.photo
+          ? `<img class="pers-thumb" src="${p.photo}" alt="" />`
+          : `<input type="color" class="pers-color" data-pers-color="${p.id}" value="${p.color || '#8a3b3b'}" title="Colore identificativo" />`}
         <input class="nome" data-pers-name="${p.id}" value="${escapeAttr(p.name)}" />
         <button class="filter-btn" data-filter-pers="${escapeAttr(p.name)}" title="Mostra solo le scene con questo personaggio">🔎</button>
         <button class="icon-btn rm" data-del-pers="${p.id}" title="Elimina personaggio">✕</button>
       </div>
-      <select class="pers-role" data-pers-role="${p.id}">
-        <option value="">Ruolo drammaturgico…</option>
-        ${ROLE_OPTIONS.map(r => `<option value="${r}" ${p.role === r ? 'selected' : ''}>${r}</option>`).join('')}
-      </select>
-      <textarea class="desc" rows="2" data-pers-desc="${p.id}" placeholder="Breve descrizione: età, ruolo, cosa vuole...">${escapeHtml(p.desc || '')}</textarea>
-      <button class="pers-details-toggle" data-toggle-pers-details="${p.id}">${isOpen ? '▴ Nascondi dettagli' : '▾ Altri dettagli (età, aspetto, costume, relazioni…)'}</button>
-      ${isOpen ? `
-      <div class="pers-details" data-details-for="${p.id}">
-        <div class="pers-field-row">
-          <div class="pers-field"><label>Età</label><input type="text" data-pers-age="${p.id}" value="${escapeAttr(p.age || '')}" placeholder="es. 35" /></div>
-          <div class="pers-field"><label>Altezza</label><input type="text" data-pers-height="${p.id}" value="${escapeAttr(p.height || '')}" placeholder="es. 1,75 m" /></div>
-        </div>
-        <div class="pers-field"><label>Aspetto fisico</label><textarea rows="2" data-pers-physical="${p.id}" placeholder="corporatura, tratti distintivi...">${escapeHtml(p.physical || '')}</textarea></div>
-        <div class="pers-field"><label>Costume</label><textarea rows="2" data-pers-costume="${p.id}" placeholder="cosa indossa...">${escapeHtml(p.costume || '')}</textarea></div>
-        <div class="pers-field"><label>Retroscena / note per l'attore</label><textarea rows="2" data-pers-backstory="${p.id}" placeholder="motivazioni, storia pregressa (non compare nel copione stampato)">${escapeHtml(p.backstory || '')}</textarea></div>
-        <div class="pers-relationships">
-          <label>Relazioni con altri personaggi</label>
-          <div class="pers-rel-list">
-            ${rels.map((r, i) => `
-              <div class="pers-rel-row">
-                <select data-rel-char="${p.id}" data-rel-index="${i}">
-                  <option value="">— chi —</option>
-                  ${others.map(oc => `<option value="${oc.id}" ${r.targetId === oc.id ? 'selected' : ''}>${escapeHtml(oc.name)}</option>`).join('')}
-                </select>
-                <input type="text" data-rel-label="${p.id}" data-rel-index="${i}" value="${escapeAttr(r.label || '')}" placeholder="es. madre di, rivale di..." />
-                <button class="icon-btn" data-del-rel="${p.id}" data-rel-index="${i}" title="Rimuovi relazione">✕</button>
-              </div>`).join('') || '<div class="field-hint">Nessuna relazione aggiunta.</div>'}
-          </div>
-          <button class="pers-rel-add" data-add-rel="${p.id}" ${others.length ? '' : 'disabled'}>+ Aggiungi relazione</button>
-        </div>
-      </div>` : ''}
+      ${p.role ? `<div class="pers-role-badge">${escapeHtml(p.role)}</div>` : ''}
+      ${p.desc ? `<div class="pers-desc-preview">${escapeHtml(truncate(p.desc, 90))}</div>` : ''}
+      <button class="pers-open-sheet" data-open-pers="${p.id}">✎ Scheda completa</button>
       <div class="pers-stat">${s.battute} battute · ${s.words} parole</div>`;
     panel.appendChild(card);
   });
@@ -1231,23 +1272,30 @@ function buildRelationshipSVG(){
       edgeMarkup += `<path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="var(--grigio)" stroke-width="1.6" marker-end="url(#relArrow)" opacity="0.85"/>`;
       if(e.label){
         const w = Math.min(150, 14 + e.label.length*5.6);
-        edgeMarkup += `<rect x="${(ctrlX-w/2).toFixed(1)}" y="${(ctrlY-9).toFixed(1)}" width="${w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#D8C088" stroke-width="1"/>`;
+        edgeMarkup += `<rect x="${(ctrlX-w/2).toFixed(1)}" y="${(ctrlY-9).toFixed(1)}" width="${w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#d6c7a1" stroke-width="1"/>`;
         edgeMarkup += `<text x="${ctrlX.toFixed(1)}" y="${(ctrlY+3).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--sipario)">${escapeHtml(e.label)}</text>`;
       }
     });
   });
 
   let nodeMarkup = '';
+  let defsExtra = '';
   chars.forEach(c => {
     const pos = nodePos[c.id];
-    nodeMarkup += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}" fill="${c.color || '#8a3b3b'}" stroke="var(--carta)" stroke-width="3"/>`;
+    if(c.photo){
+      defsExtra += `<clipPath id="clip-${c.id}"><circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}"/></clipPath>`;
+      nodeMarkup += `<image href="${c.photo}" x="${(pos.x-nodeR).toFixed(1)}" y="${(pos.y-nodeR).toFixed(1)}" width="${nodeR*2}" height="${nodeR*2}" preserveAspectRatio="xMidYMid slice" clip-path="url(#clip-${c.id})"/>`;
+      nodeMarkup += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}" fill="none" stroke="${c.color || '#8a3b3b'}" stroke-width="3"/>`;
+    } else {
+      nodeMarkup += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}" fill="${c.color || '#8a3b3b'}" stroke="var(--carta)" stroke-width="3"/>`;
+    }
     nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+40).toFixed(1)}" text-anchor="middle" font-family="'Playfair Display', serif" font-weight="700" font-size="12.5" fill="var(--inchiostro)">${escapeHtml(c.name)}</text>`;
     if(c.role) nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+53).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--grigio)">${escapeHtml(c.role)}</text>`;
   });
 
-  const hint = edges.length ? '' : `<div class="field-hint" style="margin-bottom:8px;">Nessuna relazione è stata ancora inserita: apri la scheda di un personaggio → "Altri dettagli" → "+ Aggiungi relazione".</div>`;
+  const hint = edges.length ? '' : `<div class="field-hint" style="margin-bottom:8px;">Nessuna relazione è stata ancora inserita: apri la scheda completa di un personaggio → "+ Aggiungi relazione".</div>`;
   return hint + `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-    <defs><marker id="relArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--grigio)"/></marker></defs>
+    <defs><marker id="relArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--grigio)"/></marker>${defsExtra}</defs>
     ${edgeMarkup}
     ${nodeMarkup}
   </svg>`;
@@ -1269,6 +1317,151 @@ document.getElementById('btnScaricaRelazioni').addEventListener('click', () => {
   a.download = (play.title || 'relazioni').replace(/[^\wàèéìòù\-]+/gi,'_') + '_relazioni.svg';
   a.click();
   URL.revokeObjectURL(url);
+});
+
+/* ---------- SCHEDA PERSONAGGIO A SCHERMO INTERO ---------- */
+let editingPersId = null;
+document.getElementById('mpRole').innerHTML =
+  '<option value="">Ruolo drammaturgico…</option>' +
+  ROLE_OPTIONS.map(r => `<option value="${r}">${r}</option>`).join('');
+
+function openPersonaggioModal(id){
+  const p = play.characters.find(c => c.id === id);
+  if(!p) return;
+  editingPersId = id;
+  document.getElementById('mpNomeHeader').textContent = p.name || 'Personaggio';
+  document.querySelectorAll('#modalPersonaggio [data-mp]').forEach(el => {
+    const field = el.dataset.mp;
+    if(field === 'color') el.value = p.color || '#8a3b3b';
+    else el.value = p[field] || '';
+  });
+  updateMpPhotoPreview(p);
+  renderMpRelationships();
+  document.getElementById('modalPersonaggio').classList.add('open');
+}
+function updateMpPhotoPreview(p){
+  const img = document.getElementById('mpPhotoPreview');
+  const removeBtn = document.getElementById('mpPhotoRemove');
+  if(p.photo){
+    img.src = p.photo;
+    removeBtn.style.display = 'flex';
+  } else {
+    img.removeAttribute('src');
+    removeBtn.style.display = 'none';
+  }
+}
+function renderMpRelationships(){
+  const p = play.characters.find(c => c.id === editingPersId);
+  if(!p) return;
+  const others = play.characters.filter(c => c.id !== p.id);
+  const rels = p.relationships || [];
+  document.getElementById('mpRelList').innerHTML = rels.map((r, i) => `
+    <div class="pers-rel-row">
+      <select data-rel-index="${i}">
+        <option value="">— chi —</option>
+        ${others.map(oc => `<option value="${oc.id}" ${r.targetId === oc.id ? 'selected' : ''}>${escapeHtml(oc.name)}</option>`).join('')}
+      </select>
+      <input type="text" data-rel-label-index="${i}" value="${escapeAttr(r.label || '')}" placeholder="es. madre di, rivale di..." />
+      <button class="icon-btn" data-del-rel-index="${i}" title="Rimuovi relazione">✕</button>
+    </div>`).join('') || '<div class="field-hint">Nessuna relazione aggiunta.</div>';
+  document.getElementById('mpAddRel').disabled = others.length === 0;
+}
+document.querySelector('#modalPersonaggio .mp-body').addEventListener('input', e => {
+  const p = play.characters.find(c => c.id === editingPersId);
+  if(!p) return;
+  const field = e.target.closest('[data-mp]');
+  if(field){
+    if(field.dataset.mp === 'name'){
+      renameCharacterEverywhere(p, field.value);
+      document.getElementById('mpNomeHeader').textContent = p.name || 'Personaggio';
+      renderStage();
+    } else {
+      p[field.dataset.mp] = field.value;
+      if(field.dataset.mp === 'color') renderStage();
+    }
+    scheduleSave();
+    return;
+  }
+  const relSelect = e.target.closest('[data-rel-index]');
+  if(relSelect){
+    p.relationships[Number(relSelect.dataset.relIndex)].targetId = relSelect.value;
+    scheduleSave(); return;
+  }
+  const relLabel = e.target.closest('[data-rel-label-index]');
+  if(relLabel){
+    p.relationships[Number(relLabel.dataset.relLabelIndex)].label = relLabel.value;
+    scheduleSave(); return;
+  }
+});
+document.querySelector('#modalPersonaggio .mp-body').addEventListener('click', e => {
+  const p = play.characters.find(c => c.id === editingPersId);
+  if(!p) return;
+  if(e.target.closest('#mpAddRel')){
+    if(!p.relationships) p.relationships = [];
+    p.relationships.push({ targetId: '', label: '' });
+    scheduleSave(); renderMpRelationships(); return;
+  }
+  const delRel = e.target.closest('[data-del-rel-index]');
+  if(delRel){
+    p.relationships.splice(Number(delRel.dataset.delRelIndex), 1);
+    scheduleSave(); renderMpRelationships(); return;
+  }
+  if(e.target.closest('#mpPhotoBtn')){
+    document.getElementById('mpPhotoInput').click(); return;
+  }
+  if(e.target.closest('#mpPhotoRemove')){
+    p.photo = ''; p.photoW = 0; p.photoH = 0;
+    updateMpPhotoPreview(p);
+    scheduleSave(); renderPersonaggi();
+    return;
+  }
+});
+document.getElementById('mpPhotoInput').addEventListener('change', e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if(!file) return;
+  const p = play.characters.find(c => c.id === editingPersId);
+  if(!p) return;
+  resizeImageFile(file, 400, 0.75).then(result => {
+    p.photo = result.dataUrl;
+    p.photoW = result.width;
+    p.photoH = result.height;
+    updateMpPhotoPreview(p);
+    scheduleSave(); renderPersonaggi();
+  }).catch(() => { alert('Non sono riuscito a caricare questa immagine.'); });
+});
+function resizeImageFile(file, maxSize, quality){
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.naturalWidth, height = img.naturalHeight;
+        if(width > height && width > maxSize){ height = Math.round(height * maxSize / width); width = maxSize; }
+        else if(height >= width && height > maxSize){ width = Math.round(width * maxSize / height); height = maxSize; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve({ dataUrl: canvas.toDataURL('image/jpeg', quality), width, height });
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+document.getElementById('closePersonaggioModal').addEventListener('click', () => {
+  editingPersId = null;
+  document.getElementById('modalPersonaggio').classList.remove('open');
+  renderPersonaggi();
+});
+document.getElementById('modalPersonaggio').addEventListener('click', e => {
+  if(e.target.id === 'modalPersonaggio'){
+    editingPersId = null;
+    e.target.classList.remove('open');
+    renderPersonaggi();
+  }
 });
 
 /* ---------- RENDER: MAIN STAGE ---------- */
@@ -1599,16 +1792,25 @@ document.getElementById('panel-struttura').addEventListener('input', e => {
   }
 });
 
+function renameCharacterEverywhere(p, newName){
+  const oldName = p.name;
+  if(oldName === newName) return;
+  play.acts.forEach(a => a.scenes.forEach(s => {
+    if(Array.isArray(s.presentCharacters)) s.presentCharacters = s.presentCharacters.map(n => n === oldName ? newName : n);
+    s.blocks.forEach(b => { if(b.type === 'dialogue' && b.character === oldName) b.character = newName; });
+  }));
+  if(filterCharacter === oldName) filterCharacter = newName;
+  p.name = newName;
+}
+
 document.getElementById('panel-personaggi').addEventListener('click', e => {
   const addBtn = e.target.closest('#addPers');
   const delBtn = e.target.closest('[data-del-pers]');
   const filterBtn = e.target.closest('[data-filter-pers]');
-  const toggleDetails = e.target.closest('[data-toggle-pers-details]');
-  const addRelBtn = e.target.closest('[data-add-rel]');
-  const delRelBtn = e.target.closest('[data-del-rel]');
+  const openBtn = e.target.closest('[data-open-pers]');
   const diagramBtn = e.target.closest('#btnDiagrammaRelazioni');
   if(addBtn){
-    play.characters.push({ id: uid(), name: 'NUOVO PERSONAGGIO', role: '', age: '', height: '', physical: '', costume: '', desc: '', backstory: '', color: nextCharColor(), relationships: [] });
+    play.characters.push(blankCharacter());
     scheduleSave(); renderPersonaggi(); return;
   }
   if(delBtn){
@@ -1626,24 +1828,8 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
     renderStruttura();
     return;
   }
-  if(toggleDetails){
-    const id = toggleDetails.dataset.togglePersDetails;
-    if(openPersDetails.has(id)) openPersDetails.delete(id); else openPersDetails.add(id);
-    renderPersonaggi();
-    return;
-  }
-  if(addRelBtn){
-    const p = play.characters.find(c => c.id === addRelBtn.dataset.addRel);
-    if(!p.relationships) p.relationships = [];
-    p.relationships.push({ targetId: '', label: '' });
-    openPersDetails.add(p.id);
-    scheduleSave(); renderPersonaggi();
-    return;
-  }
-  if(delRelBtn){
-    const p = play.characters.find(c => c.id === delRelBtn.dataset.delRel);
-    p.relationships.splice(Number(delRelBtn.dataset.relIndex), 1);
-    scheduleSave(); renderPersonaggi();
+  if(openBtn){
+    openPersonaggioModal(openBtn.dataset.openPers);
     return;
   }
   if(diagramBtn){
@@ -1654,73 +1840,16 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
 
 document.getElementById('panel-personaggi').addEventListener('input', e => {
   const nameInput = e.target.closest('[data-pers-name]');
-  const descInput = e.target.closest('[data-pers-desc]');
   const colorInput = e.target.closest('[data-pers-color]');
-  const ageInput = e.target.closest('[data-pers-age]');
-  const heightInput = e.target.closest('[data-pers-height]');
-  const physicalInput = e.target.closest('[data-pers-physical]');
-  const costumeInput = e.target.closest('[data-pers-costume]');
-  const backstoryInput = e.target.closest('[data-pers-backstory]');
-  const roleSelect = e.target.closest('[data-pers-role]');
-  const relCharSelect = e.target.closest('[data-rel-char]');
-  const relLabelInput = e.target.closest('[data-rel-label]');
   if(nameInput){
     const p = play.characters.find(c => c.id === nameInput.dataset.persName);
-    const oldName = p.name;
-    const newName = nameInput.value;
-    if(oldName !== newName){
-      play.acts.forEach(a => a.scenes.forEach(s => {
-        if(Array.isArray(s.presentCharacters)) s.presentCharacters = s.presentCharacters.map(n => n === oldName ? newName : n);
-        s.blocks.forEach(b => { if(b.type === 'dialogue' && b.character === oldName) b.character = newName; });
-      }));
-      if(filterCharacter === oldName) filterCharacter = newName;
-    }
-    p.name = newName;
+    renameCharacterEverywhere(p, nameInput.value);
     scheduleSave(); renderStage();
-  }
-  if(descInput){
-    const p = play.characters.find(c => c.id === descInput.dataset.persDesc);
-    p.desc = descInput.value;
-    scheduleSave();
   }
   if(colorInput){
     const p = play.characters.find(c => c.id === colorInput.dataset.persColor);
     p.color = colorInput.value;
     scheduleSave(); renderStage();
-  }
-  if(ageInput){
-    const p = play.characters.find(c => c.id === ageInput.dataset.persAge);
-    p.age = ageInput.value; scheduleSave();
-  }
-  if(heightInput){
-    const p = play.characters.find(c => c.id === heightInput.dataset.persHeight);
-    p.height = heightInput.value; scheduleSave();
-  }
-  if(physicalInput){
-    const p = play.characters.find(c => c.id === physicalInput.dataset.persPhysical);
-    p.physical = physicalInput.value; scheduleSave();
-  }
-  if(costumeInput){
-    const p = play.characters.find(c => c.id === costumeInput.dataset.persCostume);
-    p.costume = costumeInput.value; scheduleSave();
-  }
-  if(backstoryInput){
-    const p = play.characters.find(c => c.id === backstoryInput.dataset.persBackstory);
-    p.backstory = backstoryInput.value; scheduleSave();
-  }
-  if(roleSelect){
-    const p = play.characters.find(c => c.id === roleSelect.dataset.persRole);
-    p.role = roleSelect.value; scheduleSave();
-  }
-  if(relCharSelect){
-    const p = play.characters.find(c => c.id === relCharSelect.dataset.relChar);
-    p.relationships[Number(relCharSelect.dataset.relIndex)].targetId = relCharSelect.value;
-    scheduleSave();
-  }
-  if(relLabelInput){
-    const p = play.characters.find(c => c.id === relLabelInput.dataset.relChar);
-    p.relationships[Number(relLabelInput.dataset.relIndex)].label = relLabelInput.value;
-    scheduleSave();
   }
 });
 
@@ -2434,8 +2563,9 @@ function drawCastPage(doc, R){
   R.centerText('PERSONAGGI', 15, 'bold');
   R.state.y += 12;
   const left = R.marginLeft;
-  const textLeft = left + 20;
-  const textW = R.contentW - 20;
+  const gutter = 34;
+  const textLeft = left + gutter;
+  const textW = R.contentW - gutter;
   play.characters.forEach(c => {
     doc.setFont('courier','bold'); doc.setFontSize(11.5);
     const nameLines = doc.splitTextToSize(c.name.toUpperCase() + (c.role ? '  (' + c.role + ')' : ''), textW);
@@ -2443,17 +2573,33 @@ function drawCastPage(doc, R){
     if(c.age) metaBits.push(c.age + (/^\d+$/.test(c.age.trim()) ? ' anni' : ''));
     if(c.height) metaBits.push(c.height);
     const metaLine = metaBits.join(' · ');
+    const actorLine = c.actor && c.actor.trim() ? 'Interpretato da: ' + c.actor.trim() : '';
     doc.setFont('courier','normal'); doc.setFontSize(9);
     const descLines = c.desc && c.desc.trim() ? doc.splitTextToSize(c.desc.trim(), textW) : [];
     const physLines = c.physical && c.physical.trim() ? doc.splitTextToSize('Aspetto: ' + c.physical.trim(), textW) : [];
     const costLines = c.costume && c.costume.trim() ? doc.splitTextToSize('Costume: ' + c.costume.trim(), textW) : [];
+    const voiceLines = c.voice && c.voice.trim() ? doc.splitTextToSize('Voce: ' + c.voice.trim(), textW) : [];
+    const objLines = c.objects && c.objects.trim() ? doc.splitTextToSize('Oggetti: ' + c.objects.trim(), textW) : [];
+    const makeupLines = c.makeup && c.makeup.trim() ? doc.splitTextToSize('Trucco/parrucco: ' + c.makeup.trim(), textW) : [];
+    const nicknameLines = c.nicknames && c.nicknames.trim() ? doc.splitTextToSize('Nomignoli: ' + c.nicknames.trim(), textW) : [];
+    const bodyLines = descLines.length + physLines.length + costLines.length + voiceLines.length + objLines.length + makeupLines.length + nicknameLines.length;
 
-    const blockH = 14*nameLines.length + (metaLine ? 12 : 0) + (descLines.length+physLines.length+costLines.length)*11.5 + 16;
+    const blockH = Math.max(34, 14*nameLines.length + (metaLine?12:0) + (actorLine?12:0) + bodyLines*11.5 + 16);
     R.ensureSpace(blockH);
 
-    const [rr,gg,bb] = hexToRgb(c.color);
-    doc.setFillColor(rr,gg,bb);
-    doc.roundedRect(left, R.state.y - 9, 10, 10, 2, 2, 'F');
+    const blockTop = R.state.y - 9;
+    if(c.photo){
+      let iw = 28, ih = 28;
+      if(c.photoW && c.photoH){
+        const ratio = c.photoW / c.photoH;
+        if(ratio >= 1) ih = 28 / ratio; else iw = 28 * ratio;
+      }
+      try{ doc.addImage(c.photo, 'JPEG', left, blockTop, iw, ih); }catch(e){ /* formato non supportato: si continua senza foto */ }
+    } else {
+      const [rr,gg,bb] = hexToRgb(c.color);
+      doc.setFillColor(rr,gg,bb);
+      doc.roundedRect(left, blockTop, 10, 10, 2, 2, 'F');
+    }
 
     doc.setFont('courier','bold'); doc.setFontSize(11.5); doc.setTextColor(0,0,0);
     nameLines.forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 14; });
@@ -2464,8 +2610,14 @@ function drawCastPage(doc, R){
       doc.setTextColor(0,0,0);
       R.state.y += 12;
     }
+    if(actorLine){
+      doc.setFont('courier','italic'); doc.setFontSize(9); doc.setTextColor(110,105,95);
+      doc.text(actorLine, textLeft, R.state.y);
+      doc.setTextColor(0,0,0);
+      R.state.y += 12;
+    }
     doc.setFont('courier','normal'); doc.setFontSize(9);
-    descLines.concat(physLines, costLines).forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 11.5; });
+    descLines.concat(physLines, costLines, voiceLines, objLines, makeupLines, nicknameLines).forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 11.5; });
     R.state.y += 12;
   });
 }
@@ -2751,7 +2903,7 @@ document.getElementById('btnEseguiImporta').addEventListener('click', () => {
   targetAct.scenes.push(newScene);
   blocks.forEach(b => {
     if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)){
-      play.characters.push({ id: uid(), name: b.character, role: '', age: '', height: '', physical: '', costume: '', desc: '', backstory: '', color: nextCharColor(), relationships: [] });
+      play.characters.push(blankCharacter({ name: b.character }));
     }
   });
   currentSceneId = newScene.id;
@@ -2858,7 +3010,7 @@ function buildBlankPlay(){
     copyright: '',
     pdfSettings: { format: 'a4', margins: 'normal' },
     characters: [
-      { id: uid(), name: "PERSONAGGIO A", role: "", age: "", height: "", physical: "", costume: "", desc: "Breve descrizione: età, ruolo, cosa vuole.", backstory: "", color: "#8a3b3b", relationships: [] }
+      blankCharacter({ name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." })
     ],
     acts: [
       {
