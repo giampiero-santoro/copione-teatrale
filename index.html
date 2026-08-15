@@ -781,6 +781,8 @@
         <button class="ghost" id="btnEsportaProgetto">Salva progetto (.json)</button>
         <button class="ghost" id="btnImportaProgetto">Importa progetto</button>
         <input type="file" id="fileImporta" accept="application/json" style="display:none;" />
+        <button class="ghost" id="btnImportaFountain">Importa .fountain</button>
+        <input type="file" id="fileImportaFountain" accept=".fountain,.txt,text/plain" style="display:none;" />
       </div>
     </footer>
   </main>
@@ -2351,7 +2353,7 @@ document.getElementById('btnEsporta').addEventListener('click', () => {
 
 /* ---------- MOTORE DI RENDERING PDF (condiviso tra copione completo e copione per personaggio) ---------- */
 const MARGIN_PRESETS = {
-  normal:  { top: 72, bottom: 72, left: 108, right: 72 },
+  normal:  { top: 71, bottom: 71, left: 108, right: 57 },  // 2,5 / 2,5 / 3,8 / 2 cm — convenzione standard da copione A4
   stretti: { top: 54, bottom: 54, left: 72,  right: 54 },
   ampi:    { top: 90, bottom: 90, left: 126, right: 90 }
 };
@@ -2488,7 +2490,7 @@ function makePdfRenderer(doc, startPageNum){
     doc.setDrawColor(210, 210, 206);
     doc.roundedRect(boxX, boxTop, boxW, boxH, 3, 3, 'FD');
 
-    doc.setFont('helvetica','bold'); doc.setFontSize(7.5);
+    doc.setFont('courier','bold'); doc.setFontSize(7.5);
     doc.setTextColor(120, 115, 105);
     doc.text(label.toUpperCase(), boxX + 10, boxTop + 12);
 
@@ -2907,31 +2909,7 @@ function parsePastedScript(text){
   });
   return blocks.length ? blocks : [{ id: uid(), type: 'direction', text: '' }];
 }
-document.getElementById('btnImportaTesto').addEventListener('click', () => {
-  document.getElementById('importTextarea').value = '';
-  document.getElementById('modalImporta').classList.add('open');
-});
-document.getElementById('closeImporta').addEventListener('click', () => document.getElementById('modalImporta').classList.remove('open'));
-document.getElementById('modalImporta').addEventListener('click', e => { if(e.target.id === 'modalImporta') e.target.classList.remove('open'); });
-document.getElementById('btnEseguiImporta').addEventListener('click', () => {
-  const raw = document.getElementById('importTextarea').value;
-  if(!raw.trim()){ alert('Incolla prima del testo da importare.'); return; }
-  const blocks = parsePastedScript(raw);
-  const targetAct = play.acts[play.acts.length - 1];
-  const n = targetAct.scenes.length + 1;
-  const newScene = { id: uid(), title: 'Scena ' + n + ' (importata)', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks };
-  targetAct.scenes.push(newScene);
-  blocks.forEach(b => {
-    if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)){
-      play.characters.push(blankCharacter({ name: b.character }));
-    }
-  });
-  currentSceneId = newScene.id;
-  scheduleSave();
-  document.getElementById('modalImporta').classList.remove('open');
-  renderAll();
-  closeMobileSidebar();
-});
+
 
 /* ---------- ESPORTAZIONE FOUNTAIN (.fountain) ---------- */
 function buildFountain(){
@@ -2970,6 +2948,149 @@ document.getElementById('btnFountain').addEventListener('click', () => {
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+});
+
+/* ---------- IMPORTAZIONE FOUNTAIN (.fountain) ---------- */
+function parseFountain(text){
+  const rawLines = text.replace(/\r\n/g, '\n').split('\n');
+  let i = 0;
+  const meta = {};
+  const titleKeyRe = /^([A-Za-z][A-Za-z \t]*):\s*(.*)$/;
+  while(i < rawLines.length && rawLines[i].trim() === '') i++;
+  while(i < rawLines.length){
+    const line = rawLines[i];
+    if(line.trim() === ''){ i++; break; }
+    const m = line.match(titleKeyRe);
+    if(!m) break;
+    const key = m[1].trim().toLowerCase();
+    let val = m[2].trim();
+    let j = i + 1;
+    while(j < rawLines.length && /^[ \t]+/.test(rawLines[j]) && rawLines[j].trim() !== ''){
+      val += (val ? ' ' : '') + rawLines[j].trim();
+      j++;
+    }
+    meta[key] = val;
+    i = j;
+  }
+  const bodyLines = rawLines.slice(i);
+
+  const SCENE_RE = /^(INT|EST|EXT|INTERNO|ESTERNO|I\/E)[.\s]/i;
+  const TRANSITION_RE = /^[A-ZÀ-Ý0-9 .'\-]{3,50} TO:\s*$/;
+  const isCharacterLine = (l) => l.length <= 40 && l === l.toUpperCase() && /[A-ZÀ-Ý]/.test(l) && !/^\(.*\)$/.test(l);
+
+  const acts = [];
+  let currentAct = null, currentScene = null, lastDialogueBlock = null;
+  function ensureAct(title){
+    currentAct = { title: (title || '').trim() || ('Atto ' + toRoman(acts.length + 1)), scenes: [] };
+    acts.push(currentAct);
+    currentScene = null;
+  }
+  function ensureScene(title){
+    if(!currentAct) ensureAct();
+    currentScene = { title: (title || '').trim() || ('Scena ' + (currentAct.scenes.length + 1)), setting: '', scenografia: '', blocks: [] };
+    currentAct.scenes.push(currentScene);
+    lastDialogueBlock = null;
+  }
+
+  bodyLines.forEach(raw => {
+    const line = raw.trim();
+    if(line === ''){ lastDialogueBlock = null; return; }
+
+    if(/^##\s+/.test(line)){ ensureScene(line.replace(/^##\s+/, '')); return; }
+    if(/^#\s+/.test(line)){ ensureAct(line.replace(/^#\s+/, '')); return; }
+    if(SCENE_RE.test(line)){ ensureScene(line); return; }
+    if(/^\.[^.]/.test(line)){ ensureScene(line.slice(1)); return; }
+
+    if(!currentScene) ensureScene();
+
+    if(/^>/.test(line)){
+      const content = line.replace(/^>\s*/, '').replace(/\s*<$/, '').trim();
+      if(currentScene.blocks.length === 0 && !currentScene.setting) currentScene.setting = content;
+      else currentScene.blocks.push({ id: uid(), type: 'direction', text: content });
+      lastDialogueBlock = null;
+      return;
+    }
+    if(TRANSITION_RE.test(line)){
+      currentScene.blocks.push({ id: uid(), type: 'direction', text: line });
+      lastDialogueBlock = null;
+      return;
+    }
+    const scenografiaMatch = line.match(/^\[\[Scenografia e oggettistica:\s*(.*)\]\]$/i);
+    if(scenografiaMatch){ currentScene.scenografia = scenografiaMatch[1].trim(); lastDialogueBlock = null; return; }
+    const offstageMatch = line.match(/^\[\[FUORI SCENA:\s*(.*)\]\]$/i);
+    if(offstageMatch){ currentScene.blocks.push({ id: uid(), type: 'offstage', text: offstageMatch[1].trim() }); lastDialogueBlock = null; return; }
+    const genericNoteMatch = line.match(/^\[\[(.*)\]\]$/);
+    if(genericNoteMatch){ currentScene.blocks.push({ id: uid(), type: 'direction', text: genericNoteMatch[1].trim() }); lastDialogueBlock = null; return; }
+
+    if(/^\(.*\)$/.test(line)){
+      const inner = line.slice(1, -1);
+      if(lastDialogueBlock && !lastDialogueBlock.text) lastDialogueBlock.note = inner;
+      else if(lastDialogueBlock && lastDialogueBlock.afterDirection === undefined) lastDialogueBlock.afterDirection = inner;
+      else if(lastDialogueBlock) lastDialogueBlock.text += (lastDialogueBlock.text ? ' ' : '') + line;
+      else currentScene.blocks.push({ id: uid(), type: 'direction', text: inner });
+      return;
+    }
+    if(isCharacterLine(line)){
+      const block = { id: uid(), type: 'dialogue', character: line.replace(/\s*\(.*\)\s*$/, '').trim(), text: '' };
+      currentScene.blocks.push(block);
+      lastDialogueBlock = block;
+      return;
+    }
+    if(lastDialogueBlock) lastDialogueBlock.text = (lastDialogueBlock.text ? lastDialogueBlock.text + ' ' : '') + line;
+    else currentScene.blocks.push({ id: uid(), type: 'direction', text: line });
+  });
+
+  if(!acts.length) ensureAct();
+  if(!currentScene) ensureScene();
+  return { meta, acts };
+}
+document.getElementById('btnImportaFountain').addEventListener('click', () => document.getElementById('fileImportaFountain').click());
+document.getElementById('fileImportaFountain').addEventListener('change', (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = '';
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    let parsed;
+    try{ parsed = parseFountain(String(reader.result)); }
+    catch(err){ alert('Non sono riuscito a leggere questo file .fountain.'); return; }
+    const nScenes = parsed.acts.reduce((s,a) => s + a.scenes.length, 0);
+    const nActs = parsed.acts.length;
+    const newCharNames = new Set();
+    parsed.acts.forEach(a => a.scenes.forEach(s => s.blocks.forEach(b => {
+      if(b.type === 'dialogue' && b.character && !play.characters.some(c => c.name === b.character)) newCharNames.add(b.character);
+    })));
+    const summary = `Trovat${nActs===1?'o':'i'} ${nActs} att${nActs===1?'o':'i'} e ${nScenes} scen${nScenes===1?'a':'e'}` +
+      (newCharNames.size ? `, con ${newCharNames.size} nuovo/i personaggio/i (${Array.from(newCharNames).slice(0,5).join(', ')}${newCharNames.size>5?'…':''})` : '') +
+      `.\n\nVerranno aggiunti in fondo al copione attuale. Continuare?`;
+    if(!confirm(summary)) return;
+
+    const insertFromIndex = play.acts.length;
+    parsed.acts.forEach(a => {
+      play.acts.push({
+        id: uid(),
+        title: a.title,
+        scenes: a.scenes.map(s => ({
+          id: uid(), title: s.title, setting: s.setting || '', directorNotes: '', status: '',
+          presentCharacters: [], descrizione: '', scenografia: s.scenografia || '', blocks: s.blocks
+        }))
+      });
+    });
+    newCharNames.forEach(name => play.characters.push(blankCharacter({ name })));
+
+    if(parsed.meta.title && play.title === "Titolo dell'opera") play.title = parsed.meta.title;
+    const metaAuthor = parsed.meta.author || parsed.meta.authors;
+    if(metaAuthor && play.author === "Il tuo nome") play.author = metaAuthor;
+    if(parsed.meta.copyright && !play.copyright) play.copyright = parsed.meta.copyright;
+
+    const firstNewScene = play.acts[insertFromIndex] && play.acts[insertFromIndex].scenes[0];
+    if(firstNewScene) currentSceneId = firstNewScene.id;
+    scheduleSave();
+    renderAll();
+    closeMobileSidebar();
+  };
+  reader.onerror = () => alert('Non sono riuscito a leggere questo file.');
+  reader.readAsText(file);
 });
 
 /* ---------- SCORCIATOIE DA TASTIERA ---------- */
