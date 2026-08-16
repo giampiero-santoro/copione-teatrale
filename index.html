@@ -426,6 +426,8 @@
     cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;font-size:12px;line-height:1;
   }
   .stage-controls button:hover{background:var(--sipario-dark);}
+  .stage-controls button:disabled{opacity:.35;cursor:default;}
+  .stage-controls button:disabled:hover{background:var(--sipario);}
   .stage-controls span{font-family:'Inter',sans-serif;font-size:11px;color:var(--grigio);min-width:32px;text-align:center;}
 
   /* PANNELLO "SPAZIO DI SCRITTURA": mostra/nascondi intestazione, menù laterale, barra inferiore */
@@ -751,6 +753,8 @@
 
   <main>
     <div class="stage-controls">
+      <button id="btnUndo" title="Annulla ultima modifica (Ctrl+Z)" disabled>↶</button>
+      <button id="btnRedo" title="Ripeti (Ctrl+Maiusc+Z)" disabled>↷</button>
       <button id="btnLayout" title="Mostra/nascondi intestazione, menù laterale e barra inferiore">▦</button>
       <button id="btnDarkMode" title="Tema scuro">🌙</button>
       <button id="btnRehearsal" title="Modalità prova/lettura">🎭</button>
@@ -1094,7 +1098,70 @@ async function storageList(prefix){
 }
 
 let saveTimer = null;
+/* ---------- ANNULLA / RIPETI ---------- */
+let undoStack = [];
+let redoStack = [];
+let lastCommittedSnapshot = null;
+let undoTimer = null;
+const UNDO_LIMIT = 50;
+const UNDO_GROUP_MS = 1200; // raggruppa le modifiche ravvicinate (es. mentre si digita) in un solo passo
+function updateUndoButton(){
+  const bU = document.getElementById('btnUndo');
+  const bR = document.getElementById('btnRedo');
+  if(bU) bU.disabled = !undoStack.length;
+  if(bR) bR.disabled = !redoStack.length;
+}
+function noteUndoableChange(){
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => {
+    const current = JSON.stringify(play);
+    if(lastCommittedSnapshot !== null && current !== lastCommittedSnapshot){
+      undoStack.push(lastCommittedSnapshot);
+      if(undoStack.length > UNDO_LIMIT) undoStack.shift();
+      redoStack = [];
+    }
+    lastCommittedSnapshot = current;
+    updateUndoButton();
+  }, UNDO_GROUP_MS);
+}
+function restorePlaySnapshot(json){
+  play = JSON.parse(json);
+  if(!(play.acts || []).some(a => a.scenes.some(s => s.id === currentSceneId))){
+    currentSceneId = play.acts[0] && play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
+  }
+  rehearsalMode = false;
+  editingPersId = null;
+  renderAll();
+  updateUndoButton();
+  scheduleSave();
+}
+function performUndo(){
+  clearTimeout(undoTimer); undoTimer = null;
+  const current = JSON.stringify(play);
+  if(lastCommittedSnapshot !== null && current !== lastCommittedSnapshot){
+    // c'era una modifica in corso non ancora "chiusa" in un passo: la chiudiamo ora, così non va persa
+    undoStack.push(lastCommittedSnapshot);
+    if(undoStack.length > UNDO_LIMIT) undoStack.shift();
+    lastCommittedSnapshot = current;
+  }
+  if(!undoStack.length) return;
+  redoStack.push(lastCommittedSnapshot);
+  if(redoStack.length > UNDO_LIMIT) redoStack.shift();
+  const prev = undoStack.pop();
+  lastCommittedSnapshot = prev;
+  restorePlaySnapshot(prev);
+}
+function performRedo(){
+  if(!redoStack.length) return;
+  clearTimeout(undoTimer); undoTimer = null;
+  undoStack.push(lastCommittedSnapshot);
+  if(undoStack.length > UNDO_LIMIT) undoStack.shift();
+  const next = redoStack.pop();
+  lastCommittedSnapshot = next;
+  restorePlaySnapshot(next);
+}
 function scheduleSave(){
+  noteUndoableChange();
   const el = document.getElementById('saveState');
   el.textContent = 'salvataggio…';
   clearTimeout(saveTimer);
@@ -1115,6 +1182,10 @@ async function loadSaved(){
       }
     }
   }catch(e){ /* niente di salvato: si parte dal modello base */ }
+  lastCommittedSnapshot = JSON.stringify(play);
+  undoStack = [];
+  redoStack = [];
+  updateUndoButton();
   renderAll();
 }
 
@@ -3143,8 +3214,21 @@ document.addEventListener('keydown', e => {
   if((e.ctrlKey || e.metaKey) && e.key === 'Enter'){
     const btn = document.querySelector('.block-toolbar [data-add-block="dialogue"]');
     if(btn){ e.preventDefault(); btn.click(); }
+    return;
+  }
+  // Ctrl/Cmd + Z: annulla — con Maiusc (o Ctrl+Y): ripeti
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z'){
+    e.preventDefault();
+    if(e.shiftKey) performRedo(); else performUndo();
+    return;
+  }
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'y'){
+    e.preventDefault();
+    performRedo();
   }
 });
+document.getElementById('btnUndo').addEventListener('click', performUndo);
+document.getElementById('btnRedo').addEventListener('click', performRedo);
 
 /* ---------- SALVATAGGIO RAPIDO ---------- */
 async function forceSaveNow(){
