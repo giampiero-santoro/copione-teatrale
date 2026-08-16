@@ -622,6 +622,8 @@
   }
   .sr-check{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--grigio);margin-bottom:14px;font-family:'Inter',sans-serif;}
   .field-hint{font-size:11.5px;color:var(--grigio);margin-top:5px;line-height:1.45;font-family:'Inter',sans-serif;}
+  .dove-salvare-options{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .dove-salvare-options button{width:100%;text-align:center;padding:12px 14px;}
   #searchResult{font-size:12.5px;color:var(--grigio);margin-bottom:10px;min-height:16px;}
   /* ---------- OTTIMIZZAZIONE PER TABLET E SMARTPHONE ---------- */
   @media(max-width:820px){
@@ -908,6 +910,20 @@
     <div class="sub">Tutte le scene del copione, con un'anteprima. Clicca su una riga per aprirla.</div>
     <div id="outlineContent"></div>
     <button class="modal-close" id="closeOutline">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalDoveSalvare">
+  <div class="modal">
+    <h2>Dove vuoi salvare questo copione?</h2>
+    <div class="sub">Il salvataggio automatico nel browser è sempre attivo, ma un file vero sul tuo computer è più sicuro: non si perde svuotando la cache o cambiando dispositivo.</div>
+    <div class="dove-salvare-options">
+      <button class="modal-close" id="btnDoveSalvareFile">📁 Collega un file sul mio computer</button>
+      <button class="modal-close" id="btnDoveSalvareBrowser" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;">💾 Solo salvataggio automatico nel browser</button>
+    </div>
+    <div class="field-hint" style="margin-top:14px;">
+      💡 <b>Consiglio:</b> salva spesso per non perdere le modifiche. Il salvataggio automatico nel browser scatta da solo pochi istanti dopo ogni modifica, ma non sostituisce un vero backup — usa <b>Ctrl+S</b> per salvare subito, o scarica ogni tanto una copia con "Salva progetto (.json)".
+    </div>
   </div>
 </div>
 
@@ -2775,60 +2791,36 @@ function drawDraftWatermark(doc){
 /* ---------- ESPORTAZIONE PDF (formato copione professionale, con indice) ---------- */
 function buildFullScriptPDF(){
   const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
+  const R = makePdfRenderer(doc, 1);
+  drawTitlePage(doc, R);
+  R.newPage(); // pagina 2: qui comincia il contenuto del copione
 
-  // Passo 1: calcolo su un documento "usa e getta" delle pagine in cui inizia ogni atto/scena
-  const measureDoc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
-  const measureR = makePdfRenderer(measureDoc, 1);
   const tocEntries = [];
-  renderScriptContent(measureR, { record: (ai, si, page) => {
+  renderScriptContent(R, { record: (ai, si, page) => {
     if(si === -1) tocEntries.push({ type:'act', ai, page });
     else tocEntries.push({ type:'scene', ai, si, page });
   }});
 
-  const tocLinesNeeded = tocEntries.length + play.acts.length; // margine per le intestazioni degli atti
-  const tocPages = Math.max(1, Math.ceil(tocLinesNeeded / 40));
+  drawCastPage(doc, R); // pagina "Personaggi", dopo il contenuto
 
-  // Passo 2: documento definitivo
-  const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
-  const R = makePdfRenderer(doc, 1);
-  drawTitlePage(doc, R);
-  drawCastPage(doc, R);
-  const introPages = R.currentPage(); // frontespizio (+ pagina personaggi, se presente)
-  const offset = introPages + tocPages;
-
-  for(let p = 0; p < tocPages; p++){
-    R.newPage();
-    if(p === 0) R.centerText('INDICE', 16, 'bold');
-    R.state.y += 6;
-  }
-  doc.setPage(introPages + 1);
-  R.state.y = R.marginTop + (tocPages > 0 ? 30 : 0);
-  let tocPageCursor = introPages + 1;
+  // Indice delle scene, in fondo al documento: i numeri di pagina sono già quelli reali
+  R.newPage();
+  R.centerText('INDICE', 16, 'bold');
+  R.state.y += 6;
   tocEntries.forEach(entry => {
-    if(R.state.y + R.lineH > R.pageH - R.marginBottom){
-      tocPageCursor++;
-      doc.setPage(tocPageCursor);
-      R.state.y = R.marginTop;
-    }
-    doc.setPage(tocPageCursor);
-    const finalPage = entry.page + offset;
+    R.ensureSpace(R.lineH);
     if(entry.type === 'act'){
       doc.setFont('courier','bold'); doc.setFontSize(11);
       doc.text(play.acts[entry.ai].title.toUpperCase(), R.marginLeft, R.state.y);
-      doc.text(String(finalPage), R.pageW - R.marginRight, R.state.y, { align: 'right' });
+      doc.text(String(entry.page), R.pageW - R.marginRight, R.state.y, { align: 'right' });
     } else {
       doc.setFont('courier','normal'); doc.setFontSize(10);
       doc.text('   ' + play.acts[entry.ai].scenes[entry.si].title, R.marginLeft, R.state.y);
-      doc.text(String(finalPage), R.pageW - R.marginRight, R.state.y, { align: 'right' });
+      doc.text(String(entry.page), R.pageW - R.marginRight, R.state.y, { align: 'right' });
     }
     R.state.y += R.lineH;
   });
-
-  doc.setPage(doc.internal.getNumberOfPages());
-  R.state.pageNum = offset;
-  R.state.y = R.marginTop;
-  R.newPage();
-  renderScriptContent(R, {});
 
   return doc;
 }
@@ -2844,9 +2836,9 @@ function buildSidesPDF(characterName){
   const doc = new jsPDF({ unit: 'pt', format: (play.pdfSettings && play.pdfSettings.format) || 'a4' });
   const R = makePdfRenderer(doc, 1);
   drawTitlePage(doc, R, 'Copione — parte di ' + characterName.toUpperCase());
-  drawCastPage(doc, R);
   R.newPage();
   renderScriptContent(R, { character: characterName });
+  drawCastPage(doc, R);
   return doc;
 }
 function exportSidesPDF(characterName){
@@ -3384,12 +3376,14 @@ document.getElementById('btnNuovoCopione').addEventListener('click', () => {
   scheduleSave();
   renderAll();
   closeMobileSidebar();
+  showDoveSalvare();
 });
 
-document.getElementById('btnFileLocale').addEventListener('click', async () => {
+document.getElementById('btnFileLocale').addEventListener('click', chooseLocalFile);
+async function chooseLocalFile(){
   if(!('showSaveFilePicker' in window)){
     alert('Questa funzione è disponibile solo su browser basati su Chrome/Edge. Su questo browser continua a funzionare comunque il salvataggio automatico nella memoria del browser, oppure puoi usare "Salva progetto (.json)" manualmente.');
-    return;
+    return false;
   }
   try{
     fileHandle = await window.showSaveFilePicker({
@@ -3398,8 +3392,27 @@ document.getElementById('btnFileLocale').addEventListener('click', async () => {
     });
     await writeToFileHandle();
     document.getElementById('fileLocLabel').textContent = '📁 ' + fileHandle.name;
-  }catch(e){ /* l'utente ha annullato la scelta */ }
+    return true;
+  }catch(e){ return false; /* l'utente ha annullato la scelta */ }
+}
+
+/* ---------- "DOVE VUOI SALVARE?" (all'apertura e a ogni nuovo copione) ---------- */
+function showDoveSalvare(){
+  const btnFile = document.getElementById('btnDoveSalvareFile');
+  const supported = 'showSaveFilePicker' in window;
+  btnFile.disabled = !supported;
+  btnFile.title = supported ? '' : 'Disponibile solo su browser basati su Chrome/Edge';
+  btnFile.style.opacity = supported ? '1' : '.5';
+  document.getElementById('modalDoveSalvare').classList.add('open');
+}
+document.getElementById('btnDoveSalvareFile').addEventListener('click', async () => {
+  await chooseLocalFile();
+  document.getElementById('modalDoveSalvare').classList.remove('open');
 });
+document.getElementById('btnDoveSalvareBrowser').addEventListener('click', () => {
+  document.getElementById('modalDoveSalvare').classList.remove('open');
+});
+document.getElementById('modalDoveSalvare').addEventListener('click', e => { if(e.target.id === 'modalDoveSalvare') e.target.classList.remove('open'); });
 
 /* ---------- TASTO RAPIDO "AGGIUNGI BATTUTA/DIDASCALIA" (sempre a portata di mano) ---------- */
 let lastFocusedBlockId = null;
@@ -3495,7 +3508,7 @@ document.getElementById('chkShowFooter').addEventListener('change', e => { layou
 window.addEventListener('resize', () => updateFabPosition());
 
 document.getElementById('creatorLogo').src = CREATOR_LOGO;
-loadSaved();
+loadSaved().then(() => showDoveSalvare());
 loadDarkModePref();
 loadLayoutPrefs();
 </script>
