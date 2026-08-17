@@ -2687,16 +2687,36 @@ function drawTitlePage(doc, R, subtitle){
   doc.setTextColor(120,110,95);
   doc.text(copyrightLine(), R.pageW/2, R.pageH - 60, { align: 'center' });
   doc.setTextColor(0,0,0);
+}
 
-  // credito: logo + nome, in fondo alla copertina
-  try{
-    const logoSize = 24;
-    doc.addImage(CREATOR_LOGO, 'PNG', R.pageW/2 - logoSize/2, R.pageH - 48, logoSize, logoSize);
-  }catch(e){ /* se il formato immagine non è supportato, si continua senza logo */ }
+/* Credito "Editor di Copioni [logo] Giampiero Santoro" su una riga, ripetuto in fondo a ogni pagina del PDF */
+function drawCreatorCredit(doc){
+  const total = doc.internal.getNumberOfPages();
+  const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
+  const logoSize = 24; // dimensione invariata rispetto a prima
+  const gap = 5;
+  const label1 = 'Editor di Copioni';
+  const label2 = 'Giampiero Santoro';
+  const baseY = pageH - 18;
+
   doc.setFont('times','italic'); doc.setFontSize(8);
-  doc.setTextColor(150,140,125);
-  doc.text('Editor di Copioni di Giampiero Santoro — Clan Destino', R.pageW/2, R.pageH - 18, { align: 'center' });
-  doc.setTextColor(0,0,0);
+  const w1 = doc.getTextWidth(label1);
+  const w2 = doc.getTextWidth(label2);
+  const totalW = w1 + gap + logoSize + gap + w2;
+  const startX = pageW/2 - totalW/2;
+
+  for(let p = 1; p <= total; p++){
+    doc.setPage(p);
+    doc.setFont('times','italic'); doc.setFontSize(8);
+    doc.setTextColor(150,140,125);
+    doc.text(label1, startX, baseY);
+    try{
+      doc.addImage(CREATOR_LOGO, 'PNG', startX + w1 + gap, baseY - logoSize + 6, logoSize, logoSize);
+    }catch(e){ /* se il formato immagine non è supportato, si continua senza logo */ }
+    doc.text(label2, startX + w1 + gap + logoSize + gap, baseY);
+    doc.setTextColor(0,0,0);
+  }
 }
 
 function hexToRgb(hex){
@@ -2822,6 +2842,7 @@ function buildFullScriptPDF(){
     R.state.y += R.lineH;
   });
 
+  drawCreatorCredit(doc);
   return doc;
 }
 
@@ -2839,6 +2860,7 @@ function buildSidesPDF(characterName){
   R.newPage();
   renderScriptContent(R, { character: characterName });
   drawCastPage(doc, R);
+  drawCreatorCredit(doc);
   return doc;
 }
 function exportSidesPDF(characterName){
