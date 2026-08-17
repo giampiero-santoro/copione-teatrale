@@ -1317,7 +1317,7 @@ function computeDialogueNumbers(){
 }
 
 /* ---------- RENDER: SIDEBAR PERSONAGGI ---------- */
-const ROLE_OPTIONS = ['Protagonista','Antagonista','Comprimario','Caratterista','Comparsa'];
+const ROLE_OPTIONS = ['Protagonista','Deuteragonista','Antagonista','Confidente','Comprimario','Caratterista','Aiutante','Coro','Voce narrante','Comparsa'];
 function truncate(str, n){
   if(!str) return '';
   return str.length > n ? str.slice(0, n).trim() + '…' : str;
@@ -2888,23 +2888,6 @@ function drawCastPage(doc, R){
     descLines.concat(physLines, costLines, voiceLines, objLines, makeupLines, nicknameLines).forEach(l => { doc.text(l, textLeft, R.state.y); R.state.y += 11.5; });
     R.state.y += 12;
   });
-}
-
-function isDraftPlay(){
-  return !play.acts.every(atto => atto.scenes.every(scena => scena.status === 'definitiva'));
-}
-
-function drawDraftWatermark(doc){
-  const total = doc.internal.getNumberOfPages();
-  const pageW = doc.internal.pageSize.getWidth();
-  const pageH = doc.internal.pageSize.getHeight();
-  for(let p = 1; p <= total; p++){
-    doc.setPage(p);
-    doc.setFont('helvetica','bold'); doc.setFontSize(88);
-    doc.setTextColor(215,195,165);
-    doc.text('BOZZA', pageW/2, pageH/2, { angle: 45, align: 'center' });
-    doc.setTextColor(0,0,0);
-  }
 }
 
 /* ---------- ESPORTAZIONE PDF (formato copione professionale, con indice) ---------- */
