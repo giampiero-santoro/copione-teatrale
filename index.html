@@ -1383,7 +1383,8 @@ function buildRelationshipSVG(){
   });
 
   const nodeR = 24;
-  let edgeMarkup = '';
+  const labelCandidates = [];
+  let pathMarkup = '';
   Object.entries(pairGroups).forEach(([key, group]) => {
     const n = group.length;
     // direzione di riferimento fissa per la coppia (indipendente dal verso di ogni singola relazione):
@@ -1399,18 +1400,46 @@ function buildRelationshipSVG(){
       const dx = p2.x - p1.x, dy = p2.y - p1.y;
       const len = Math.sqrt(dx*dx + dy*dy) || 1;
       const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2;
-      const offset = (idx - (n-1)/2) * 26;
+      const offset = (idx - (n-1)/2) * 30;
       const ctrlX = mx + perpX*offset, ctrlY = my + perpY*offset;
       const startX = p1.x + (dx/len)*nodeR, startY = p1.y + (dy/len)*nodeR;
       const endX = p2.x - (dx/len)*nodeR, endY = p2.y - (dy/len)*nodeR;
-      edgeMarkup += `<path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="var(--grigio)" stroke-width="1.6" marker-end="url(#relArrow)" opacity="0.85"/>`;
+      pathMarkup += `<path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="var(--grigio)" stroke-width="1.6" marker-end="url(#relArrow)" opacity="0.85"/>`;
       if(e.label){
         const w = Math.min(150, 14 + e.label.length*5.6);
-        edgeMarkup += `<rect x="${(ctrlX-w/2).toFixed(1)}" y="${(ctrlY-9).toFixed(1)}" width="${w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#d6c7a1" stroke-width="1"/>`;
-        edgeMarkup += `<text x="${ctrlX.toFixed(1)}" y="${(ctrlY+3).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--sipario)">${escapeHtml(e.label)}</text>`;
+        labelCandidates.push({ x: ctrlX, y: ctrlY, anchorX: ctrlX, anchorY: ctrlY, w, h: 16, text: e.label });
       }
     });
   });
+
+  // Risoluzione automatica delle sovrapposizioni tra le etichette delle relazioni:
+  // controlla TUTTE le etichette del diagramma (non solo quelle di una stessa coppia), e se una si
+  // sovrappone a un'altra già posizionata la sposta più in basso, finché non trova spazio libero.
+  // Se l'etichetta viene spostata, una sottile linea tratteggiata la ricollega al punto originale
+  // della relazione, così resta chiaro a quale freccia appartiene.
+  const placedLabels = [];
+  labelCandidates.forEach(L => {
+    let y = L.y;
+    let guard = 0;
+    while(guard < 40){
+      const clash = placedLabels.some(P => Math.abs(L.x - P.x) < (L.w + P.w)/2 + 6 && Math.abs(y - P.y) < (L.h + P.h)/2 + 4);
+      if(!clash) break;
+      y += L.h + 6;
+      guard++;
+    }
+    L.finalY = y;
+    placedLabels.push({ x: L.x, y, w: L.w, h: L.h });
+  });
+
+  let labelMarkup = '';
+  labelCandidates.forEach(L => {
+    if(Math.abs(L.finalY - L.anchorY) > 4){
+      labelMarkup += `<line x1="${L.anchorX.toFixed(1)}" y1="${L.anchorY.toFixed(1)}" x2="${L.x.toFixed(1)}" y2="${L.finalY.toFixed(1)}" stroke="#c9b788" stroke-width="1" stroke-dasharray="2,2"/>`;
+    }
+    labelMarkup += `<rect x="${(L.x-L.w/2).toFixed(1)}" y="${(L.finalY-9).toFixed(1)}" width="${L.w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#d6c7a1" stroke-width="1"/>`;
+    labelMarkup += `<text x="${L.x.toFixed(1)}" y="${(L.finalY+3).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--sipario)">${escapeHtml(L.text)}</text>`;
+  });
+  const edgeMarkup = pathMarkup + labelMarkup;
 
   let nodeMarkup = '';
   let defsExtra = '';
@@ -1428,7 +1457,10 @@ function buildRelationshipSVG(){
   });
 
   const hint = edges.length ? '' : `<div class="field-hint" style="margin-bottom:8px;">Nessuna relazione è stata ancora inserita: apri la scheda completa di un personaggio → "+ Aggiungi relazione".</div>`;
-  return hint + `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+  let maxLabelBottom = 0;
+  placedLabels.forEach(p => { maxLabelBottom = Math.max(maxLabelBottom, p.y + p.h/2); });
+  const finalH = Math.max(H, maxLabelBottom + 30);
+  return hint + `<svg viewBox="0 0 ${W} ${finalH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
     <defs><marker id="relArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--grigio)"/></marker>${defsExtra}</defs>
     ${edgeMarkup}
     ${nodeMarkup}
