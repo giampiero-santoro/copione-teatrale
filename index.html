@@ -1384,14 +1384,21 @@ function buildRelationshipSVG(){
 
   const nodeR = 24;
   let edgeMarkup = '';
-  Object.values(pairGroups).forEach(group => {
+  Object.entries(pairGroups).forEach(([key, group]) => {
     const n = group.length;
+    // direzione di riferimento fissa per la coppia (indipendente dal verso di ogni singola relazione):
+    // così due relazioni reciproche (es. "madre" / "figlio") vengono scostate su lati opposti
+    // invece di annullarsi a vicenda e sovrapporsi.
+    const [refFromId, refToId] = key.split('|');
+    const refP1 = nodePos[refFromId], refP2 = nodePos[refToId];
+    const refDx = refP2.x - refP1.x, refDy = refP2.y - refP1.y;
+    const refLen = Math.sqrt(refDx*refDx + refDy*refDy) || 1;
+    const perpX = -refDy/refLen, perpY = refDx/refLen;
     group.forEach((e, idx) => {
       const p1 = nodePos[e.from], p2 = nodePos[e.to];
       const dx = p2.x - p1.x, dy = p2.y - p1.y;
       const len = Math.sqrt(dx*dx + dy*dy) || 1;
       const mx = (p1.x + p2.x)/2, my = (p1.y + p2.y)/2;
-      const perpX = -dy/len, perpY = dx/len;
       const offset = (idx - (n-1)/2) * 26;
       const ctrlX = mx + perpX*offset, ctrlY = my + perpY*offset;
       const startX = p1.x + (dx/len)*nodeR, startY = p1.y + (dy/len)*nodeR;
