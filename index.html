@@ -986,7 +986,8 @@
     <div class="sub">Generato automaticamente dalle relazioni inserite nella scheda di ogni personaggio</div>
     <div id="relazioniContent" style="background:var(--carta);border:1px solid #d6c7a1;border-radius:8px;padding:10px;"></div>
     <div style="margin-top:14px;">
-      <button class="modal-close" id="btnScaricaRelazioni">Scarica come SVG</button>
+      <button class="modal-close" id="btnScaricaRelazioniPDF">Scarica come PDF</button>
+      <button class="modal-close" id="btnScaricaRelazioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Scarica come SVG</button>
       <button class="modal-close" id="closeRelazioni" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
     </div>
   </div>
@@ -1464,10 +1465,23 @@ function openRelationshipDiagram(){
 }
 document.getElementById('closeRelazioni').addEventListener('click', () => document.getElementById('modalRelazioni').classList.remove('open'));
 document.getElementById('modalRelazioni').addEventListener('click', e => { if(e.target.id === 'modalRelazioni') e.target.classList.remove('open'); });
+
+// Le forme del diagramma usano i colori dell'app tramite var(--nome), che però non esistono più
+// una volta che l'SVG viene esportato ed aperto fuori da questa pagina (per il PDF, ancora prima,
+// durante la rasterizzazione su canvas). Qui li sostituiamo con il valore effettivo, così il
+// disegno resta identico anche fuori dall'app.
+function resolveSvgColorVars(svgString){
+  const rootStyles = getComputedStyle(document.documentElement);
+  return svgString.replace(/var\(--([a-zA-Z0-9-]+)\)/g, (match, name) => {
+    const value = rootStyles.getPropertyValue('--' + name).trim();
+    return value || match;
+  });
+}
+
 document.getElementById('btnScaricaRelazioni').addEventListener('click', () => {
   const svg = document.querySelector('#relazioniContent svg');
   if(!svg) return;
-  const svgData = new XMLSerializer().serializeToString(svg);
+  const svgData = resolveSvgColorVars(new XMLSerializer().serializeToString(svg));
   const blob = new Blob([svgData], { type: 'image/svg+xml' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1475,6 +1489,48 @@ document.getElementById('btnScaricaRelazioni').addEventListener('click', () => {
   a.download = (play.title || 'relazioni').replace(/[^\wàèéìòù\-]+/gi,'_') + '_relazioni.svg';
   a.click();
   URL.revokeObjectURL(url);
+});
+
+document.getElementById('btnScaricaRelazioniPDF').addEventListener('click', () => {
+  const svg = document.querySelector('#relazioniContent svg');
+  if(!svg) return;
+  const vb = svg.viewBox && svg.viewBox.baseVal;
+  const w = (vb && vb.width) || (svg.width && svg.width.baseVal && svg.width.baseVal.value) || 760;
+  const h = (vb && vb.height) || (svg.height && svg.height.baseVal && svg.height.baseVal.value) || 600;
+
+  const svgData = resolveSvgColorVars(new XMLSerializer().serializeToString(svg));
+  const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(svgBlob);
+  const img = new Image();
+  img.onload = () => {
+    // rasterizziamo su un canvas ad alta risoluzione, così il PDF risulta nitido anche stampato
+    const scale = 2.5;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--carta').trim() || '#F3ECDD';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(url);
+
+    try{
+      const pngData = canvas.toDataURL('image/png');
+      const { jsPDF } = window.jspdf;
+      const marginPt = 24;
+      const pageW = w + marginPt * 2, pageH = h + marginPt * 2;
+      const doc = new jsPDF({ unit: 'pt', format: [pageW, pageH], orientation: pageW >= pageH ? 'landscape' : 'portrait' });
+      doc.addImage(pngData, 'PNG', marginPt, marginPt, w, h);
+      doc.save((play.title || 'relazioni').replace(/[^\wàèéìòù\-]+/gi,'_') + '_relazioni.pdf');
+    }catch(err){
+      alert('Non è stato possibile generare il PDF del diagramma. Prova a scaricarlo come SVG.');
+    }
+  };
+  img.onerror = () => {
+    URL.revokeObjectURL(url);
+    alert('Non è stato possibile generare il PDF del diagramma. Prova a scaricarlo come SVG.');
+  };
+  img.src = url;
 });
 
 /* ---------- SCHEDA PERSONAGGIO A SCHERMO INTERO ---------- */
