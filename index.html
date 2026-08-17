@@ -396,6 +396,8 @@
     padding:3px 10px;font-family:'Inter',sans-serif;font-size:11px;cursor:pointer;
   }
   .chip.on{background:var(--sipario);color:var(--carta);border-color:var(--sipario);}
+  .chip-all{font-weight:700;letter-spacing:.03em;}
+  .block.filtered-out{display:none;}
   .presence-auto{background:none;border:none;color:var(--grigio);cursor:pointer;font-size:11px;text-decoration:underline dotted;font-family:'Inter',sans-serif;}
   .presence-auto:hover{color:var(--sipario);}
   .page.rehearsal .block-controls,
@@ -1735,9 +1737,10 @@ function renderStage(){
   const presenceWrap = document.createElement('div');
   presenceWrap.className = 'presence-wrap';
   const present = scena.presentCharacters || [];
-  presenceWrap.innerHTML = `<div class="presence-label">Personaggi in scena</div>
+  presenceWrap.innerHTML = `<div class="presence-label">Personaggi in scena — seleziona per mostrare solo le loro battute</div>
     <div class="presence-chips">
       ${play.characters.map(c => `<button class="chip${present.includes(c.name) ? ' on' : ''}" data-toggle-present="${escapeAttr(c.name)}">${escapeHtml(c.name)}</button>`).join('')}
+      <button class="chip chip-all${present.length ? '' : ' on'}" data-toggle-present-all="1">TUTTI</button>
       <button class="presence-auto" id="autoDetectPresence">rileva dai dialoghi</button>
     </div>`;
   page.appendChild(presenceWrap);
@@ -1781,6 +1784,9 @@ function renderStage(){
     const b = document.createElement('div');
     b.dataset.blockId = block.id;
     const ro = rehearsalMode ? 'readonly' : '';
+    // se sono stati selezionati dei personaggi tra i chip "Personaggi in scena", nascondiamo le battute
+    // degli altri personaggi (le didascalie e le voci fuori scena restano sempre visibili).
+    const hiddenByFilter = present.length && block.type === 'dialogue' && !present.includes(block.character);
     if(block.type === 'direction'){
       b.className = 'block direction';
       b.innerHTML = `<div class="block-controls">${moveCtrls(block.id)}</div>
@@ -1831,6 +1837,7 @@ function renderStage(){
         <textarea class="line" rows="2" ${ro} spellcheck="true" lang="it" data-block-text="${block.id}" placeholder="Battuta...">${escapeHtml(block.text)}</textarea>
         ${afterDirHtml}`;
     }
+    if(hiddenByFilter) b.classList.add('filtered-out');
     blocksWrap.appendChild(b);
   });
 
@@ -2086,6 +2093,7 @@ document.getElementById('stage').addEventListener('click', e => {
   const addSameCharBtn = e.target.closest('[data-add-same-char]');
   const statusBtn = e.target.closest('[data-set-status]');
   const presentChip = e.target.closest('[data-toggle-present]');
+  const presentAllChip = e.target.closest('[data-toggle-present-all]');
   const autoDetectBtn = e.target.closest('#autoDetectPresence');
   const emptyAdd = e.target.closest('#emptyAdd');
 
@@ -2108,6 +2116,10 @@ document.getElementById('stage').addEventListener('click', e => {
     scena.presentCharacters = scena.presentCharacters || [];
     const idx = scena.presentCharacters.indexOf(name);
     if(idx > -1) scena.presentCharacters.splice(idx,1); else scena.presentCharacters.push(name);
+    scheduleSave(); renderStage(); return;
+  }
+  if(presentAllChip){
+    scena.presentCharacters = [];
     scheduleSave(); renderStage(); return;
   }
   if(autoDetectBtn){
