@@ -1361,13 +1361,29 @@ function renderPersonaggi(){
 function buildRelationshipSVG(){
   const chars = play.characters;
   const N = chars.length;
-  const R = N <= 4 ? 140 : Math.min(230, 120 + N * 10);
-  const cx = 380, cy = R + 100;
-  const H = cy + R + 90, W = 760;
+
+  // Disposizione dei personaggi lungo il perimetro di un quadrato (invece che in cerchio):
+  // riduce gli incroci di linee e lascia più spazio ai lati per far scorrere le etichette.
+  const half = N <= 4 ? 150 : Math.min(260, 150 + (N - 4) * 16);
+  const margin = 110;
+  const cx = half + margin, cy = half + margin;
+  const W = 2 * (half + margin), H = 2 * (half + margin) + 20;
+
+  function pointOnSquare(frac){
+    const t = ((frac % 1) + 1) % 1;
+    const p4 = t * 4;
+    const side = Math.floor(p4);
+    const local = p4 - side;
+    const d = local * 2 * half;
+    if(side === 0) return { x: cx - half + d, y: cy - half };        // lato alto: sinistra → destra
+    if(side === 1) return { x: cx + half,       y: cy - half + d };  // lato destro: alto → basso
+    if(side === 2) return { x: cx + half - d,   y: cy + half };      // lato basso: destra → sinistra
+    return { x: cx - half,       y: cy + half - d };                  // lato sinistro: basso → alto
+  }
+
   const nodePos = {};
   chars.forEach((c, i) => {
-    const angle = -Math.PI/2 + i * (2*Math.PI/N);
-    nodePos[c.id] = { x: cx + R*Math.cos(angle), y: cy + R*Math.sin(angle) };
+    nodePos[c.id] = pointOnSquare((i + 0.5) / N);
   });
 
   const edges = [];
@@ -1383,13 +1399,14 @@ function buildRelationshipSVG(){
   });
 
   const nodeR = 24;
-  const labelCandidates = [];
   let pathMarkup = '';
+  let labelMarkup = '';
+  let labelCounter = 0;
   Object.entries(pairGroups).forEach(([key, group]) => {
     const n = group.length;
     // direzione di riferimento fissa per la coppia (indipendente dal verso di ogni singola relazione):
     // così due relazioni reciproche (es. "madre" / "figlio") vengono scostate su lati opposti
-    // invece di annullarsi a vicenda e sovrapporsi.
+    // invece di annullarsi a vicenda e sovrapporsi, ognuna con la propria linea e la propria etichetta.
     const [refFromId, refToId] = key.split('|');
     const refP1 = nodePos[refFromId], refP2 = nodePos[refToId];
     const refDx = refP2.x - refP1.x, refDy = refP2.y - refP1.y;
@@ -1406,38 +1423,16 @@ function buildRelationshipSVG(){
       const endX = p2.x - (dx/len)*nodeR, endY = p2.y - (dy/len)*nodeR;
       pathMarkup += `<path d="M ${startX.toFixed(1)} ${startY.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${endX.toFixed(1)} ${endY.toFixed(1)}" fill="none" stroke="var(--grigio)" stroke-width="1.6" marker-end="url(#relArrow)" opacity="0.85"/>`;
       if(e.label){
-        const w = Math.min(150, 14 + e.label.length*5.6);
-        labelCandidates.push({ x: ctrlX, y: ctrlY, anchorX: ctrlX, anchorY: ctrlY, w, h: 16, text: e.label });
+        // il testo della relazione scorre lungo la linea stessa (textPath), invece che in un riquadro a parte:
+        // costruiamo un secondo tracciato invisibile, identico nella curvatura, ma orientato sempre da
+        // sinistra a destra (o dall'alto in basso se la linea è verticale) così il testo non risulta mai capovolto.
+        let tS = { x: startX, y: startY }, tE = { x: endX, y: endY };
+        if(tS.x > tE.x || (tS.x === tE.x && tS.y > tE.y)){ const tmp = tS; tS = tE; tE = tmp; }
+        const pathId = `relpath-${labelCounter++}`;
+        pathMarkup += `<path id="${pathId}" d="M ${tS.x.toFixed(1)} ${tS.y.toFixed(1)} Q ${ctrlX.toFixed(1)} ${ctrlY.toFixed(1)} ${tE.x.toFixed(1)} ${tE.y.toFixed(1)}" fill="none" stroke="none"/>`;
+        labelMarkup += `<text font-family="Inter, sans-serif" font-size="9.5" font-weight="600" fill="var(--sipario)" stroke="var(--carta)" stroke-width="3" style="paint-order:stroke;"><textPath href="#${pathId}" startOffset="50%" text-anchor="middle" dy="-4">${escapeHtml(e.label)}</textPath></text>`;
       }
     });
-  });
-
-  // Risoluzione automatica delle sovrapposizioni tra le etichette delle relazioni:
-  // controlla TUTTE le etichette del diagramma (non solo quelle di una stessa coppia), e se una si
-  // sovrappone a un'altra già posizionata la sposta più in basso, finché non trova spazio libero.
-  // Se l'etichetta viene spostata, una sottile linea tratteggiata la ricollega al punto originale
-  // della relazione, così resta chiaro a quale freccia appartiene.
-  const placedLabels = [];
-  labelCandidates.forEach(L => {
-    let y = L.y;
-    let guard = 0;
-    while(guard < 40){
-      const clash = placedLabels.some(P => Math.abs(L.x - P.x) < (L.w + P.w)/2 + 6 && Math.abs(y - P.y) < (L.h + P.h)/2 + 4);
-      if(!clash) break;
-      y += L.h + 6;
-      guard++;
-    }
-    L.finalY = y;
-    placedLabels.push({ x: L.x, y, w: L.w, h: L.h });
-  });
-
-  let labelMarkup = '';
-  labelCandidates.forEach(L => {
-    if(Math.abs(L.finalY - L.anchorY) > 4){
-      labelMarkup += `<line x1="${L.anchorX.toFixed(1)}" y1="${L.anchorY.toFixed(1)}" x2="${L.x.toFixed(1)}" y2="${L.finalY.toFixed(1)}" stroke="#c9b788" stroke-width="1" stroke-dasharray="2,2"/>`;
-    }
-    labelMarkup += `<rect x="${(L.x-L.w/2).toFixed(1)}" y="${(L.finalY-9).toFixed(1)}" width="${L.w.toFixed(1)}" height="16" rx="4" fill="var(--carta)" stroke="#d6c7a1" stroke-width="1"/>`;
-    labelMarkup += `<text x="${L.x.toFixed(1)}" y="${(L.finalY+3).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--sipario)">${escapeHtml(L.text)}</text>`;
   });
   const edgeMarkup = pathMarkup + labelMarkup;
 
@@ -1457,10 +1452,7 @@ function buildRelationshipSVG(){
   });
 
   const hint = edges.length ? '' : `<div class="field-hint" style="margin-bottom:8px;">Nessuna relazione è stata ancora inserita: apri la scheda completa di un personaggio → "+ Aggiungi relazione".</div>`;
-  let maxLabelBottom = 0;
-  placedLabels.forEach(p => { maxLabelBottom = Math.max(maxLabelBottom, p.y + p.h/2); });
-  const finalH = Math.max(H, maxLabelBottom + 30);
-  return hint + `<svg viewBox="0 0 ${W} ${finalH}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+  return hint + `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
     <defs><marker id="relArrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="var(--grigio)"/></marker>${defsExtra}</defs>
     ${edgeMarkup}
     ${nodeMarkup}
