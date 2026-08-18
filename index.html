@@ -5,7 +5,7 @@
 <title>Copione — Editor per il teatro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
@@ -18,6 +18,23 @@
     --inchiostro:#2A211B;
     --grigio:#83786A;
     --rosso-avviso:#9C3B3B;
+    --font-chrome:'Playfair Display',serif;
+  }
+  /* ---------- TEMI GRAFICI ALTERNATIVI (palette + carattere dell'interfaccia; il testo del copione resta sempre in Courier) ---------- */
+  body.theme-manoscritto{
+    --sipario:#22221E; --sipario-dark:#161611; --oro:#3E6259; --oro-chiaro:#6B9186;
+    --carta:#EFE9DD; --carta-scura:#E4DCC8; --inchiostro:#22221E; --grigio:#5C5C52;
+    --font-chrome:'Courier Prime',monospace;
+  }
+  body.theme-palco{
+    --sipario:#17181A; --sipario-dark:#0E0F10; --oro:#C97F1E; --oro-chiaro:#E8A33D;
+    --carta:#F1EEE6; --carta-scura:#E4E0D4; --inchiostro:#201F1C; --grigio:#7A7870;
+    --font-chrome:'Space Grotesk',sans-serif;
+  }
+  body.theme-piazza{
+    --sipario:#B5502E; --sipario-dark:#8E3C22; --oro:#D9A441; --oro-chiaro:#E8C377;
+    --carta:#F1E6D2; --carta-scura:#E6D3B2; --inchiostro:#2E2418; --grigio:#6B5B3E;
+    --font-chrome:'Playfair Display',serif;
   }
   *{box-sizing:border-box;}
   html, body{ height:100%; }
@@ -50,7 +67,7 @@
     display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
   }
   .brand .mark{
-    font-family:'Playfair Display',serif;font-style:italic;font-weight:600;
+    font-family:var(--font-chrome);font-style:italic;font-weight:600;
     color:var(--oro-chiaro);font-size:14px;letter-spacing:.14em;text-transform:uppercase;
   }
   .creator-credit{
@@ -60,14 +77,14 @@
   .creator-credit img{width:18px;height:18px;border-radius:50%;flex-shrink:0;}
   .title-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:4px;}
   #titolo-opera{
-    font-family:'Playfair Display',serif;font-weight:700;font-size:32px;
+    font-family:var(--font-chrome);font-weight:700;font-size:32px;
     color:var(--carta);background:transparent;border:none;border-bottom:1px dashed transparent;
     outline:none;min-width:220px;
   }
   #titolo-opera:hover,#titolo-opera:focus{border-bottom-color:var(--oro);}
-  .di{color:var(--oro-chiaro);font-family:'Playfair Display',serif;font-style:italic;font-size:16px;}
+  .di{color:var(--oro-chiaro);font-family:var(--font-chrome);font-style:italic;font-size:16px;}
   #autore-opera{
-    font-family:'Playfair Display',serif;font-style:italic;font-size:16px;color:var(--oro-chiaro);
+    font-family:var(--font-chrome);font-style:italic;font-size:16px;color:var(--oro-chiaro);
     background:transparent;border:none;border-bottom:1px dashed transparent;outline:none;
   }
   #autore-opera:hover,#autore-opera:focus{border-bottom-color:var(--oro);}
@@ -115,11 +132,11 @@
   .atto-block{margin-bottom:14px;}
   .atto-head{
     display:flex;align-items:center;justify-content:space-between;gap:6px;
-    font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
+    font-family:var(--font-chrome);font-weight:700;color:var(--sipario);
     font-size:15px;padding:6px 4px;border-bottom:1px solid #d6c7a1;
   }
   .atto-head input{
-    font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);
+    font-family:var(--font-chrome);font-weight:700;color:var(--sipario);
     background:none;border:none;outline:none;font-size:15px;width:100%;
   }
   .icon-btn{
@@ -177,7 +194,7 @@
   .pers-color::-moz-color-swatch{border:none;border-radius:50%;}
   .pers-thumb{object-fit:cover;border:2px solid var(--carta-scura);}
   .pers-card input.nome{
-    flex:1;min-width:0;font-family:'Playfair Display',serif;font-weight:700;font-size:14px;color:var(--sipario);
+    flex:1;min-width:0;font-family:var(--font-chrome);font-weight:700;font-size:14px;color:var(--sipario);
     border:none;background:none;outline:none;margin-bottom:0;
   }
   .pers-card .rm{flex-shrink:0;}
@@ -281,7 +298,7 @@
     text-align:center;margin-bottom:4px;
   }
   .scene-head .atto-lbl{
-    font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+    font-family:var(--font-chrome);font-weight:700;letter-spacing:.12em;text-transform:uppercase;
     color:var(--sipario);font-size:13px;
   }
   .scene-head .scena-lbl{
@@ -468,6 +485,30 @@
   body.dark-mode .layout-toggle-panel label{ color:#e7dcc4; }
   body.dark-mode .layout-toggle-panel .ltp-title{ color:#a8987a; }
 
+  /* PANNELLO "STILE GRAFICO": scelta della palette/carattere dell'interfaccia */
+  .style-toggle-panel{
+    display:none;position:absolute;top:calc(100% + 8px);right:0;z-index:20;
+    background:var(--carta);border:1px solid #d6c7a1;border-radius:10px;
+    box-shadow:0 10px 30px rgba(0,0,0,.35);padding:12px 14px;min-width:230px;
+  }
+  .style-toggle-panel.open{display:block;}
+  .style-toggle-panel .ltp-title{
+    font-family:'Inter',sans-serif;font-weight:700;font-size:11px;color:var(--grigio);
+    text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px;
+  }
+  .style-option{
+    display:flex;align-items:center;gap:10px;font-family:'Inter',sans-serif;font-size:12.5px;
+    color:var(--inchiostro);padding:7px 6px;cursor:pointer;border-radius:6px;border:1px solid transparent;
+    background:none;width:100%;text-align:left;
+  }
+  .style-option:hover{background:var(--carta-scura);}
+  .style-option.on{border-color:var(--oro);background:var(--carta-scura);font-weight:600;}
+  .style-swatch{width:26px;height:26px;border-radius:6px;flex-shrink:0;border:1px solid rgba(0,0,0,.15);}
+  body.dark-mode .style-toggle-panel{ background:#2c2219; border-color:#3a2c20; }
+  body.dark-mode .style-option{ color:#e7dcc4; }
+  body.dark-mode .style-option:hover, body.dark-mode .style-option.on{ background:#3a2c20; }
+  body.dark-mode .style-toggle-panel .ltp-title{ color:#a8987a; }
+
   body.hide-topbar header{display:none;}
   body.hide-sidebar aside{display:none;}
   body.hide-bottombar footer{display:none;}
@@ -512,7 +553,7 @@
     border-radius:12px;padding:30px 32px;box-shadow:0 20px 60px rgba(0,0,0,.5);border:1px solid var(--oro);
   }
   .modal h2{
-    font-family:'Playfair Display',serif;color:var(--sipario);margin:0 0 4px;font-size:22px;
+    font-family:var(--font-chrome);color:var(--sipario);margin:0 0 4px;font-size:22px;
   }
   .modal .sub{color:var(--grigio);font-size:13px;margin-bottom:18px;}
   .modal ul{padding-left:18px;margin:0 0 16px;}
@@ -585,7 +626,7 @@
     padding:8px 4px;border-bottom:1px solid #e7dbc0;cursor:pointer;
   }
   .outline-row:hover{background:#f4ecd8;}
-  .outline-row .ol-title{font-family:'Playfair Display',serif;font-weight:700;color:var(--sipario);font-size:12.5px;}
+  .outline-row .ol-title{font-family:var(--font-chrome);font-weight:700;color:var(--sipario);font-size:12.5px;}
   .outline-row .ol-preview{font-size:12px;color:var(--grigio);margin-top:2px;font-family:'Courier Prime',monospace;}
   .import-textarea{
     width:100%;min-height:180px;font-family:'Courier Prime',monospace;font-size:12.5px;padding:10px;
@@ -654,7 +695,7 @@
       display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
       padding:14px 16px;background:var(--sipario);color:var(--carta);
     }
-    .mobile-aside-close span{font-family:'Playfair Display',serif;font-weight:700;font-size:15px;}
+    .mobile-aside-close span{font-family:var(--font-chrome);font-weight:700;font-size:15px;}
     .mobile-aside-close button{
       background:none;border:1px solid var(--carta-scura);color:var(--carta);border-radius:6px;
       padding:6px 12px;font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;
@@ -702,6 +743,7 @@
     .quick-add-fab{right:14px;bottom:calc(var(--footer-h, 60px) + 14px);}
     .quick-add-fab button{padding:9px 13px;font-size:12px;}
     .layout-toggle-panel{right:-4px;min-width:190px;}
+    .style-toggle-panel{right:-4px;min-width:200px;}
   }
   @media(max-width:480px){
     header{padding:14px 14px 16px;}
@@ -779,6 +821,26 @@
       <button id="btnRedo" title="Ripeti (Ctrl+Maiusc+Z)" disabled>↷</button>
       <button id="btnLayout" title="Mostra/nascondi intestazione, menù laterale e barra inferiore">▦</button>
       <button id="btnDarkMode" title="Tema scuro">🌙</button>
+      <button id="btnStile" title="Stile grafico dell'interfaccia">🎨</button>
+      <div class="style-toggle-panel" id="styleTogglePanel">
+        <div class="ltp-title">Stile grafico</div>
+        <button class="style-option" data-theme="">
+          <span class="style-swatch" style="background:#F3ECDD;border-left:14px solid #5C1A21;"></span>
+          Velluto &amp; oro (predefinito)
+        </button>
+        <button class="style-option" data-theme="theme-manoscritto">
+          <span class="style-swatch" style="background:#EFE9DD;border-left:14px solid #3E6259;"></span>
+          Manoscritto d'archivio
+        </button>
+        <button class="style-option" data-theme="theme-palco">
+          <span class="style-swatch" style="background:#F1EEE6;border-left:14px solid #C97F1E;"></span>
+          Palcoscenico contemporaneo
+        </button>
+        <button class="style-option" data-theme="theme-piazza">
+          <span class="style-swatch" style="background:#F1E6D2;border-left:14px solid #B5502E;"></span>
+          Carta di piazza
+        </button>
+      </div>
       <button id="btnRehearsal" title="Modalità prova/lettura">🎭</button>
       <button id="fontDown" title="Riduci il testo">A－</button>
       <span id="fontSizeLabel">14px</span>
@@ -1010,7 +1072,7 @@
         <div class="mp-top-fields">
           <div style="display:flex;align-items:center;gap:8px;">
             <input type="color" id="mpColor" class="pers-color" data-mp="color" title="Colore identificativo" />
-            <input type="text" id="mpName" data-mp="name" placeholder="Nome personaggio" style="flex:1;font-family:'Playfair Display',serif;font-weight:700;font-size:17px;color:var(--sipario);border:1px solid #d6c7a1;border-radius:5px;padding:6px 8px;background:var(--carta);outline:none;" />
+            <input type="text" id="mpName" data-mp="name" placeholder="Nome personaggio" style="flex:1;font-family:var(--font-chrome);font-weight:700;font-size:17px;color:var(--sipario);border:1px solid #d6c7a1;border-radius:5px;padding:6px 8px;background:var(--carta);outline:none;" />
           </div>
           <select id="mpRole" data-mp="role" style="margin-top:8px;width:100%;font-family:'Inter',sans-serif;font-size:12.5px;color:var(--grigio);border:1px solid #d6c7a1;border-radius:5px;padding:6px 8px;background:var(--carta);cursor:pointer;">
             <option value="">Ruolo drammaturgico…</option>
@@ -1450,7 +1512,7 @@ function buildRelationshipSVG(){
     } else {
       nodeMarkup += `<circle cx="${pos.x.toFixed(1)}" cy="${pos.y.toFixed(1)}" r="${nodeR}" fill="${c.color || '#8a3b3b'}" stroke="var(--carta)" stroke-width="3"/>`;
     }
-    nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+40).toFixed(1)}" text-anchor="middle" font-family="'Playfair Display', serif" font-weight="700" font-size="12.5" fill="var(--inchiostro)">${escapeHtml(c.name)}</text>`;
+    nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+40).toFixed(1)}" text-anchor="middle" font-family="var(--font-chrome)" font-weight="700" font-size="12.5" fill="var(--inchiostro)">${escapeHtml(c.name)}</text>`;
     if(c.role) nodeMarkup += `<text x="${pos.x.toFixed(1)}" y="${(pos.y+53).toFixed(1)}" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" fill="var(--grigio)">${escapeHtml(c.role)}</text>`;
   });
 
@@ -3606,6 +3668,36 @@ document.getElementById('btnLayout').addEventListener('click', e => {
 });
 document.getElementById('layoutTogglePanel').addEventListener('click', e => e.stopPropagation());
 document.addEventListener('click', () => document.getElementById('layoutTogglePanel').classList.remove('open'));
+
+/* ---------- STILE GRAFICO (palette alternative all'aspetto "Velluto & oro" predefinito) ---------- */
+const THEME_CLASSES = ['theme-manoscritto', 'theme-palco', 'theme-piazza'];
+function applyStyleTheme(themeClass){
+  document.body.classList.remove(...THEME_CLASSES);
+  if(themeClass) document.body.classList.add(themeClass);
+  document.querySelectorAll('.style-option').forEach(btn => {
+    btn.classList.toggle('on', btn.dataset.theme === themeClass);
+  });
+}
+async function loadStylePref(){
+  try{
+    const pref = await storageGet('copione:stile');
+    applyStyleTheme(THEME_CLASSES.includes(pref) ? pref : '');
+  }catch(e){}
+}
+document.querySelectorAll('.style-option').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const themeClass = btn.dataset.theme;
+    applyStyleTheme(themeClass);
+    storageSet('copione:stile', themeClass);
+    document.getElementById('styleTogglePanel').classList.remove('open');
+  });
+});
+document.getElementById('btnStile').addEventListener('click', e => {
+  e.stopPropagation();
+  document.getElementById('styleTogglePanel').classList.toggle('open');
+});
+document.getElementById('styleTogglePanel').addEventListener('click', e => e.stopPropagation());
+document.addEventListener('click', () => document.getElementById('styleTogglePanel').classList.remove('open'));
 document.getElementById('chkShowHeader').addEventListener('change', e => { layoutPrefs.header = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
 document.getElementById('chkShowSidebar').addEventListener('change', e => { layoutPrefs.sidebar = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
 document.getElementById('chkShowFooter').addEventListener('change', e => { layoutPrefs.footer = e.target.checked; applyLayoutPrefs(); saveLayoutPrefs(); });
@@ -3614,6 +3706,7 @@ window.addEventListener('resize', () => updateFabPosition());
 document.getElementById('creatorLogo').src = CREATOR_LOGO;
 loadSaved().then(() => showDoveSalvare());
 loadDarkModePref();
+loadStylePref();
 loadLayoutPrefs();
 </script>
 </body>
