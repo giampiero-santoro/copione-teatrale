@@ -2161,6 +2161,7 @@ document.getElementById('stage').addEventListener('click', e => {
 
   if(emptyAdd){
     const newScene = { id: uid(), title: 'Scena 1', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks: [{ id: uid(), type:'direction', text:'' }] };
+    if(!play.acts.length) play.acts.push({ id: uid(), title: 'Atto I', scenes: [] });
     play.acts[0].scenes.push(newScene);
     currentSceneId = newScene.id;
     scheduleSave(); renderAll(); return;
@@ -2505,7 +2506,7 @@ document.getElementById('versionList').addEventListener('click', async e => {
           const parsed = JSON.parse(value);
           if(parsed.snapshot && Array.isArray(parsed.snapshot.acts)){
             play = parsed.snapshot;
-            currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
+            currentSceneId = (play.acts[0] && play.acts[0].scenes[0]) ? play.acts[0].scenes[0].id : null;
             scheduleSave(); renderAll();
             document.getElementById('modalVersioni').classList.remove('open');
           }
@@ -3030,7 +3031,7 @@ function importProject(file){
   reader.onload = (e) => {
     try{
       const parsed = JSON.parse(e.target.result);
-      if(!parsed || !Array.isArray(parsed.acts) || !parsed.acts.length){
+      if(!parsed || !Array.isArray(parsed.acts)){
         throw new Error('formato non valido');
       }
       // normalizza eventuali id mancanti, per sicurezza
@@ -3050,7 +3051,7 @@ function importProject(file){
       if(!parsed.fontSize) parsed.fontSize = 14;
       if(!parsed.pdfSettings) parsed.pdfSettings = { format: 'a4', margins: 'normal' };
       play = parsed;
-      currentSceneId = play.acts[0].scenes[0] ? play.acts[0].scenes[0].id : null;
+      currentSceneId = (play.acts[0] && play.acts[0].scenes[0]) ? play.acts[0].scenes[0].id : null;
       scheduleSave();
       renderAll();
     }catch(err){
@@ -3075,11 +3076,19 @@ document.getElementById('btnGeneraSides').addEventListener('click', () => {
 });
 document.getElementById('btnEsportaProgetto').addEventListener('click', exportProject);
 document.getElementById('btnImportaProgetto').addEventListener('click', () => document.getElementById('fileImporta').click());
+function hasMeaningfulContent(p){
+  return !!(p && (((p.characters||[]).length) || ((p.acts||[]).length)));
+}
 document.getElementById('fileImporta').addEventListener('change', (e) => {
-  if(e.target.files && e.target.files[0]){
-    if(confirm('Importare questo progetto sovrascriverà il copione attualmente aperto. Continuare?')){
-      importProject(e.target.files[0]);
+  const file = e.target.files && e.target.files[0];
+  if(!file){ e.target.value = ''; return; }
+  if(hasMeaningfulContent(play)){
+    if(confirm('È aperto un copione con del contenuto.\n\nVuoi salvarlo (Esporta progetto .json) prima di importare quello nuovo?')){
+      exportProject();
     }
+  }
+  if(confirm('Importare questo progetto sostituirà il copione attualmente aperto. Continuare?')){
+    importProject(file);
   }
   e.target.value = '';
 });
@@ -3229,6 +3238,7 @@ document.getElementById('btnEseguiImporta').addEventListener('click', () => {
   const raw = document.getElementById('importTextarea').value;
   if(!raw.trim()){ alert('Incolla prima del testo da importare.'); return; }
   const blocks = parsePastedScript(raw);
+  if(!play.acts.length) play.acts.push({ id: uid(), title: 'Atto I', scenes: [] });
   const targetAct = play.acts[play.acts.length - 1];
   const n = targetAct.scenes.length + 1;
   const newScene = { id: uid(), title: 'Scena ' + n + ' (importata)', setting: '', directorNotes: '', status: '', presentCharacters: [], descrizione: '', scenografia: '', blocks };
@@ -3498,31 +3508,8 @@ function buildBlankPlay(){
     fontSize: 14,
     copyright: '',
     pdfSettings: { format: 'a4', margins: 'normal' },
-    characters: [
-      blankCharacter({ name: "PERSONAGGIO A", desc: "Breve descrizione: età, ruolo, cosa vuole." })
-    ],
-    acts: [
-      {
-        id: uid(),
-        title: "Atto I",
-        scenes: [
-          {
-            id: uid(),
-            title: "Scena 1",
-            setting: "Luogo, momento del giorno",
-            directorNotes: "",
-            status: "",
-            presentCharacters: [],
-            descrizione: "",
-            scenografia: "",
-            blocks: [
-              { id: uid(), type: "direction", text: "" },
-              { id: uid(), type: "dialogue", character: "PERSONAGGIO A", text: "" }
-            ]
-          }
-        ]
-      }
-    ]
+    characters: [],
+    acts: []
   };
 }
 document.getElementById('btnNuovoCopione').addEventListener('click', () => {
@@ -3533,7 +3520,7 @@ document.getElementById('btnNuovoCopione').addEventListener('click', () => {
   );
   if(!ok) return;
   play = buildBlankPlay();
-  currentSceneId = play.acts[0].scenes[0].id;
+  currentSceneId = null;
   filterCharacter = null;
   rehearsalMode = false;
   readingBlockId = null;
