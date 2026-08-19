@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
     --sipario:#5C1A21;
@@ -622,6 +623,14 @@
   .bar-track{flex:1;background:#e7dbc0;border-radius:6px;height:14px;overflow:hidden;}
   .bar-fill{background:var(--sipario);height:100%;border-radius:6px;}
   .bar-val{width:70px;font-size:11px;color:var(--grigio);}
+  .diff-add{background:#d7f5d7;color:#1b5e20;padding:1px 4px;white-space:pre-wrap;word-break:break-word;}
+  .diff-del{background:#fbdada;color:#7a1f1f;text-decoration:line-through;padding:1px 4px;white-space:pre-wrap;word-break:break-word;}
+  .diff-same{color:var(--grigio);padding:1px 4px;white-space:pre-wrap;word-break:break-word;}
+  .eu-table{border-collapse:collapse;width:100%;font-family:'Inter',sans-serif;font-size:11.5px;}
+  .eu-table th, .eu-table td{border:1px solid #d6c7a1;padding:5px 7px;text-align:center;white-space:nowrap;}
+  .eu-table th{background:var(--carta-scura);font-weight:700;}
+  .eu-table td.eu-name{text-align:left;font-family:var(--font-chrome);font-weight:700;position:sticky;left:0;background:var(--carta);}
+  .eu-table td.eu-yes{background:var(--sipario);color:var(--carta);font-weight:700;}
   .outline-row{
     padding:8px 4px;border-bottom:1px solid #e7dbc0;cursor:pointer;
   }
@@ -799,9 +808,11 @@
         <button id="btnSides">📄 Per personaggio</button>
         <button id="btnQualita">✅ Qualità</button>
         <button id="btnStatsAvanzate">📊 Statistiche</button>
+        <button id="btnEntrateUscite">🎭 Piano scene</button>
         <button id="btnOutline">🗂️ Insieme</button>
         <button id="btnImportaTesto">📥 Importa testo</button>
         <button id="btnPdfSettings">⚙️ Impostazioni PDF</button>
+        <button id="btnEsportaLettura">👁️ Copia di lettura (HTML)</button>
       </div>
       <div class="file-loc-label" id="fileLocLabel"></div>
     </div>
@@ -905,6 +916,17 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modalDiff">
+  <div class="modal" style="max-width:720px;">
+    <h2>Confronto con la versione attuale</h2>
+    <div class="sub" id="diffSubtitle">Righe in rosso: presenti solo nella versione salvata. Righe in verde: presenti solo nel copione attuale.</div>
+    <div id="diffContent" style="max-height:60vh;overflow-y:auto;font-family:'Courier Prime',monospace;font-size:12px;line-height:1.5;border:1px solid #d6c7a1;border-radius:8px;padding:10px 12px;background:var(--carta-scura);"></div>
+    <div style="margin-top:14px;">
+      <button class="modal-close" id="closeDiff" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;">Chiudi</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalVersioni">
   <div class="modal">
     <h2>Versioni salvate</h2>
@@ -962,9 +984,18 @@
 <div class="modal-overlay" id="modalStats">
   <div class="modal">
     <h2>Statistiche avanzate</h2>
-    <div class="sub">Tempo di lettura per atto e bilanciamento delle battute tra i personaggi</div>
+    <div class="sub">Tempo di lettura per atto, bilanciamento delle battute e oggetti di scena</div>
     <div id="statsContent"></div>
     <button class="modal-close" id="closeStats">Chiudi</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modalEntrateUscite">
+  <div class="modal" style="max-width:800px;">
+    <h2>Piano di scena: chi c'è in ogni scena</h2>
+    <div class="sub">Basato sui chip "Personaggi in scena" (o, se non impostati, sui personaggi che parlano in quella scena)</div>
+    <div id="entrateUsciteContent" style="overflow-x:auto;"></div>
+    <button class="modal-close" id="closeEntrateUscite" style="margin-top:14px;">Chiudi</button>
   </div>
 </div>
 
@@ -1026,6 +1057,11 @@
       <label>Copyright (facoltativo)</label>
       <input type="text" id="copyrightText" placeholder="es. © 2026 Mario Rossi — Tutti i diritti riservati" />
       <div class="field-hint">Se lasci vuoto, viene generata in automatico la dicitura con l'anno corrente e il nome dell'autore. Compare nella copertina del PDF, nel copione .txt e nel file .fountain.</div>
+    </div>
+    <div class="sr-field">
+      <label>Link alla versione digitale (facoltativo)</label>
+      <input type="text" id="digitalUrlText" placeholder="es. https://tuosito.it/copione" />
+      <div class="field-hint">Se lo compili, in copertina del PDF completo comparirà anche un QR code che rimanda a questo indirizzo.</div>
     </div>
     <button class="modal-close" id="btnSalvaPdfSettings">Salva impostazioni</button>
     <button class="modal-close" id="closePdfSettings" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;margin-left:8px;">Chiudi</button>
@@ -1161,6 +1197,38 @@ let openDirNotes = new Set();
 let filterCharacter = null;
 let rehearsalMode = false;
 let readingBlockId = null;
+let isSpeaking = false;
+
+/* ---------- SINTESI VOCALE PER LE PROVE (legge le battute dei personaggi non segnati come presenti) ---------- */
+function stopSpeech(){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  isSpeaking = false;
+  const btn = document.getElementById('btnLeggiAssenti');
+  if(btn) btn.textContent = '🔊 leggi le battute degli assenti';
+}
+function speakAbsentCharacters(scena){
+  if(!('speechSynthesis' in window)){
+    alert('Il browser in uso non supporta la sintesi vocale (Web Speech API).');
+    return;
+  }
+  const present = scena.presentCharacters || [];
+  const toRead = scena.blocks.filter(b => b.type === 'dialogue' && b.character && !present.includes(b.character) && (b.text || '').trim());
+  if(!toRead.length){
+    alert('Non ci sono battute di personaggi assenti da leggere in questa scena (segna qualcuno come "non presente" tra i chip, oppure tutti sono già segnati presenti).');
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const utterances = toRead.map(b => {
+    const u = new SpeechSynthesisUtterance((b.character || '') + '. ' + b.text);
+    u.lang = 'it-IT';
+    return u;
+  });
+  utterances[utterances.length - 1].onend = () => stopSpeech();
+  isSpeaking = true;
+  const btn = document.getElementById('btnLeggiAssenti');
+  if(btn) btn.textContent = '⏹ interrompi lettura';
+  utterances.forEach(u => window.speechSynthesis.speak(u));
+}
 
 
 function findScene(id){
@@ -1804,6 +1872,7 @@ function renderStage(){
       ${play.characters.map(c => `<button class="chip${present.includes(c.name) ? ' on' : ''}" data-toggle-present="${escapeAttr(c.name)}">${escapeHtml(c.name)}</button>`).join('')}
       <button class="chip chip-all${present.length ? '' : ' on'}" data-toggle-present-all="1">TUTTI</button>
       <button class="presence-auto" id="autoDetectPresence">rileva dai dialoghi</button>
+      <button class="presence-auto" id="btnLeggiAssenti">${isSpeaking ? '⏹ interrompi lettura' : '🔊 leggi le battute degli assenti'}</button>
     </div>`;
   page.appendChild(presenceWrap);
 
@@ -2157,6 +2226,7 @@ document.getElementById('stage').addEventListener('click', e => {
   const presentChip = e.target.closest('[data-toggle-present]');
   const presentAllChip = e.target.closest('[data-toggle-present-all]');
   const autoDetectBtn = e.target.closest('#autoDetectPresence');
+  const speakAbsentBtn = e.target.closest('#btnLeggiAssenti');
   const emptyAdd = e.target.closest('#emptyAdd');
 
   if(emptyAdd){
@@ -2190,6 +2260,10 @@ document.getElementById('stage').addEventListener('click', e => {
     scena.blocks.forEach(b => { if(b.type === 'dialogue' && b.character) names.add(b.character); });
     scena.presentCharacters = Array.from(names);
     scheduleSave(); renderStage(); return;
+  }
+  if(speakAbsentBtn){
+    if(isSpeaking){ stopSpeech(); } else { speakAbsentCharacters(scena); }
+    return;
   }
   if(rehearsalMode){
     const readBlock = e.target.closest('[data-read-block]');
@@ -2393,11 +2467,63 @@ document.getElementById('btnStatsAvanzate').addEventListener('click', () => {
     });
   }
   html += `</div>`;
+
+  const props = play.characters.filter(c => (c.objects && c.objects.trim()) || (c.costume && c.costume.trim()));
+  html += `<div class="stat-block"><h3>Oggetti di scena e costumi</h3>`;
+  if(!props.length){
+    html += `<div class="qa-ok">Nessun oggetto o costume ancora indicato nelle schede personaggio.</div>`;
+  } else {
+    props.forEach(c => {
+      html += `<div class="stat-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+        <b>${escapeHtml(c.name)}</b>
+        ${c.costume && c.costume.trim() ? `<span style="font-size:12px;color:var(--grigio);">Costume: ${escapeHtml(c.costume.trim())}</span>` : ''}
+        ${c.objects && c.objects.trim() ? `<span style="font-size:12px;color:var(--grigio);">Oggetti: ${escapeHtml(c.objects.trim())}</span>` : ''}
+      </div>`;
+    });
+  }
+  html += `</div>`;
   document.getElementById('statsContent').innerHTML = html;
   document.getElementById('modalStats').classList.add('open');
 });
 document.getElementById('closeStats').addEventListener('click', () => document.getElementById('modalStats').classList.remove('open'));
 document.getElementById('modalStats').addEventListener('click', e => { if(e.target.id === 'modalStats') e.target.classList.remove('open'); });
+
+/* ---------- PIANO DI SCENA: presenza dei personaggi scena per scena ---------- */
+function computeScenePresenceMatrix(){
+  const scenes = [];
+  play.acts.forEach(atto => {
+    atto.scenes.forEach(scena => {
+      const present = new Set(
+        (scena.presentCharacters && scena.presentCharacters.length)
+          ? scena.presentCharacters
+          : scena.blocks.filter(b => b.type === 'dialogue' && b.character).map(b => b.character)
+      );
+      scenes.push({ actTitle: atto.title, title: scena.title, present });
+    });
+  });
+  return scenes;
+}
+document.getElementById('btnEntrateUscite').addEventListener('click', () => {
+  const scenes = computeScenePresenceMatrix();
+  const box = document.getElementById('entrateUsciteContent');
+  if(!play.characters.length || !scenes.length){
+    box.innerHTML = `<div class="qa-ok">Servono almeno un personaggio e una scena per costruire il piano.</div>`;
+  } else {
+    let html = '<table class="eu-table"><thead><tr><th style="text-align:left;">Personaggio</th>';
+    scenes.forEach(s => { html += `<th title="${escapeAttr(s.actTitle)}">${escapeHtml(s.title)}</th>`; });
+    html += '</tr></thead><tbody>';
+    play.characters.forEach(c => {
+      html += `<tr><td class="eu-name">${escapeHtml(c.name)}</td>`;
+      scenes.forEach(s => { html += `<td class="${s.present.has(c.name) ? 'eu-yes' : ''}">${s.present.has(c.name) ? '●' : ''}</td>`; });
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    box.innerHTML = html;
+  }
+  document.getElementById('modalEntrateUscite').classList.add('open');
+});
+document.getElementById('closeEntrateUscite').addEventListener('click', () => document.getElementById('modalEntrateUscite').classList.remove('open'));
+document.getElementById('modalEntrateUscite').addEventListener('click', e => { if(e.target.id === 'modalEntrateUscite') e.target.classList.remove('open'); });
 
 /* ---------- TEMA SCURO ---------- */
 async function loadDarkModePref(){
@@ -2465,6 +2591,7 @@ async function renderVersionList(){
         </div>
         <div class="v-actions">
           <button class="v-restore" data-restore-version="${escapeAttr(v.key)}">Ripristina</button>
+          <button class="v-restore" data-diff-version="${escapeAttr(v.key)}" style="background:var(--carta-scura);color:var(--inchiostro);border:1px solid #d6c7a1;">Confronta</button>
           <button class="v-del" data-del-version="${escapeAttr(v.key)}">Elimina</button>
         </div>`;
       list.appendChild(row);
@@ -2478,6 +2605,72 @@ document.getElementById('btnVersioni').addEventListener('click', () => {
   document.getElementById('modalVersioni').classList.add('open');
   renderVersionList();
 });
+
+/* ---------- CONFRONTO TRA VERSIONI (diff riga per riga) ---------- */
+function serializePlayForDiff(p){
+  const lines = [];
+  lines.push('Titolo: ' + (p.title || ''));
+  (p.acts || []).forEach(atto => {
+    lines.push('');
+    lines.push('== ' + (atto.title || 'Atto') + ' ==');
+    (atto.scenes || []).forEach(scena => {
+      lines.push('-- ' + (scena.title || 'Scena') + (scena.setting ? ' (' + scena.setting + ')' : ''));
+      (scena.blocks || []).forEach(b => {
+        if(b.type === 'dialogue'){
+          lines.push((b.character || '').toUpperCase() + ': ' + (b.text || ''));
+        } else if(b.type === 'offstage'){
+          lines.push('(fuori scena) ' + (b.character || '').toUpperCase() + ': ' + (b.text || ''));
+        } else {
+          lines.push('[' + (b.text || '') + ']');
+        }
+      });
+    });
+  });
+  return lines;
+}
+function diffLines(a, b){
+  const n = a.length, m = b.length;
+  // per copioni molto lunghi la tabella LCS diventerebbe troppo pesante: in quel caso ci si limita a un confronto sommario
+  if(n * m > 4000000) return null;
+  const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+  for(let i = n - 1; i >= 0; i--){
+    for(let j = m - 1; j >= 0; j--){
+      dp[i][j] = a[i] === b[j] ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+    }
+  }
+  const result = [];
+  let i = 0, j = 0;
+  while(i < n && j < m){
+    if(a[i] === b[j]){ result.push({ type: 'same', text: a[i] }); i++; j++; }
+    else if(dp[i+1][j] >= dp[i][j+1]){ result.push({ type: 'del', text: a[i] }); i++; }
+    else { result.push({ type: 'add', text: b[j] }); j++; }
+  }
+  while(i < n){ result.push({ type: 'del', text: a[i] }); i++; }
+  while(j < m){ result.push({ type: 'add', text: b[j] }); j++; }
+  return result;
+}
+function showDiff(oldPlay, newPlay, label){
+  const a = serializePlayForDiff(oldPlay);
+  const b = serializePlayForDiff(newPlay);
+  const diff = diffLines(a, b);
+  const box = document.getElementById('diffContent');
+  document.getElementById('diffSubtitle').textContent =
+    `"${label}" (a sinistra/rosso) confrontata con il copione attuale (a destra/verde). Le righe invariate sono in grigio.`;
+  if(!diff){
+    box.innerHTML = `<div class="qa-ok">Il copione è troppo esteso per un confronto dettagliato riga per riga. Usa "Ripristina" se vuoi tornare a questa versione.</div>`;
+  } else if(!diff.some(d => d.type !== 'same')){
+    box.innerHTML = `<div class="qa-ok">Nessuna differenza: questa versione è identica al copione attuale.</div>`;
+  } else {
+    box.innerHTML = diff.map(d => {
+      const cls = d.type === 'add' ? 'diff-add' : (d.type === 'del' ? 'diff-del' : 'diff-same');
+      const prefix = d.type === 'add' ? '+ ' : (d.type === 'del' ? '− ' : '  ');
+      return `<div class="${cls}">${escapeHtml(prefix + d.text)}</div>`;
+    }).join('');
+  }
+  document.getElementById('modalDiff').classList.add('open');
+}
+document.getElementById('closeDiff').addEventListener('click', () => document.getElementById('modalDiff').classList.remove('open'));
+document.getElementById('modalDiff').addEventListener('click', e => { if(e.target.id === 'modalDiff') e.target.classList.remove('open'); });
 document.getElementById('closeVersioni').addEventListener('click', () => document.getElementById('modalVersioni').classList.remove('open'));
 document.getElementById('modalVersioni').addEventListener('click', e => { if(e.target.id === 'modalVersioni') e.target.classList.remove('open'); });
 
@@ -2497,6 +2690,20 @@ document.getElementById('btnSalvaVersione').addEventListener('click', async () =
 document.getElementById('versionList').addEventListener('click', async e => {
   const restoreBtn = e.target.closest('[data-restore-version]');
   const delBtn = e.target.closest('[data-del-version]');
+  const diffBtn = e.target.closest('[data-diff-version]');
+  if(diffBtn){
+    const key = diffBtn.dataset.diffVersion;
+    try{
+      const value = await storageGet(key);
+      if(!value){ alert('Impossibile leggere questa versione.'); return; }
+      const parsed = JSON.parse(value);
+      if(!parsed.snapshot || !Array.isArray(parsed.snapshot.acts)){ alert('Questa versione non contiene un copione valido.'); return; }
+      showDiff(parsed.snapshot, play, parsed.label || 'versione salvata');
+    }catch(err){
+      alert('Impossibile confrontare questa versione.');
+    }
+    return;
+  }
   if(restoreBtn){
     const key = restoreBtn.dataset.restoreVersion;
     if(confirm('Ripristinare questa versione sovrascriverà il copione attualmente aperto. Continuare?')){
@@ -2834,6 +3041,23 @@ function renderScriptContent(R, options){
   });
 }
 
+/* ---------- QR CODE (link alla versione digitale, mostrato in copertina del PDF) ---------- */
+function generateQRDataURL(text, size){
+  if(typeof QRCode === 'undefined') return null;
+  const holder = document.createElement('div');
+  holder.style.cssText = 'position:absolute;left:-9999px;top:-9999px;';
+  document.body.appendChild(holder);
+  try{
+    new QRCode(holder, { text, width: size, height: size, correctLevel: QRCode.CorrectLevel.M });
+    const canvas = holder.querySelector('canvas');
+    const url = canvas ? canvas.toDataURL('image/png') : null;
+    document.body.removeChild(holder);
+    return url;
+  }catch(e){
+    document.body.removeChild(holder);
+    return null;
+  }
+}
 function drawTitlePage(doc, R, subtitle){
   doc.setFont('times','bold'); doc.setFontSize(26);
   doc.text(play.title || 'Senza titolo', R.pageW/2, R.pageH/2 - 40, { align: 'center' });
@@ -2844,6 +3068,19 @@ function drawTitlePage(doc, R, subtitle){
   if(subtitle){
     doc.setFont('courier','bold'); doc.setFontSize(12);
     doc.text(subtitle, R.pageW/2, R.pageH/2 + 50, { align: 'center' });
+  }
+  if(play.digitalUrl && play.digitalUrl.trim()){
+    const qrData = generateQRDataURL(play.digitalUrl.trim(), 160);
+    if(qrData){
+      const qrSize = 55;
+      try{
+        doc.addImage(qrData, 'PNG', R.pageW/2 - qrSize/2, R.pageH - 150, qrSize, qrSize);
+        doc.setFont('times','normal'); doc.setFontSize(8);
+        doc.setTextColor(120,110,95);
+        doc.text('Versione digitale', R.pageW/2, R.pageH - 90, { align: 'center' });
+        doc.setTextColor(0,0,0);
+      }catch(e){ /* se il QR non è generabile, si prosegue senza */ }
+    }
   }
   doc.setFont('times','normal'); doc.setFontSize(9.5);
   doc.setTextColor(120,110,95);
@@ -3013,6 +3250,80 @@ function exportSidesPDF(characterName){
   doc.save((play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '_' + characterName.replace(/[^a-z0-9]+/gi,'_') + '.pdf');
 }
 
+/* ---------- COPIA DI LETTURA (HTML statico, di sola lettura, da condividere col cast) ---------- */
+function buildReadOnlyHTML(){
+  const rs = getComputedStyle(document.documentElement);
+  const col = (name, fallback) => rs.getPropertyValue(name).trim() || fallback;
+  const sipario = col('--sipario', '#5C1A21');
+  const oro = col('--oro', '#B8923C');
+  const carta = col('--carta', '#F3ECDD');
+  const inchiostro = col('--inchiostro', '#2A211B');
+  const grigio = col('--grigio', '#83786A');
+  const fontChrome = (col('--font-chrome', "'Playfair Display', serif")).replace(/"/g, "'");
+
+  let body = `<div class="cover">
+    <h1>${escapeHtml(play.title || 'Senza titolo')}</h1>
+    <div class="author">${escapeHtml(play.author || '')}</div>
+    ${play.copyright ? `<div class="copyright">${escapeHtml(play.copyright)}</div>` : ''}
+  </div>`;
+
+  play.acts.forEach(atto => {
+    atto.scenes.forEach(scena => {
+      body += `<div class="scene"><div class="scene-head"><div class="act-lbl">${escapeHtml(atto.title)}</div><div class="scene-lbl">${escapeHtml(scena.title)}</div>${scena.setting ? `<div class="setting">${escapeHtml(scena.setting)}</div>` : ''}</div>`;
+      scena.blocks.forEach(b => {
+        if(b.type === 'direction'){
+          if((b.text || '').trim()) body += `<p class="direction">${escapeHtml(b.text)}</p>`;
+        } else if(b.type === 'offstage'){
+          body += `<p class="dialogue"><span class="char">${escapeHtml((b.character || '').toUpperCase())} (fuori scena)</span><br>${escapeHtml(b.text || '')}</p>`;
+        } else {
+          body += `<p class="dialogue"><span class="char">${escapeHtml((b.character || '').toUpperCase())}</span><br>${escapeHtml(b.text || '')}</p>`;
+        }
+      });
+      body += `</div>`;
+    });
+  });
+
+  return `<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>${escapeHtml(play.title || 'Copione')} — copia di lettura</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  body{margin:0;background:${sipario};font-family:'Courier Prime',monospace;color:${inchiostro};padding:24px 0 60px;}
+  .cover{background:${carta};max-width:700px;margin:16px auto;padding:60px 40px;text-align:center;border-radius:4px;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+  .cover h1{font-family:${fontChrome};color:${sipario};font-size:32px;margin:0 0 10px;}
+  .cover .author{font-size:15px;color:${grigio};}
+  .cover .copyright{font-size:11px;color:${grigio};margin-top:30px;white-space:pre-wrap;}
+  .scene{background:${carta};max-width:700px;margin:20px auto;padding:40px 46px;box-shadow:0 12px 40px rgba(0,0,0,.4);}
+  .scene-head{text-align:center;margin-bottom:18px;border-bottom:1px solid ${oro};padding-bottom:10px;}
+  .act-lbl{font-family:${fontChrome};font-size:11px;letter-spacing:.08em;color:${grigio};text-transform:uppercase;}
+  .scene-lbl{font-family:${fontChrome};font-weight:700;font-size:18px;color:${sipario};}
+  .setting{font-size:12px;font-style:italic;color:${grigio};margin-top:4px;}
+  .direction{font-style:italic;color:${grigio};text-align:center;margin:14px 0;font-size:13px;white-space:pre-wrap;}
+  .dialogue{margin:14px 0;white-space:pre-wrap;line-height:1.5;}
+  .char{font-weight:700;letter-spacing:.04em;color:${sipario};}
+  @media print{ body{background:${carta};padding:0;} .cover,.scene{box-shadow:none;margin:0 auto;} .scene{page-break-after:always;} }
+</style>
+</head>
+<body>
+${body}
+</body>
+</html>`;
+}
+document.getElementById('btnEsportaLettura').addEventListener('click', () => {
+  const html = buildReadOnlyHTML();
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (play.title || 'copione').replace(/[^a-z0-9]+/gi,'_') + '_lettura.html';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
 /* ---------- ESPORTAZIONE / IMPORTAZIONE PROGETTO (.json) ---------- */
 function exportProject(){
   const blob = new Blob([JSON.stringify(play, null, 2)], { type: 'application/json' });
@@ -3155,6 +3466,7 @@ document.getElementById('btnPdfSettings').addEventListener('click', () => {
   document.getElementById('pdfFormatSelect').value = (play.pdfSettings && play.pdfSettings.format) || 'a4';
   document.getElementById('pdfMarginsSelect').value = (play.pdfSettings && play.pdfSettings.margins) || 'normal';
   document.getElementById('copyrightText').value = play.copyright || '';
+  document.getElementById('digitalUrlText').value = play.digitalUrl || '';
   document.getElementById('modalPdfSettings').classList.add('open');
 });
 document.getElementById('closePdfSettings').addEventListener('click', () => document.getElementById('modalPdfSettings').classList.remove('open'));
@@ -3165,6 +3477,7 @@ document.getElementById('btnSalvaPdfSettings').addEventListener('click', () => {
     margins: document.getElementById('pdfMarginsSelect').value
   };
   play.copyright = document.getElementById('copyrightText').value.trim();
+  play.digitalUrl = document.getElementById('digitalUrlText').value.trim();
   scheduleSave();
   document.getElementById('modalPdfSettings').classList.remove('open');
 });
