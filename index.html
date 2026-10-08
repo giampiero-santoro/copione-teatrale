@@ -4010,6 +4010,7 @@ loadStylePref();
 loadLayoutPrefs();
 </script>
 <!-- ===== RESTYLING UI v2: moderno, card, icone, dashboard, ricerca rapida (patch additiva) ===== -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style id="ui-v2">
 :root{--card-bg:#fffaf0;--card-bd:rgba(0,0,0,.1);--card-tx:var(--inchiostro);--dash-bg:var(--carta);--sh:0 1px 2px rgba(0,0,0,.06),0 8px 22px rgba(0,0,0,.08)}
 body.dark-mode{--card-bg:#2c2219;--card-bd:#3a2c20;--card-tx:#e7dcc4;--dash-bg:#1c1510}
@@ -4140,6 +4141,78 @@ body.dark-mode .shelf{background:repeating-linear-gradient(to bottom,transparent
  #dash{padding-bottom:90px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== TEMA "BORDEAUX MODERNO": chiaro, card bianche, accento bordeaux, copione in serif ===== */
+body.theme-bordeaux{
+ --sipario:#8A1E3E;--sipario-dark:#6B1630;--oro:#8A1E3E;--oro-chiaro:#EBD3DA;
+ --carta:#FFFFFF;--carta-scura:#F6F4F2;--inchiostro:#2B2426;--grigio:#7A7275;
+ --font-chrome:'Inter',sans-serif;--font-script:'Noto Serif',Georgia,serif;
+ --card-bg:#FFFFFF;--card-bd:#E6E2DE;--card-tx:#2B2426;--dash-bg:#F3F1EF;
+ --sh:0 1px 2px rgba(40,20,25,.05),0 6px 18px rgba(40,20,25,.07);
+ background:#F3F1EF}
+body.theme-bordeaux main{background:#F3F1EF}
+/* intestazione chiara */
+body.theme-bordeaux header{background:#FFFFFF;border-bottom:1px solid #E6E2DE;padding:14px 26px 12px}
+body.theme-bordeaux header::after{display:none}
+body.theme-bordeaux .brand .mark{font-family:'Inter',sans-serif;font-style:normal;font-weight:600;font-size:11px;letter-spacing:.12em;color:var(--grigio)}
+body.theme-bordeaux .creator-credit{color:var(--grigio);opacity:.9}
+body.theme-bordeaux #titolo-opera{font-family:'Playfair Display',serif;font-size:28px;color:#3A2227}
+body.theme-bordeaux .di,body.theme-bordeaux #autore-opera{font-family:'Inter',sans-serif;font-style:normal;font-size:14px;color:var(--grigio)}
+body.theme-bordeaux #titolo-opera:hover,body.theme-bordeaux #titolo-opera:focus,body.theme-bordeaux #autore-opera:hover,body.theme-bordeaux #autore-opera:focus{border-bottom-color:#D9B8C2}
+body.theme-bordeaux .save-state{background:#E7F3EA;color:#2F7D4F;padding:4px 12px;border-radius:999px;font-weight:500;opacity:1;top:16px}
+body.theme-bordeaux .quick-save-btn{background:var(--sipario);color:#fff;top:12px}
+body.theme-bordeaux .home-top{border-color:#D9B8C2;background:#FBF3F5;color:var(--sipario)}
+body.theme-bordeaux .home-top:hover{background:var(--sipario);color:#fff}
+body.theme-bordeaux.dark-mode header{background:#1d1517;border-color:#3a2c30}
+body.theme-bordeaux.dark-mode #titolo-opera{color:#f2e6e9}
+/* barra comandi */
+body.theme-bordeaux .stage-controls{background:#fff;border:1px solid #E6E2DE;box-shadow:0 2px 10px rgba(40,20,25,.08)}
+body.theme-bordeaux .stage-controls button{background:none;color:var(--inchiostro)}
+body.theme-bordeaux .stage-controls button:hover{background:#F3E7EA;color:var(--sipario)}
+/* menu laterale */
+body.theme-bordeaux aside{background:#FAF8F7;border-right:1px solid #E6E2DE}
+body.theme-bordeaux .sidebar-fixed-top{background:#FAF8F7;border-bottom:1px solid #E6E2DE}
+body.theme-bordeaux .tabs{background:#FAF8F7;border-bottom:1px solid #E6E2DE}
+body.theme-bordeaux .tab-btn{font-weight:500}
+body.theme-bordeaux .tab-btn.active{color:var(--sipario);border-bottom-color:var(--sipario);font-weight:600}
+body.theme-bordeaux .atto-head{border-bottom:none;font-size:14px;font-weight:600;color:var(--inchiostro);padding:8px 4px 4px}
+body.theme-bordeaux .atto-head input{font-size:14px;font-weight:600;color:var(--inchiostro)}
+body.theme-bordeaux .scena-item{padding:9px 10px 9px 16px;border-radius:10px;font-size:13.5px}
+body.theme-bordeaux .scena-item:hover{background:#F1ECEA}
+body.theme-bordeaux .scena-item.active{background:#EEDFE3;color:var(--sipario);font-weight:500}
+body.theme-bordeaux .scena-item.active .icon-btn{color:var(--sipario)}
+body.theme-bordeaux .scena-item.active .dot{background:var(--sipario)}
+body.theme-bordeaux .add-btn,body.theme-bordeaux .pers-open-sheet,body.theme-bordeaux .pers-rel-add{background:#fff;border:1px solid #E0DAD6;color:var(--inchiostro);border-radius:10px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+body.theme-bordeaux .add-btn:hover{border-color:var(--sipario);color:var(--sipario)}
+body.theme-bordeaux .pers-card{background:#fff;border:1px solid #E6E2DE;border-radius:14px}
+body.theme-bordeaux .pers-card input.nome{font-weight:600}
+body.theme-bordeaux .pers-role-badge{background:#F3E7EA;color:var(--sipario)}
+body.theme-bordeaux .pers-field input,body.theme-bordeaux .pers-field textarea,body.theme-bordeaux .pers-rel-row select,body.theme-bordeaux .pers-rel-row input{border-color:#E0DAD6;border-radius:10px}
+body.theme-bordeaux .chip,body.theme-bordeaux .status-btn{border-color:#E0DAD6;background:#F3F1EF}
+body.theme-bordeaux .chip.on{background:var(--sipario);border-color:var(--sipario)}
+/* foglio del copione */
+body.theme-bordeaux .page{background:#fff;border:1px solid #ECE8E5;border-radius:6px;box-shadow:0 1px 3px rgba(40,20,25,.08),0 12px 34px rgba(40,20,25,.09);padding:56px 64px 90px;font-family:var(--font-script)}
+body.theme-bordeaux .page::before{display:none}
+body.theme-bordeaux .scene-head .atto-lbl{font-family:var(--font-script);font-size:20px;letter-spacing:.22em;color:var(--sipario)}
+body.theme-bordeaux .scene-head .scena-lbl{font-family:var(--font-script);font-size:20px;letter-spacing:.22em;color:var(--sipario);padding-bottom:8px;border-bottom:1px solid var(--sipario);display:inline-block;margin-top:4px}
+body.theme-bordeaux .slugline{font-family:var(--font-script);font-style:italic;text-transform:none;letter-spacing:0;color:var(--sipario);border:none;font-size:var(--ms-size);margin:12px 0 26px}
+body.theme-bordeaux .block.direction textarea,body.theme-bordeaux .block.offstage textarea{font-family:var(--font-script);font-style:italic;color:var(--sipario);text-align:left;background:none;border:none;width:100%;padding:4px 0}
+body.theme-bordeaux .block.dialogue .char-name{font-family:var(--font-script);font-weight:700;letter-spacing:.06em}
+body.theme-bordeaux .block.dialogue textarea.line{font-family:var(--font-script);line-height:1.65}
+body.theme-bordeaux .note-row,body.theme-bordeaux .after-direction-row{background:none;border:none;justify-content:flex-start;padding:2px 0}
+body.theme-bordeaux .note-input,body.theme-bordeaux .after-direction-input{font-family:var(--font-script);text-align:left;color:var(--inchiostro)}
+body.theme-bordeaux .block.offstage,body.theme-bordeaux .director-notes{background:#FBF4F6;border:1px dashed #E2C7CF;border-radius:10px}
+body.theme-bordeaux .block.dialogue.reading{background:#F8EEF1;box-shadow:inset 3px 0 0 var(--sipario)}
+body.theme-bordeaux .block-num{background:#F3E7EA;color:var(--sipario)}
+/* barra inferiore e finestre */
+body.theme-bordeaux footer{background:#fff;border-top:1px solid #E6E2DE}
+body.theme-bordeaux .footer-actions button{background:var(--sipario);color:#fff;border-radius:10px}
+body.theme-bordeaux .footer-actions button.ghost{background:#fff;color:var(--sipario);border:1px solid #E0C9D0}
+body.theme-bordeaux .modal{border:1px solid #E6E2DE;border-radius:20px}
+body.theme-bordeaux .modal-overlay{background:rgba(35,18,24,.5)}
+body.theme-bordeaux #dash .dq .pri{background:var(--sipario);color:#fff}
+body.theme-bordeaux .bk em{background:#fff;color:var(--sipario)}
+@media(max-width:820px){body.theme-bordeaux .page{padding:30px 20px 70px;border-radius:0}}
 </style>
 <script id="ui-v2-js">
 (function(){
@@ -4404,7 +4477,231 @@ bn.addEventListener('click',e=>{
   if(n==='tools'){det.open=true;det.scrollIntoView({block:'start'})}
 });
 libInit();
+/* --- tema "Bordeaux moderno": voce nel selettore e predefinito se non ne hai scelto uno --- */
+if(typeof THEME_CLASSES!=='undefined'){
+  THEME_CLASSES.push('theme-bordeaux');
+  const panel=$('styleTogglePanel');
+  if(panel){
+    const o=document.createElement('button');o.className='style-option';o.dataset.theme='theme-bordeaux';
+    o.innerHTML='<span class="style-swatch" style="background:#F6F4F2;border-left:14px solid #8A1E3E;"></span>Bordeaux moderno';
+    o.addEventListener('click',()=>{applyStyleTheme('theme-bordeaux');storageSet('copione:stile','theme-bordeaux');panel.classList.remove('open')});
+    panel.insertBefore(o,panel.children[1]);
+    const v=panel.querySelector('.style-option[data-theme=""]');if(v)[...v.childNodes].forEach(n=>{if(n.nodeType===3)n.textContent=n.textContent.replace(' (predefinito)','')});
+  }
+  storageGet('copione:stile').then(v=>applyStyleTheme(v==null?'theme-bordeaux':(THEME_CLASSES.includes(v)?v:''))).catch(()=>applyStyleTheme('theme-bordeaux'));
+}
 setTimeout(showDash,350);
+Object.assign(P,{chev:'M6 9l6 6 6-6',max:'M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3',layoutR:'M3 3h18v18H3zM15 3v18',chevL:'M15 18l-6-6 6-6',chevR:'M9 18l6-6-6-6',pin:'M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'});
+window.__ui={ico:ico,LOGO:LOGO,showDash:showDash,hideDash:hideDash};
+})();
+</script>
+
+<style id="pro-css">
+#proBar,#proNav,.pro-logo,#rightPanel,#proCrumb,#proFoot,#proSideHead,#proQuick{display:none}
+body.pro header{display:flex;align-items:center;gap:20px;padding:8px 22px;min-height:62px}
+body.pro .brand{order:1;gap:0}
+body.pro .brand .mark,body.pro .creator-credit,body.pro .save-state,body.pro .quick-save-btn{display:none}
+body.pro .pro-logo{display:block;order:2;width:42px;height:42px;border-radius:50%}
+body.pro .title-row{order:3;display:grid!important;grid-template-columns:auto 1fr;align-items:baseline;width:260px;margin:0}
+body.pro #titolo-opera{font-size:18px;padding:0}
+body.pro .di,body.pro #autore-opera{font-size:12px}
+body.pro #proNav{display:flex;order:4;gap:2px;margin-left:10px}
+.pn{display:flex;align-items:center;gap:7px;padding:9px 14px;border:none;background:none;font:500 14px Inter,sans-serif;color:var(--inchiostro);border-radius:10px;cursor:pointer}
+.pn:hover{background:#F3E7EA}.pn.pri{background:var(--sipario);color:#fff}.pn svg.i{width:18px;height:18px}
+.pw{position:relative}
+.pm{display:none;position:absolute;top:calc(100% + 6px);left:0;min-width:240px;background:#fff;border:1px solid #E6E2DE;border-radius:14px;box-shadow:0 10px 30px rgba(40,20,25,.16);padding:6px;z-index:70}
+.pm.open{display:block;animation:u2up .15s}
+.pm button{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;padding:9px 10px;border-radius:8px;font:500 13px Inter,sans-serif;color:var(--inchiostro);cursor:pointer;text-align:left}
+.pm button:hover{background:#F3E7EA}.pm hr{border:none;border-top:1px solid #EEE9E6;margin:5px 0}
+body.pro #proBar{display:flex;align-items:center;gap:4px;padding:8px 22px;background:#fff;border-bottom:1px solid #E6E2DE;flex-shrink:0;overflow-x:auto}
+.tb{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border:none;background:none;font:500 12.5px Inter,sans-serif;color:var(--inchiostro);border-radius:10px;cursor:pointer;white-space:nowrap}
+.tb:hover{background:#F3E7EA}.tb.pri{background:var(--sipario);color:#fff}.tb[disabled]{opacity:.35;pointer-events:none}
+.sp{width:1px;height:22px;background:#E6E2DE;margin:0 8px;flex-shrink:0}
+.tz{display:flex;align-items:center;gap:6px;font:12px Inter,sans-serif;color:var(--grigio);margin-left:6px}
+.tz select,#pfF{border:1px solid #E0DAD6;border-radius:8px;background:#fff;padding:5px 8px;font:500 12.5px Inter,sans-serif;color:var(--inchiostro)}
+.ps{margin-left:auto;background:#E7F3EA;color:#2F7D4F;padding:5px 14px;border-radius:999px;font:500 12px Inter,sans-serif;white-space:nowrap}
+body.pro .mini-stats,body.pro .side-tools-grid,body.pro .file-loc-label,body.pro .tabs{display:none!important}
+body.pro #panel-struttura{display:block!important}
+body.pro.pro-noside aside{display:none}
+body.pro #proSideHead{display:flex;align-items:center;justify-content:space-between;font:600 15px Inter,sans-serif;color:var(--inchiostro)}
+#proSideHead span{display:flex;align-items:center;gap:8px}
+#proSideHead button{width:30px;height:30px;border-radius:8px;border:none;background:none;color:var(--inchiostro);cursor:pointer;display:flex;align-items:center;justify-content:center}
+#proSideHead button:hover{background:#F3E7EA}
+body.pro #proQuick{display:block;padding:6px 16px 24px;border-top:1px solid #E6E2DE;margin-top:6px}
+#proQuick h4{font:600 14px Inter,sans-serif;margin:14px 0 6px;color:var(--inchiostro)}
+#proQuick button{display:flex;align-items:center;gap:10px;width:100%;border:none;background:none;padding:9px 6px;border-radius:8px;font:500 13px Inter,sans-serif;color:var(--grigio);cursor:pointer}
+#proQuick button:hover{background:#F1ECEA;color:var(--inchiostro)}
+body.pro #proCrumb{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:#F3F1EF;font:500 13px Inter,sans-serif;color:var(--inchiostro);flex-shrink:0;}
+#proCrumb .pin{display:flex;align-items:center;gap:6px;border:none;background:none;color:var(--sipario);font:500 12px Inter,sans-serif;cursor:pointer}
+body.pro .stage-controls{top:0;right:0;width:0;height:0;padding:0;overflow:visible;background:none;border:none;box-shadow:none}
+body.pro .stage-controls button[id]{display:none}
+body.pro .style-toggle-panel,body.pro .layout-toggle-panel{position:fixed;top:62px;right:24px;z-index:80}
+#proEnd{display:none}body.pro #proEnd{display:flex;order:9;margin-left:auto}
+.pm.r{left:auto;right:0}
+#proSideHead span{flex:1}#proSideHead{gap:2px}
+.rp-hide{flex:none;width:40px;border:none;background:none;color:var(--grigio);cursor:pointer;display:flex;align-items:center;justify-content:center;border-bottom:2px solid transparent}
+.rp-hide:hover{color:var(--sipario);background:#F3E7EA}
+.hdl{display:none;position:fixed;top:50%;z-index:40;width:22px;height:56px;border:1px solid #E6E2DE;background:#fff;color:var(--sipario);cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(40,20,25,.12);padding:0}
+#hdlL{left:0;border-left:none;border-radius:0 10px 10px 0}#hdlR{right:0;border-right:none;border-radius:10px 0 0 10px}
+body.pro.pro-noside #hdlL,body.pro.pro-noright #hdlR{display:flex}
+body.pro.pro-noright #rightPanel{display:none}
+body.pro.pro-noright .quick-add-fab{right:36px}
+body.pro .quick-add-fab{bottom:88px;right:384px}
+body.pro #btnUndo,body.pro #btnRedo,body.pro #fontDown,body.pro #fontUp,body.pro #fontSizeLabel,body.pro main>footer{display:none}
+body.pro .scene-info-box,body.pro .scene-meta-row,body.pro .presence-wrap,body.pro .director-wrap{display:none}
+body.pro .page{max-width:var(--pw,780px);zoom:var(--pz,1)}
+body.pro .block.dialogue textarea.line,body.pro .block.direction textarea{line-height:var(--lh,1.65)}
+body.pro #rightPanel{display:flex;width:360px;flex-shrink:0;flex-direction:column;background:#FAF8F7;border-left:1px solid #E6E2DE;min-height:0}
+.rp-tabs{display:flex;border-bottom:1px solid #E6E2DE;flex-shrink:0}
+.rp-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 6px;border:none;background:none;font:500 12.5px Inter,sans-serif;color:var(--grigio);border-bottom:2px solid transparent;cursor:pointer}
+.rp-tab.on{color:var(--sipario);border-bottom-color:var(--sipario);font-weight:600}
+.rp-pane{display:none;flex:1;min-height:0;overflow-y:auto;padding:14px}.rp-pane.on{display:block}
+.rp-search{display:flex;align-items:center;gap:8px;padding:0 12px;height:38px;background:#fff;border:1px solid #E6E2DE;border-radius:10px;margin-bottom:12px;color:var(--grigio)}
+.rp-search input{flex:1;border:none;outline:none;background:none;font:13px Inter,sans-serif;color:var(--inchiostro)}
+body.pro #rpPersList #panel-personaggi{display:block!important;padding:0;overflow:visible}
+#rpDet label,#rpNote label{display:block;font:600 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--grigio);margin:14px 0 6px}
+#rpDet label:first-child,#rpNote label:first-child{margin-top:0}
+#rpDet textarea,#rpNote textarea{width:100%;border:1px solid #E0DAD6;border-radius:10px;padding:10px 12px;font:13px/1.5 Inter,sans-serif;color:var(--inchiostro);background:#fff;resize:vertical;outline:none}
+#rpNote textarea{min-height:240px}
+.rp-chips{display:flex;flex-wrap:wrap;gap:6px}
+body.pro #proFoot{display:flex;align-items:center;gap:22px;padding:8px 22px;background:#fff;border-top:1px solid #E6E2DE;font:12px Inter,sans-serif;color:var(--grigio);flex-shrink:0;overflow-x:auto}
+#proFoot label{display:flex;align-items:center;gap:8px;white-space:nowrap}
+#proFoot input[type=range]{width:110px;accent-color:var(--sipario)}
+#proFoot .pfb{display:flex;align-items:center;gap:8px;color:var(--inchiostro);font-weight:500;margin-right:auto;white-space:nowrap}
+#pfFs{border:none;background:none;color:var(--inchiostro);cursor:pointer;padding:6px;border-radius:8px}#pfFs:hover{background:#F3E7EA}
+</style>
+<script id="pro-js">
+(function(){
+const U=window.__ui,$=id=>document.getElementById(id),ico=U.ico,B=document.body;
+const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const header=document.querySelector('header'),main=document.querySelector('main'),aside=document.querySelector('aside');
+const logo=new Image();logo.className='pro-logo';logo.alt='Clan Destino';logo.src=U.LOGO;header.insertBefore(logo,header.querySelector('.title-row'));
+/* menu in alto */
+const MENUS=[
+ {l:'File',i:'file',pri:1,items:[['btnNuovoCopione','plus'],['btnFileLocale','folder'],['btnSalvaOra','save'],['btnVersioni','clock'],0,['btnImportaTesto','download'],['btnImportaProgetto','upload'],['btnImportaFountain','upload'],0,['btnHome','home'],['btnGuida','book']]},
+ {l:'Scrittura',i:'pen',go:()=>{U.hideDash();$('stage').scrollTop=0}},
+ {l:'Personaggi',i:'users',go:()=>rpTab('pers')},
+ {l:'Analisi',i:'chart',items:[['btnStatsAvanzate','chart'],['btnQualita','check'],['btnEntrateUscite','users']]},
+ {l:'',i:'sliders',end:1,items:[['btnStile','palette'],['btnDarkMode','moon'],['btnRehearsal','play']]},
+ {l:'Pubblicazione',i:'upload',items:[['btnAnteprima','eye'],['btnPDF','pdf'],['btnLivePreview','monitor'],['btnPdfSettings','sliders'],0,['btnOutline','grid'],['btnSides','file'],['btnEsportaLettura','eye'],0,['btnFountain','file'],['btnEsporta','file'],['btnCopia','copy'],['btnEsportaProgetto','save']]}
+];
+const nav=document.createElement('nav');nav.id='proNav';
+const endBox=document.createElement('div');endBox.id='proEnd';
+const closeMenus=()=>nav.querySelectorAll('.pm.open').forEach(m=>m.classList.remove('open'));
+MENUS.forEach(m=>{
+  const w=document.createElement('div');w.className='pw';
+  const b=document.createElement('button');b.className='pn'+(m.pri?' pri':'');b.innerHTML=ico(m.i)+(m.l?'<span>'+m.l+'</span>':'')+(m.items&&m.l?ico('chev'):'');if(!m.l)b.title='Impostazioni';w.appendChild(b);
+  if(m.items){
+    const pm=document.createElement('div');pm.className='pm'+(m.end?' r':'');
+    m.items.forEach(it=>{
+      if(!it){pm.appendChild(document.createElement('hr'));return}
+      const o=$(it[0]);if(!o)return;
+      const x=document.createElement('button');x.innerHTML=ico(it[1])+'<span>'+esc((o.textContent||'').trim()||({btnSalvaOra:'Salva',btnStile:'Stile grafico',btnDarkMode:'Tema scuro / chiaro',btnRehearsal:'Modalità prova e lettura'})[it[0]]||'')+'</span>';
+      x.addEventListener('click',e=>{e.stopPropagation();closeMenus();o.click()});pm.appendChild(x);
+    });
+    w.appendChild(pm);
+    b.addEventListener('click',e=>{e.stopPropagation();const open=pm.classList.contains('open');closeMenus();if(!open)pm.classList.add('open')});
+  }else b.addEventListener('click',()=>{closeMenus();m.go()});
+  (m.end?endBox:nav).appendChild(w);
+});
+document.addEventListener('click',closeMenus);
+header.appendChild(nav);header.appendChild(endBox);
+/* barra strumenti */
+const bar=document.createElement('div');bar.id='proBar';
+bar.innerHTML='<button class="tb pri" data-c="btnNuovoCopione">'+ico('plus')+'Nuovo copione</button><button class="tb" data-c="btnFileLocale">'+ico('folder')+'Apri</button><button class="tb" data-c="btnSalvaOra">'+ico('save')+'Salva</button><i class="sp"></i><button class="tb" id="tbUndo" data-c="btnUndo">'+ico('undo')+'Annulla</button><button class="tb" id="tbRedo" data-c="btnRedo">'+ico('redo')+'Ripristina</button><i class="sp"></i><button class="tb" data-c="btnCerca">'+ico('search')+'Cerca</button><button class="tb" id="tbSide">'+ico('list')+'Struttura</button><i class="sp"></i><button class="tb" data-c="fontDown">A−</button><button class="tb" id="tbA">A</button><button class="tb" data-c="fontUp">A+</button><i class="sp"></i><label class="tz">Zoom<select id="tbZoom"><option value="0.8">80%</option><option value="0.9">90%</option><option value="1" selected>100%</option><option value="1.1">110%</option><option value="1.25">125%</option><option value="1.5">150%</option></select></label><span class="ps" id="proSave">pronto</span>';
+header.after(bar);
+bar.addEventListener('click',e=>{const b=e.target.closest('.tb');if(!b)return;
+  if(b.dataset.c){const o=$(b.dataset.c);o&&o.click()}
+  else if(b.id==='tbSide')B.classList.toggle('pro-noside');
+  else if(b.id==='tbA'){play.fontSize=14;scheduleSave();renderStage()}});
+/* menu laterale: titolo + navigazione rapida */
+const top=aside.querySelector('.sidebar-fixed-top');
+const sh=document.createElement('div');sh.id='proSideHead';sh.innerHTML='<span>'+ico('list')+'Struttura del copione</span><button title="Aggiungi atto">'+ico('plus')+'</button><button id="proHideL" title="Nascondi il menu laterale">'+ico('layout')+'</button>';
+top.insertBefore(sh,top.firstChild);
+sh.querySelector('button').addEventListener('click',()=>{const a=$('panel-struttura').querySelector('.add-btn');a&&a.click()});
+const qk=document.createElement('div');qk.id='proQuick';
+qk.innerHTML='<h4>Navigazione rapida</h4><button data-q="top">'+ico('file')+'Tutti gli atti</button><button data-q="btnEntrateUscite">'+ico('grid')+'Piano scene</button><button data-q="pers">'+ico('users')+'Personaggi</button><button data-q="note">'+ico('file')+'Note di regia</button>';
+$('panel-struttura').after(qk);
+qk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const q=b.dataset.q;
+  if(q==='top')aside.scrollTop=0;else if(q==='pers'||q==='note')rpTab(q);else{const o=$(q);o&&o.click()}});
+/* pannello destro */
+const rp=document.createElement('section');rp.id='rightPanel';
+rp.innerHTML='<div class="rp-tabs"><button class="rp-tab on" data-t="pers">'+ico('users')+'Personaggi</button><button class="rp-tab" data-t="note">'+ico('file')+'Note di regia</button><button class="rp-tab" data-t="det">'+ico('list')+'Dettagli scena</button></div><div class="rp-pane on" id="rpPers"><div class="rp-search">'+ico('search')+'<input id="rpPersQ" placeholder="Cerca personaggio…"></div><div id="rpPersList"></div></div><div class="rp-pane" id="rpNote"></div><div class="rp-pane" id="rpDet"></div>';
+main.after(rp);
+function rpTab(t){
+  if(!B.classList.contains('pro')){aside.classList.add('mobile-open');const b=document.querySelector('.tab-btn[data-tab="personaggi"]');b&&b.click();return}
+  B.classList.remove('pro-noright');
+  rp.querySelectorAll('.rp-tab').forEach(b=>b.classList.toggle('on',b.dataset.t===t));
+  rp.querySelectorAll('.rp-pane').forEach(p=>p.classList.toggle('on',p.id==={pers:'rpPers',note:'rpNote',det:'rpDet'}[t]));
+}
+const rt=rp.querySelector('.rp-tabs');const hr=document.createElement('button');hr.className='rp-hide';hr.id='proHideR';hr.title='Nascondi il pannello';hr.innerHTML=ico('layoutR');rt.appendChild(hr);
+const hl=document.createElement('button');hl.className='hdl';hl.id='hdlL';hl.title='Mostra il menu laterale';hl.innerHTML=ico('chevR');
+const hrr=document.createElement('button');hrr.className='hdl';hrr.id='hdlR';hrr.title='Mostra il pannello';hrr.innerHTML=ico('chevL');
+B.appendChild(hl);B.appendChild(hrr);
+$('proHideL').addEventListener('click',()=>B.classList.add('pro-noside'));
+hl.addEventListener('click',()=>B.classList.remove('pro-noside'));
+hr.addEventListener('click',()=>B.classList.add('pro-noright'));
+hrr.addEventListener('click',()=>B.classList.remove('pro-noright'));
+rp.querySelector('.rp-tabs').addEventListener('click',e=>{const b=e.target.closest('.rp-tab');b&&rpTab(b.dataset.t)});
+$('rpPersQ').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase();
+  $('panel-personaggi').querySelectorAll('.pers-card').forEach(c=>{const n=c.querySelector('input.nome');c.style.display=(!q||(n&&n.value.toLowerCase().includes(q)))?'':'none'})});
+const scn=()=>currentSceneId?findScene(currentSceneId):null;
+function refreshRight(){
+  const f=scn(),t=f?(f.atto.title+' › '+f.scena.title):'Nessuna scena selezionata';
+  $('proCrumbT').textContent=t;$('proFootT').textContent=t;
+  $('tbUndo').disabled=$('btnUndo').disabled;$('tbRedo').disabled=$('btnRedo').disabled;
+  $('proSave').textContent=$('saveState').textContent;
+  const ae=document.activeElement;if(ae&&rp.contains(ae)&&ae.tagName==='TEXTAREA')return;
+  if(!f){$('rpNote').innerHTML='';$('rpDet').innerHTML='<p style="color:var(--grigio);font:13px Inter">Seleziona una scena.</p>';return}
+  const s=f.scena,pr=s.presentCharacters||[];
+  $('rpNote').innerHTML='<label>Note di regia (private)</label><textarea id="rpNoteTa" placeholder="Appunti di regia, luci, movimenti… (non incluse nelle esportazioni per gli attori)">'+esc(s.directorNotes||'')+'</textarea>';
+  $('rpDet').innerHTML='<label>Stato</label><div class="rp-chips">'+[['bozza','Bozza'],['rivedere','Da rivedere'],['definitiva','Definitiva']].map(x=>'<button class="status-btn'+(s.status===x[0]?' on-'+x[0]:'')+'" data-st="'+x[0]+'">'+x[1]+'</button>').join('')+'</div>'
+   +'<label>Descrizione della scena</label><textarea rows="3" data-f="descrizione" placeholder="Cosa succede, atmosfera, contesto…">'+esc(s.descrizione||'')+'</textarea>'
+   +'<label>Scenografia e oggettistica</label><textarea rows="3" data-f="scenografia" placeholder="Elementi di scena, mobili, oggetti…">'+esc(s.scenografia||'')+'</textarea>'
+   +'<label>Personaggi in scena</label><div class="rp-chips">'+play.characters.map(c=>'<button class="chip'+(pr.includes(c.name)?' on':'')+'" data-p="'+esc(c.name)+'">'+esc(c.name)+'</button>').join('')+'<button class="chip chip-all'+(pr.length?'':' on')+'" data-pall="1">TUTTI</button></div><div style="margin-top:8px"><button class="presence-auto" data-auto="1">rileva dai dialoghi</button></div>';
+}
+$('rpNote').addEventListener('input',e=>{if(e.target.id!=='rpNoteTa')return;const f=scn();if(f){f.scena.directorNotes=e.target.value;scheduleSave()}});
+$('rpDet').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const st=$('stage');
+  if(b.dataset.st){const o=st.querySelector('[data-set-status="'+b.dataset.st+'"]');o&&o.click()}
+  else if(b.dataset.p!==undefined){const o=[...st.querySelectorAll('[data-toggle-present]')].find(x=>x.getAttribute('data-toggle-present')===b.dataset.p);o&&o.click()}
+  else if(b.dataset.pall){const o=st.querySelector('[data-toggle-present-all]');o&&o.click()}
+  else if(b.dataset.auto){const o=$('autoDetectPresence');o&&o.click()}});
+$('rpDet').addEventListener('input',e=>{const k=e.target.dataset.f;if(!k)return;const o=$('stage').querySelector('[data-scene-field="'+k+'"]');if(o){o.value=e.target.value;o.dispatchEvent(new Event('input',{bubbles:true}))}});
+/* percorso sopra il foglio e barra in basso */
+const cr=document.createElement('div');cr.id='proCrumb';cr.innerHTML='<span id="proCrumbT"></span><button class="pin">'+ico('pin')+'Scena corrente</button>';
+main.insertBefore(cr,main.firstChild);cr.querySelector('.pin').addEventListener('click',()=>{$('stage').scrollTop=0});
+const ft=document.createElement('div');ft.id='proFoot';
+ft.innerHTML='<span class="pfb">'+ico('file')+'<b id="proFootT"></b></span><label>Larghezza testo<input type="range" id="pfW" min="560" max="1100" step="10" value="780"></label><label>Interlinea<input type="range" id="pfL" min="1.2" max="2.2" step="0.05" value="1.65"></label><label>Font<select id="pfF"><option value="\'Noto Serif\',Georgia,serif">Noto Serif</option><option value="\'Playfair Display\',serif">Playfair</option><option value="\'Courier Prime\',monospace">Courier Prime</option><option value="\'Inter\',sans-serif">Inter</option></select></label><button id="pfFs" title="Schermo intero">'+ico('max')+'</button>';
+B.appendChild(ft);
+const KEY='copione:pro';let pf={};try{pf=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+function applyPf(){
+  if(pf.w){B.style.setProperty('--pw',pf.w+'px');$('pfW').value=pf.w}
+  if(pf.l){B.style.setProperty('--lh',pf.l);$('pfL').value=pf.l}
+  if(pf.f){B.style.setProperty('--font-script',pf.f);$('pfF').value=pf.f}
+  if(pf.z){B.style.setProperty('--pz',pf.z);$('tbZoom').value=pf.z}
+}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(pf))}catch(e){}};
+$('pfW').addEventListener('input',e=>{pf.w=e.target.value;applyPf();save()});
+$('pfL').addEventListener('input',e=>{pf.l=e.target.value;applyPf();save()});
+$('pfF').addEventListener('change',e=>{pf.f=e.target.value;applyPf();save()});
+$('tbZoom').addEventListener('change',e=>{pf.z=e.target.value;applyPf();save()});
+$('pfFs').addEventListener('click',()=>{const d=document;if(d.fullscreenElement)d.exitFullscreen();else if(d.documentElement.requestFullscreen)d.documentElement.requestFullscreen()});
+applyPf();
+/* attivazione layout (tema Bordeaux + schermo largo) */
+const mq=window.matchMedia('(min-width:1000px)');
+function syncPro(){
+  const on=mq.matches&&B.classList.contains('theme-bordeaux');
+  B.classList.toggle('pro',on);
+  const pp=$('panel-personaggi');
+  if(on){if(pp.parentNode!==$('rpPersList'))$('rpPersList').appendChild(pp);pp.classList.add('active');refreshRight()}
+  else if(pp.parentNode!==aside){aside.appendChild(pp);const t=document.querySelector('.tab-btn.active');pp.classList.toggle('active',!!t&&t.dataset.tab==='personaggi')}
+}
+new MutationObserver(syncPro).observe(B,{attributes:true,attributeFilter:['class']});
+mq.addEventListener?mq.addEventListener('change',syncPro):mq.addListener(syncPro);
+['btnUndo','btnRedo'].forEach(id=>new MutationObserver(()=>{$('tbUndo').disabled=$('btnUndo').disabled;$('tbRedo').disabled=$('btnRedo').disabled}).observe($(id),{attributes:true,attributeFilter:['disabled']}));
+new MutationObserver(()=>{$('proSave').textContent=$('saveState').textContent}).observe($('saveState'),{childList:true,characterData:true,subtree:true});
+const _rs=renderStage;renderStage=function(){const r=_rs.apply(this,arguments);try{if(B.classList.contains('pro'))refreshRight()}catch(e){}return r};
+syncPro();
 })();
 </script>
 
