@@ -35,7 +35,7 @@ Creato da **Giampiero Santoro — Clan Destino**.
 - Vista d'insieme con anteprima di tutte le scene.
 
 **Lavorare comodi**
-- Cinque **stili grafici** (tra cui *Bordeaux moderno*) e **tema scuro**.
+- Un unico aspetto **chiaro e moderno**: carta bianca, accento bordeaux e copione in carattere con le grazie.
 - Layout a tre pannelli su schermi larghi (menu in alto, struttura a sinistra, personaggi e dettagli a destra), con pannelli nascondibili.
 - Versione ottimizzata per **smartphone**, con barra di navigazione in basso.
 - **Modalità prova/lettura** per leggere il copione senza gli strumenti di modifica.

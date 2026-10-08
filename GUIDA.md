@@ -34,11 +34,11 @@ Questa guida accompagna dalla prima apertura fino all'esportazione del copione. 
 
 ## 2. Orientarsi nella schermata
 
-Su uno schermo largo, con lo stile **Bordeaux moderno**, l'editor è diviso in tre pannelli.
+Su uno schermo largo l'editor è diviso in tre pannelli.
 
 | Zona | Cosa contiene |
 |---|---|
-| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Personaggi · Analisi · Pubblicazione** e, a destra, il menu con l'icona dei cursori (**Stile grafico, Tema scuro, Modalità prova**) |
+| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Personaggi · Analisi · Pubblicazione** e, a destra, il pulsante **Modalità prova e lettura** |
 | **Barra strumenti** | Nuovo copione, Apri, Salva, Annulla, Ripristina, Cerca, Struttura, dimensione del testo (A− A A+), Zoom e stato del salvataggio |
 | **Sinistra** | **Struttura del copione**: albero di atti e scene, ricerca rapida, navigazione rapida |
 | **Centro** | Il foglio del copione, con il percorso «Atto › Scena» sopra |
@@ -47,7 +47,7 @@ Su uno schermo largo, con lo stile **Bordeaux moderno**, l'editor è diviso in t
 
 **Nascondere i pannelli.** Il pulsante accanto al «+» di *Struttura del copione* nasconde il menu di sinistra; il pulsante in fondo alle schede nasconde il pannello di destra. Quando un pannello è nascosto compare una piccola linguetta sul bordo dello schermo: cliccala per riaprirlo.
 
-> Sugli altri stili grafici e sugli schermi stretti (telefoni, tablet in verticale) il layout è quello classico con menu laterale e barra inferiore. Vedi [Smartphone](#13-smartphone).
+> Sugli schermi stretti (telefoni, tablet in verticale) il layout è quello classico con menu laterale e barra inferiore. Vedi [Smartphone](#13-smartphone).
 
 ## 3. Scrivere il copione
 
@@ -75,9 +75,15 @@ Altri strumenti:
 
 ## 4. I personaggi
 
-- Nel pannello di destra, scheda **Personaggi**, trovi l'elenco; il campo in alto filtra per nome.
-- Ogni personaggio ha **colore**, nome, ruolo e una **scheda completa**: età, descrizione, foto e **relazioni** con gli altri personaggi.
-- L'icona del filtro mostra **solo le battute** di quel personaggio nella scena.
+Nel pannello di destra, scheda **Personaggi**:
+
+- **Elenco**: ogni personaggio ha un cerchio colorato con le iniziali, il nome e il ruolo. Il campo in alto filtra per nome. Cliccando un personaggio ne vedi la scheda sotto l'elenco.
+- **Scheda** con tre sezioni:
+  - **Scheda**: età, ruolo (scelto da un elenco), attore, descrizione e gli atti in cui il personaggio compare. Il pulsante **Scheda completa** apre tutti gli altri campi (aspetto, costume, voce, obiettivo, conflitto, foto, colore…).
+  - **Relazioni**: con chi è in rapporto e come (es. «madre di», «rivale di»). Il pulsante **Relazioni** in fondo apre il diagramma.
+  - **Note**: retroscena per l'attore e note di regia private.
+- In alto nella scheda: la lente mostra **solo le scene** con quel personaggio, il cestino lo elimina (chiede conferma e rimuove anche le relazioni collegate).
+- **Nuovo personaggio** in fondo all'elenco lo aggiunge e lo seleziona.
 - Quando scrivi una battuta scegli il personaggio dall'elenco: il nome compare sempre in maiuscolo.
 
 ## 5. Dettagli e note di ogni scena
@@ -158,9 +164,8 @@ Nella *Navigazione rapida* a sinistra trovi anche l'accesso veloce al Piano scen
 
 ## 12. Aspetto e comodità
 
-- **Stile grafico** (menu con l'icona dei cursori → *Stile grafico*): *Bordeaux moderno*, *Velluto & oro*, *Manoscritto d'archivio*, *Palcoscenico contemporaneo*, *Carta di piazza*. La scelta resta memorizzata.
-- **Tema scuro / chiaro** dallo stesso menu.
-- **Modalità prova e lettura**: nasconde gli strumenti di modifica per leggere il copione come una pagina pulita.
+- **Aspetto**: l'editor ha un solo tema, chiaro e moderno (carta bianca, accento bordeaux, copione in carattere con le grazie).
+- **Modalità prova e lettura** (pulsante in alto a destra): nasconde gli strumenti di modifica per leggere il copione come una pagina pulita.
 - **Foglio**: dalla barra in basso regola **larghezza del testo**, **interlinea** e **carattere**; dalla barra strumenti dimensione (A− A A+) e **Zoom**. Il pulsante in basso a destra attiva lo **schermo intero**.
 
 ## 13. Smartphone
@@ -191,7 +196,7 @@ Il salvataggio automatico vive nella memoria del browser. Se avevi collegato un 
 Questa funzione esiste solo su Chrome ed Edge da computer. Altrove usa *Salva progetto (.json)* e importalo quando serve.
 
 **Sul telefono non vedo i tre pannelli.**
-È voluto: lo schermo è stretto e l'editor usa il layout a cassetto. I tre pannelli compaiono da circa 1000 pixel di larghezza, con lo stile *Bordeaux moderno*.
+È voluto: lo schermo è stretto e l'editor usa il layout a cassetto. I tre pannelli compaiono da circa 1000 pixel di larghezza.
 
 **Un copione aperto da .fountain ha perso le schede dei personaggi.**
 Il formato Fountain non le contiene. Per copiare tutto usa il `.json`.

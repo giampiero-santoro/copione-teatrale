@@ -773,7 +773,7 @@
   }
 </style>
 </head>
-<body>
+<body class="theme-bordeaux">
 
 <header>
   <div class="save-state" id="saveState">pronto</div>
@@ -1739,7 +1739,7 @@ document.querySelector('#modalPersonaggio .mp-body').addEventListener('input', e
     scheduleSave(); return;
   }
 });
-document.querySelector('#modalPersonaggio .mp-body').addEventListener('click', e => {
+document.querySelector('#modalPersonaggio .mp-body').addEventListener('click', async e => {
   const p = play.characters.find(c => c.id === editingPersId);
   if(!p) return;
   if(e.target.closest('#mpAddRel')){
@@ -1749,7 +1749,7 @@ document.querySelector('#modalPersonaggio .mp-body').addEventListener('click', e
   }
   const delRel = e.target.closest('[data-del-rel-index]');
   if(delRel){
-    if(!confirm('Rimuovere questa relazione?')) return;
+    if(!await appConfirm('Rimuovere questa relazione?')) return;
     p.relationships.splice(Number(delRel.dataset.delRelIndex), 1);
     scheduleSave(); renderMpRelationships(); return;
   }
@@ -1757,7 +1757,7 @@ document.querySelector('#modalPersonaggio .mp-body').addEventListener('click', e
     document.getElementById('mpPhotoInput').click(); return;
   }
   if(e.target.closest('#mpPhotoRemove')){
-    if(!confirm('Rimuovere la foto di riferimento?')) return;
+    if(!await appConfirm('Rimuovere la foto di riferimento?')) return;
     p.photo = ''; p.photoW = 0; p.photoH = 0;
     updateMpPhotoPreview(p);
     scheduleSave(); renderPersonaggi();
@@ -2048,7 +2048,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 document.getElementById('titolo-opera').addEventListener('input', e => { play.title = e.target.value; scheduleSave(); });
 document.getElementById('autore-opera').addEventListener('input', e => { play.author = e.target.value; scheduleSave(); });
 
-document.getElementById('panel-struttura').addEventListener('click', e => {
+document.getElementById('panel-struttura').addEventListener('click', async e => {
   const clearFilterBtn = e.target.closest('#clearFilter');
   if(clearFilterBtn){
     filterCharacter = null;
@@ -2080,7 +2080,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
       const idx = atto.scenes.findIndex(s => s.id === id);
       if(idx > -1){
         if(atto.scenes.length === 1){ alert('Un atto deve avere almeno una scena.'); return; }
-        if(!confirm('Eliminare la scena "' + atto.scenes[idx].title + '"? Potrai comunque annullare con Ctrl+Z.')) return;
+        if(!await appConfirm('Eliminare la scena "' + atto.scenes[idx].title + '"? Potrai comunque annullare con Ctrl+Z.')) return;
         atto.scenes.splice(idx,1);
         if(currentSceneId === id) currentSceneId = atto.scenes[0].id;
       }
@@ -2092,7 +2092,7 @@ document.getElementById('panel-struttura').addEventListener('click', e => {
     const id = delActBtn.dataset.delAct;
     if(play.acts.length === 1){ alert('Deve esserci almeno un atto.'); return; }
     const attoToRemove = play.acts.find(a => a.id === id);
-    if(!confirm('Eliminare "' + attoToRemove.title + '" con tutte le sue scene? Potrai comunque annullare con Ctrl+Z.')) return;
+    if(!await appConfirm('Eliminare "' + attoToRemove.title + '" con tutte le sue scene? Potrai comunque annullare con Ctrl+Z.')) return;
     const idx = play.acts.findIndex(a => a.id === id);
     const removed = play.acts.splice(idx,1)[0];
     if(removed.scenes.some(s => s.id === currentSceneId)){
@@ -2160,7 +2160,7 @@ function renameCharacterEverywhere(p, newName){
   p.name = newName;
 }
 
-document.getElementById('panel-personaggi').addEventListener('click', e => {
+document.getElementById('panel-personaggi').addEventListener('click', async e => {
   const addBtn = e.target.closest('#addPers');
   const delBtn = e.target.closest('[data-del-pers]');
   const filterBtn = e.target.closest('[data-filter-pers]');
@@ -2173,7 +2173,7 @@ document.getElementById('panel-personaggi').addEventListener('click', e => {
   if(delBtn){
     const delId = delBtn.dataset.delPers;
     const delChar = play.characters.find(c => c.id === delId);
-    if(!confirm('Eliminare il personaggio "' + (delChar ? delChar.name : '') + '"? Verranno rimossi anche i riferimenti nelle relazioni degli altri personaggi. Potrai comunque annullare con Ctrl+Z.')) return;
+    if(!await appConfirm('Eliminare il personaggio "' + (delChar ? delChar.name : '') + '"? Verranno rimossi anche i riferimenti nelle relazioni degli altri personaggi. Potrai comunque annullare con Ctrl+Z.')) return;
     play.characters.forEach(c => { if(c.relationships) c.relationships = c.relationships.filter(r => r.targetId !== delId); });
     play.characters = play.characters.filter(c => c.id !== delId);
     scheduleSave(); renderPersonaggi(); renderStage(); return;
@@ -2213,7 +2213,7 @@ document.getElementById('panel-personaggi').addEventListener('input', e => {
 });
 
 
-document.getElementById('stage').addEventListener('click', e => {
+document.getElementById('stage').addEventListener('click', async e => {
   const addBlockBtn = e.target.closest('[data-add-block]');
   const delBlockBtn = e.target.closest('[data-del-block]');
   const moveBtn = e.target.closest('[data-move]');
@@ -2281,7 +2281,7 @@ document.getElementById('stage').addEventListener('click', e => {
   if(delBlockBtn){
     const toDelete = scena.blocks.find(b => b.id === delBlockBtn.dataset.delBlock);
     const label = toDelete ? (toDelete.type === 'dialogue' ? 'questa battuta' : toDelete.type === 'offstage' ? 'questa voce fuori scena' : 'questa didascalia') : 'questo elemento';
-    if(!confirm('Eliminare ' + label + '? Potrai comunque annullare con Ctrl+Z.')) return;
+    if(!await appConfirm('Eliminare ' + label + '? Potrai comunque annullare con Ctrl+Z.')) return;
     scena.blocks = scena.blocks.filter(b => b.id !== delBlockBtn.dataset.delBlock);
     scheduleSave(); renderStage(); return;
   }
@@ -2303,7 +2303,7 @@ document.getElementById('stage').addEventListener('click', e => {
     return;
   }
   if(delNoteBtn){
-    if(!confirm('Rimuovere questa nota per l\'attore?')) return;
+    if(!await appConfirm('Rimuovere questa nota per l\'attore?')) return;
     const b = scena.blocks.find(x => x.id === delNoteBtn.dataset.delNote);
     delete b.note;
     scheduleSave(); renderStage(); return;
@@ -2317,7 +2317,7 @@ document.getElementById('stage').addEventListener('click', e => {
     return;
   }
   if(delDirAfterBtn){
-    if(!confirm('Rimuovere questa didascalia?')) return;
+    if(!await appConfirm('Rimuovere questa didascalia?')) return;
     const b = scena.blocks.find(x => x.id === delDirAfterBtn.dataset.delDirectionAfter);
     delete b.afterDirection;
     scheduleSave(); renderStage(); return;
@@ -2706,7 +2706,7 @@ document.getElementById('versionList').addEventListener('click', async e => {
   }
   if(restoreBtn){
     const key = restoreBtn.dataset.restoreVersion;
-    if(confirm('Ripristinare questa versione sovrascriverà il copione attualmente aperto. Continuare?')){
+    if(await appConfirm('Ripristinare questa versione sovrascriverà il copione attualmente aperto. Continuare?')){
       try{
         const value = await storageGet(key);
         if(value){
@@ -2725,7 +2725,7 @@ document.getElementById('versionList').addEventListener('click', async e => {
   }
   if(delBtn){
     const key = delBtn.dataset.delVersion;
-    if(confirm('Eliminare definitivamente questa versione salvata?')){
+    if(await appConfirm('Eliminare definitivamente questa versione salvata?')){
       await storageDelete(key);
       renderVersionList();
     }
@@ -3390,15 +3390,15 @@ document.getElementById('btnImportaProgetto').addEventListener('click', () => do
 function hasMeaningfulContent(p){
   return !!(p && (((p.characters||[]).length) || ((p.acts||[]).length)));
 }
-document.getElementById('fileImporta').addEventListener('change', (e) => {
+document.getElementById('fileImporta').addEventListener('change', async (e) => {
   const file = e.target.files && e.target.files[0];
   if(!file){ e.target.value = ''; return; }
   if(hasMeaningfulContent(play)){
-    if(confirm('È aperto un copione con del contenuto.\n\nVuoi salvarlo (Esporta progetto .json) prima di importare quello nuovo?')){
+    if(await appConfirm('È aperto un copione con del contenuto.\n\nVuoi salvarlo (Esporta progetto .json) prima di importare quello nuovo?')){
       exportProject();
     }
   }
-  if(confirm('Importare questo progetto sostituirà il copione attualmente aperto. Continuare?')){
+  if(await appConfirm('Importare questo progetto sostituirà il copione attualmente aperto. Continuare?')){
     importProject(file);
   }
   e.target.value = '';
@@ -3708,7 +3708,7 @@ document.getElementById('fileImportaFountain').addEventListener('change', (e) =>
   e.target.value = '';
   if(!file) return;
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     let parsed;
     try{ parsed = parseFountain(String(reader.result)); }
     catch(err){ alert('Non sono riuscito a leggere questo file .fountain.'); return; }
@@ -3721,7 +3721,7 @@ document.getElementById('fileImportaFountain').addEventListener('change', (e) =>
     const summary = `Trovat${nActs===1?'o':'i'} ${nActs} att${nActs===1?'o':'i'} e ${nScenes} scen${nScenes===1?'a':'e'}` +
       (newCharNames.size ? `, con ${newCharNames.size} nuovo/i personaggio/i (${Array.from(newCharNames).slice(0,5).join(', ')}${newCharNames.size>5?'…':''})` : '') +
       `.\n\nVerranno aggiunti in fondo al copione attuale. Continuare?`;
-    if(!confirm(summary)) return;
+    if(!await appConfirm(summary)) return;
 
     const insertFromIndex = play.acts.length;
     parsed.acts.forEach(a => {
@@ -3825,8 +3825,8 @@ function buildBlankPlay(){
     acts: []
   };
 }
-document.getElementById('btnNuovoCopione').addEventListener('click', () => {
-  const ok = confirm(
+document.getElementById('btnNuovoCopione').addEventListener('click', async () => {
+  const ok = await appConfirm(
     'Creare un nuovo copione sostituirà quello attualmente aperto in questa pagina.\n\n' +
     'Se vuoi conservare il lavoro attuale, annulla e usa prima "Salva progetto (.json)" o "🕘 Versioni salvate".\n\n' +
     'Continuare con un copione nuovo e vuoto?'
@@ -4010,6 +4010,66 @@ loadStylePref();
 loadLayoutPrefs();
 </script>
 <!-- ===== RESTYLING UI v2: moderno, card, icone, dashboard, ricerca rapida (patch additiva) ===== -->
+
+<style id="ui-dialogs-css">
+#toasts{position:fixed;left:50%;bottom:76px;transform:translateX(-50%);z-index:400;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{pointer-events:auto;display:flex;gap:10px;align-items:flex-start;background:#2B2426;color:#fff;padding:11px 16px;border-radius:12px;font:500 13px/1.45 Inter,sans-serif;box-shadow:0 10px 30px rgba(0,0,0,.28);max-width:min(92vw,460px);white-space:pre-line;animation:u2up .2s;cursor:pointer}
+.toast svg{width:16px;height:16px;flex:none;margin-top:2px;color:#F2B8C6}
+.toast.out{opacity:0;transform:translateY(6px);transition:all .25s}
+.cd-box{max-width:420px!important}
+.cd-box .cd-ic{width:44px;height:44px;border-radius:50%;background:#F3E7EA;color:#8A1E3E;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.cd-box .cd-ic.danger{background:#FBE9EA;color:#B3261E}
+.cd-box h2{margin:0 0 6px}
+.cd-box .cd-msg{margin:0 0 18px;color:#5b5256;font:14px/1.5 Inter,sans-serif;white-space:pre-line}
+.cd-box .cd-act{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.cd-box .cd-act button{margin:0!important;padding:10px 18px!important;border-radius:10px;font:600 13.5px Inter,sans-serif;cursor:pointer}
+.cd-box .cd-no{background:#fff!important;color:#2B2426!important;border:1px solid #E0DAD6!important}
+.cd-box .cd-yes{background:#8A1E3E!important;color:#fff!important;border:1px solid #8A1E3E!important}
+.cd-box .cd-yes.danger{background:#B3261E!important;border-color:#B3261E!important}
+@media(max-width:820px){#toasts{bottom:84px}.cd-box .cd-act{flex-direction:column-reverse}.cd-box .cd-act button{width:100%}}
+</style>
+<script id="ui-dialogs">
+(function(){
+var SV={warn:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg>',q:'<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>',i:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0zM12 16v-4M12 8h.01"/></svg>'};
+function toast(msg){
+  var b=document.getElementById('toasts');
+  if(!b){b=document.createElement('div');b.id='toasts';b.setAttribute('role','status');b.setAttribute('aria-live','polite');document.body.appendChild(b)}
+  var t=document.createElement('div');t.className='toast';t.innerHTML=SV.i;
+  var s=document.createElement('span');s.textContent=String(msg);t.appendChild(s);b.appendChild(t);
+  var close=function(){t.classList.add('out');setTimeout(function(){t.remove()},260)};
+  t.addEventListener('click',close);setTimeout(close,Math.min(9000,3500+String(msg).length*40));
+}
+function labels(m){
+  if(/^Elimin/i.test(m))return{t:'Eliminare?',y:'Elimina',n:'Annulla',d:1};
+  if(/^Rimuov/i.test(m))return{t:'Rimuovere?',y:'Rimuovi',n:'Annulla',d:1};
+  if(/^Ripristin/i.test(m))return{t:'Ripristinare la versione?',y:'Ripristina',n:'Annulla',d:1};
+  if(/^Import/i.test(m))return{t:'Importare il progetto?',y:'Importa',n:'Annulla',d:1};
+  if(/^\u00c8 aperto/i.test(m))return{t:'Salvare prima?',y:'Salva prima',n:'Continua senza salvare'};
+  if(/^Trovat/i.test(m))return{t:'Aggiungere al copione?',y:'Aggiungi',n:'Annulla'};
+  if(/aggiunto alla libreria/i.test(m))return{t:'Copione importato',y:'Aprilo ora',n:'Più tardi'};
+  return{t:'Conferma',y:'Continua',n:'Annulla'};
+}
+function confirmDlg(msg){
+  return new Promise(function(res){
+    var m=String(msg),L=labels(m),ov=document.createElement('div');
+    ov.className='modal-overlay open cd';
+    ov.innerHTML='<div class="modal cd-box" role="alertdialog" aria-modal="true"><div class="cd-ic'+(L.d?' danger':'')+'">'+(L.d?SV.warn:SV.q)+'</div><h2></h2><p class="cd-msg"></p><div class="cd-act"><button type="button" class="cd-no"></button><button type="button" class="cd-yes'+(L.d?' danger':'')+'"></button></div></div>';
+    ov.querySelector('h2').textContent=L.t;ov.querySelector('.cd-msg').textContent=m;
+    ov.querySelector('.cd-no').textContent=L.n;ov.querySelector('.cd-yes').textContent=L.y;
+    document.body.appendChild(ov);
+    var done=function(v){document.removeEventListener('keydown',kd,true);ov.classList.remove('open');setTimeout(function(){ov.remove()},160);res(v)};
+    var kd=function(e){if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();done(false)}};
+    document.addEventListener('keydown',kd,true);
+    ov.querySelector('.cd-no').onclick=function(){done(false)};
+    ov.querySelector('.cd-yes').onclick=function(){done(true)};
+    ov.addEventListener('mousedown',function(e){if(e.target===ov)done(false)});
+    (L.d?ov.querySelector('.cd-no'):ov.querySelector('.cd-yes')).focus();
+  });
+}
+window.alert=function(m){toast(m)};
+window.appToast=toast;window.appConfirm=confirmDlg;
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style id="ui-v2">
 :root{--card-bg:#fffaf0;--card-bd:rgba(0,0,0,.1);--card-tx:var(--inchiostro);--dash-bg:var(--carta);--sh:0 1px 2px rgba(0,0,0,.06),0 8px 22px rgba(0,0,0,.08)}
@@ -4358,7 +4418,7 @@ async function dupScript(id){
     LIB.unshift(metaOf(p,nid));await libPersist();refreshDash()}catch(e){alert(e.message)}
 }
 async function delScript(id){
-  const m=LIB.find(x=>x.id===id);if(!m||!confirm('Eliminare definitivamente «'+m.title+'» dalla libreria?\nL\'operazione non si può annullare.'))return;
+  const m=LIB.find(x=>x.id===id);if(!m||!await appConfirm('Eliminare definitivamente «'+m.title+'» dalla libreria?\nL\'operazione non si può annullare.'))return;
   try{
     LIB=LIB.filter(x=>x.id!==id);
     if(id===curId){const nx=LIB[0];
@@ -4407,7 +4467,7 @@ lf.addEventListener('change',async()=>{
   }
   if(!done.length)return;
   await libPersist();refreshDash();
-  if(done.length===1){if(confirm('«'+done[0].t+'» aggiunto alla libreria ('+done[0].s+' scene).\nVuoi aprirlo ora?'))openScript(done[0].id)}
+  if(done.length===1){if(await appConfirm('«'+done[0].t+'» aggiunto alla libreria ('+done[0].s+' scene).\nVuoi aprirlo ora?'))openScript(done[0].id)}
   else alert(done.length+' copioni aggiunti alla libreria.');
 });
 function closeExp(){const m=$('expMenu');if(m)m.remove()}
@@ -4477,26 +4537,19 @@ bn.addEventListener('click',e=>{
   if(n==='tools'){det.open=true;det.scrollIntoView({block:'start'})}
 });
 libInit();
-/* --- tema "Bordeaux moderno": voce nel selettore e predefinito se non ne hai scelto uno --- */
-if(typeof THEME_CLASSES!=='undefined'){
-  THEME_CLASSES.push('theme-bordeaux');
-  const panel=$('styleTogglePanel');
-  if(panel){
-    const o=document.createElement('button');o.className='style-option';o.dataset.theme='theme-bordeaux';
-    o.innerHTML='<span class="style-swatch" style="background:#F6F4F2;border-left:14px solid #8A1E3E;"></span>Bordeaux moderno';
-    o.addEventListener('click',()=>{applyStyleTheme('theme-bordeaux');storageSet('copione:stile','theme-bordeaux');panel.classList.remove('open')});
-    panel.insertBefore(o,panel.children[1]);
-    const v=panel.querySelector('.style-option[data-theme=""]');if(v)[...v.childNodes].forEach(n=>{if(n.nodeType===3)n.textContent=n.textContent.replace(' (predefinito)','')});
-  }
-  storageGet('copione:stile').then(v=>applyStyleTheme(v==null?'theme-bordeaux':(THEME_CLASSES.includes(v)?v:''))).catch(()=>applyStyleTheme('theme-bordeaux'));
-}
+/* --- un solo tema: chiaro "Bordeaux moderno" (niente altri stili, niente tema scuro) --- */
+(function(){const c=document.body.classList,L=['theme-manoscritto','theme-palco','theme-piazza','dark-mode'];
+  const f=()=>{L.forEach(k=>{if(c.contains(k))c.remove(k)});if(!c.contains('theme-bordeaux'))c.add('theme-bordeaux')};
+  f();new MutationObserver(f).observe(document.body,{attributes:true,attributeFilter:['class']});})();
+if(typeof applyStyleTheme==='function')applyStyleTheme=function(){};
 setTimeout(showDash,350);
-Object.assign(P,{chev:'M6 9l6 6 6-6',max:'M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3',layoutR:'M3 3h18v18H3zM15 3v18',chevL:'M15 18l-6-6 6-6',chevR:'M9 18l6-6-6-6',pin:'M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'});
+Object.assign(P,{chev:'M6 9l6 6 6-6',max:'M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3',layoutR:'M3 3h18v18H3zM15 3v18',chevL:'M15 18l-6-6 6-6',chevR:'M9 18l6-6-6-6',camera:'M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z',network:'M12 7v5M12 12l-6 5M12 12l6 5M14 5a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM8 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0zM20 19a2 2 0 1 1-4 0 2 2 0 0 1 4 0z',bulb:'M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2z',printer:'M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z',stop:'M6 6h12v12H6z',up:'M18 15l-6-6-6 6',ret:'M20 4v7a4 4 0 0 1-4 4H4M9 10l-5 5 5 5',pin:'M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11zM12 12a2 2 0 1 0 0-4 2 2 0 0 0 0 4z'});
 window.__ui={ico:ico,LOGO:LOGO,showDash:showDash,hideDash:hideDash};
 })();
 </script>
 
 <style id="pro-css">
+#btnDarkMode,#btnStile,#styleTogglePanel{display:none!important}
 #proBar,#proNav,.pro-logo,#rightPanel,#proCrumb,#proFoot,#proSideHead,#proQuick{display:none}
 body.pro header{display:flex;align-items:center;gap:20px;padding:8px 22px;min-height:62px}
 body.pro .brand{order:1;gap:0}
@@ -4558,7 +4611,7 @@ body.pro #rightPanel{display:flex;width:360px;flex-shrink:0;flex-direction:colum
 .rp-pane{display:none;flex:1;min-height:0;overflow-y:auto;padding:14px}.rp-pane.on{display:block}
 .rp-search{display:flex;align-items:center;gap:8px;padding:0 12px;height:38px;background:#fff;border:1px solid #E6E2DE;border-radius:10px;margin-bottom:12px;color:var(--grigio)}
 .rp-search input{flex:1;border:none;outline:none;background:none;font:13px Inter,sans-serif;color:var(--inchiostro)}
-body.pro #rpPersList #panel-personaggi{display:block!important;padding:0;overflow:visible}
+body.pro aside #panel-personaggi{display:none!important}
 #rpDet label,#rpNote label{display:block;font:600 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--grigio);margin:14px 0 6px}
 #rpDet label:first-child,#rpNote label:first-child{margin-top:0}
 #rpDet textarea,#rpNote textarea{width:100%;border:1px solid #E0DAD6;border-radius:10px;padding:10px 12px;font:13px/1.5 Inter,sans-serif;color:var(--inchiostro);background:#fff;resize:vertical;outline:none}
@@ -4582,7 +4635,7 @@ const MENUS=[
  {l:'Scrittura',i:'pen',go:()=>{U.hideDash();$('stage').scrollTop=0}},
  {l:'Personaggi',i:'users',go:()=>rpTab('pers')},
  {l:'Analisi',i:'chart',items:[['btnStatsAvanzate','chart'],['btnQualita','check'],['btnEntrateUscite','users']]},
- {l:'',i:'sliders',end:1,items:[['btnStile','palette'],['btnDarkMode','moon'],['btnRehearsal','play']]},
+ {l:'',i:'play',end:1,tip:'Modalità prova e lettura',go:()=>{const o=$('btnRehearsal');o&&o.click()}},
  {l:'Pubblicazione',i:'upload',items:[['btnAnteprima','eye'],['btnPDF','pdf'],['btnLivePreview','monitor'],['btnPdfSettings','sliders'],0,['btnOutline','grid'],['btnSides','file'],['btnEsportaLettura','eye'],0,['btnFountain','file'],['btnEsporta','file'],['btnCopia','copy'],['btnEsportaProgetto','save']]}
 ];
 const nav=document.createElement('nav');nav.id='proNav';
@@ -4590,7 +4643,7 @@ const endBox=document.createElement('div');endBox.id='proEnd';
 const closeMenus=()=>nav.querySelectorAll('.pm.open').forEach(m=>m.classList.remove('open'));
 MENUS.forEach(m=>{
   const w=document.createElement('div');w.className='pw';
-  const b=document.createElement('button');b.className='pn'+(m.pri?' pri':'');b.innerHTML=ico(m.i)+(m.l?'<span>'+m.l+'</span>':'')+(m.items&&m.l?ico('chev'):'');if(!m.l)b.title='Impostazioni';w.appendChild(b);
+  const b=document.createElement('button');b.className='pn'+(m.pri?' pri':'');b.innerHTML=ico(m.i)+(m.l?'<span>'+m.l+'</span>':'')+(m.items&&m.l?ico('chev'):'');if(!m.l)b.title=m.tip||'';w.appendChild(b);
   if(m.items){
     const pm=document.createElement('div');pm.className='pm'+(m.end?' r':'');
     m.items.forEach(it=>{
@@ -4692,9 +4745,7 @@ const mq=window.matchMedia('(min-width:1000px)');
 function syncPro(){
   const on=mq.matches&&B.classList.contains('theme-bordeaux');
   B.classList.toggle('pro',on);
-  const pp=$('panel-personaggi');
-  if(on){if(pp.parentNode!==$('rpPersList'))$('rpPersList').appendChild(pp);pp.classList.add('active');refreshRight()}
-  else if(pp.parentNode!==aside){aside.appendChild(pp);const t=document.querySelector('.tab-btn.active');pp.classList.toggle('active',!!t&&t.dataset.tab==='personaggi')}
+  if(on)refreshRight();
 }
 new MutationObserver(syncPro).observe(B,{attributes:true,attributeFilter:['class']});
 mq.addEventListener?mq.addEventListener('change',syncPro):mq.addListener(syncPro);
@@ -4702,6 +4753,161 @@ mq.addEventListener?mq.addEventListener('change',syncPro):mq.addListener(syncPro
 new MutationObserver(()=>{$('proSave').textContent=$('saveState').textContent}).observe($('saveState'),{childList:true,characterData:true,subtree:true});
 const _rs=renderStage;renderStage=function(){const r=_rs.apply(this,arguments);try{if(B.classList.contains('pro'))refreshRight()}catch(e){}return r};
 syncPro();
+})();
+</script>
+
+<style id="ui-v3-css">
+/* finestre interne: card e icone coerenti */
+body.theme-bordeaux .modal{padding:26px 28px}
+body.theme-bordeaux .modal h2{font-family:'Inter',sans-serif;font-size:19px;font-weight:700;color:var(--inchiostro);letter-spacing:0}
+body.theme-bordeaux .modal .sub{color:var(--grigio)}
+body.theme-bordeaux .modal-close{background:var(--sipario);color:#fff;border:1px solid var(--sipario)}
+body.theme-bordeaux .qa-section,body.theme-bordeaux .stat-block{background:#FAF8F7;border:1px solid #E6E2DE;border-radius:14px;padding:14px 16px;margin:12px 0}
+body.theme-bordeaux .qa-section h3,body.theme-bordeaux .stat-block h3{font:600 14px Inter,sans-serif;color:var(--inchiostro);margin:0 0 8px}
+body.theme-bordeaux .qa-ok{color:#2F7D4F;background:#E7F3EA;border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+body.theme-bordeaux .version-item,body.theme-bordeaux .outline-row{background:#fff;border:1px solid #E6E2DE;border-radius:12px;padding:10px 12px;margin:8px 0}
+body.theme-bordeaux .outline-row:hover{border-color:#D9B8C2;background:#FBF3F5}
+body.theme-bordeaux .version-item .v-actions button{border-radius:8px}
+body.theme-bordeaux .eu-table{border-collapse:separate;border-spacing:0;border:1px solid #E6E2DE;border-radius:12px;overflow:hidden}
+body.theme-bordeaux .eu-table th{background:#F3E7EA;color:var(--sipario)}
+body.theme-bordeaux .diff-add{background:#E7F3EA}body.theme-bordeaux .diff-del{background:#FBE9EA}
+body.theme-bordeaux .modal input[type=text],body.theme-bordeaux .modal textarea,body.theme-bordeaux .modal select,body.theme-bordeaux .import-textarea{border:1px solid #E0DAD6;border-radius:10px}
+body.theme-bordeaux .empty-state{background:#FAF8F7;border:1px dashed #D9CFCB;border-radius:14px}
+svg.ei{width:1em;height:1em;vertical-align:-.15em;flex:none}
+/* personaggi: elenco e scheda */
+.pc-row{display:flex;align-items:center;gap:12px;width:100%;padding:10px 12px;border:none;border-radius:12px;background:none;cursor:pointer;text-align:left;color:var(--inchiostro)}
+.pc-row:hover{background:#F1ECEA}.pc-row.on{background:#EEDFE3}
+.pc-row svg.i{margin-left:auto;color:var(--grigio)}
+.pc-t{display:flex;flex-direction:column;min-width:0}.pc-t b{font:600 14px Inter,sans-serif}.pc-t small{font:12px Inter,sans-serif;color:var(--grigio)}
+.av{flex:none;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font:600 14px Inter,sans-serif}
+.av.lg{width:52px;height:52px;font-size:17px}
+.pc-empty{padding:18px 8px;color:var(--grigio);font:13px/1.5 Inter,sans-serif;text-align:center}
+.pc{margin-top:14px;background:#fff;border:1px solid #E6E2DE;border-radius:16px;padding:16px;box-shadow:var(--sh)}
+.pc-top{display:flex;align-items:center;gap:12px}
+.pc-id{flex:1;min-width:0}
+.pc-name{width:100%;border:none;outline:none;background:none;font:700 17px Inter,sans-serif;color:var(--inchiostro);padding:2px 0;border-bottom:1px solid transparent}
+.pc-name:focus{border-bottom-color:#D9B8C2}
+.pc-id small{font:12px Inter,sans-serif;color:var(--grigio)}
+.pc-ico{display:flex;gap:2px}
+.pc-ico button{width:32px;height:32px;border:none;background:none;border-radius:8px;color:var(--grigio);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.pc-ico button:hover{background:#F3E7EA;color:var(--sipario)}
+.pc-tabs{display:flex;gap:4px;margin:14px 0 4px;border-bottom:1px solid #E6E2DE}
+.pc-tabs button{border:none;background:none;padding:9px 12px;font:500 13px Inter,sans-serif;color:var(--grigio);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.pc-tabs button.on{color:var(--inchiostro);font-weight:600;border-bottom-color:var(--sipario)}
+.pf{display:grid;grid-template-columns:92px 1fr;gap:10px;align-items:start;padding:10px 0;border-bottom:1px solid #F0ECE9}
+.pf:last-of-type{border-bottom:none}
+.pf>label{font:13px Inter,sans-serif;color:var(--grigio);padding-top:7px}
+.pf input,.pf select,.pf textarea{width:100%;border:1px solid transparent;border-radius:8px;padding:7px 8px;font:13px/1.5 Inter,sans-serif;color:var(--inchiostro);background:none;outline:none;resize:vertical}
+.pf input:hover,.pf select:hover,.pf textarea:hover{border-color:#E6E2DE}
+.pf input:focus,.pf select:focus,.pf textarea:focus{border-color:#D9B8C2;background:#fff}
+.pf.col{grid-template-columns:1fr}.pf.col>label{padding-top:0}
+.pc-chips{display:flex;flex-wrap:wrap;gap:6px;padding-top:4px}
+.pc-chips span{background:#F3E7EA;color:var(--sipario);border-radius:999px;padding:3px 10px;font:500 12px Inter,sans-serif}
+.pc-full,.pc-add{margin-top:12px;width:100%;padding:10px;border:1px solid #E0DAD6;background:#fff;border-radius:10px;font:600 13px Inter,sans-serif;color:var(--inchiostro);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.pc-full:hover,.pc-add:hover{border-color:var(--sipario);color:var(--sipario)}
+.pc-rel{display:grid;grid-template-columns:1fr 1fr 32px;gap:8px;margin:8px 0}
+.pc-rel select,.pc-rel input{border:1px solid #E0DAD6;border-radius:8px;padding:7px 8px;font:13px Inter,sans-serif;color:var(--inchiostro);background:#fff;min-width:0}
+.pc-rel button{border:none;background:none;color:var(--grigio);cursor:pointer;border-radius:8px}
+.pc-rel button:hover{background:#FBE9EA;color:#B3261E}
+.pc-hint{color:var(--grigio);font:13px/1.5 Inter,sans-serif;padding:8px 0}
+.pc-bar{display:flex;gap:8px;margin-top:12px}.pc-bar button{flex:1}
+</style>
+<script id="ui-v3">
+(function(){
+const U=window.__ui,$=id=>document.getElementById(id),ico=U.ico;
+const esc=s=>(s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* --- 1) emoji residue -> icone coerenti, anche nei contenuti creati dopo --- */
+const EM={'✕':'x','📝':'pen','✎':'pen','📷':'camera','🔎':'search','🔍':'search','🕸️':'network','💡':'bulb','🖨️':'printer','👁️':'eye','📁':'folder','💾':'save','🗂️':'grid','🕘':'clock','🎭':'play','🔊':'vol','🔈':'vol','⏹':'stop','📖':'book','✓':'check','✅':'check','↑':'up','↓':'chev','↵':'ret'};
+const KEYS=Object.keys(EM).sort((a,b)=>b.length-a.length);
+function mini(n){return ico(n).replace('class="i"','class="ei"')}
+function iconify(root){
+  if(!root||root.nodeType!==1&&root.nodeType!==11)return;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null),todo=[];
+  while(w.nextNode()){const t=w.currentNode,par=t.parentNode;
+    if(!par||/^(SCRIPT|STYLE|TEXTAREA|OPTION|TITLE)$/.test(par.nodeName))continue;
+    const s=t.nodeValue.replace(/^\s+/,'');
+    if(KEYS.some(k=>s.startsWith(k)))todo.push(t)}
+  todo.forEach(t=>{
+    const s=t.nodeValue.replace(/^\s+/,''),k=KEYS.find(k=>s.startsWith(k));if(!k)return;
+    const sp=document.createElement('span');sp.className='eic';sp.style.display='inline-flex';sp.innerHTML=mini(EM[k]);
+    const rest=s.slice(k.length);
+    const f=document.createDocumentFragment();f.appendChild(sp);if(rest.trim())f.appendChild(document.createTextNode(' '+rest.replace(/^\s+/,'')));
+    t.parentNode.replaceChild(f,t);
+  });
+}
+let pend=new Set(),raf=0;
+function flush(){raf=0;const a=[...pend];pend.clear();a.forEach(iconify)}
+new MutationObserver(ms=>{ms.forEach(m=>m.addedNodes.forEach(n=>{if(n.nodeType===1)pend.add(n)}));if(!raf)raf=requestAnimationFrame(flush)}).observe(document.body,{childList:true,subtree:true});
+iconify(document.body);
+/* --- 4) personaggi: elenco + scheda con Scheda / Relazioni / Note --- */
+const host=$('rpPersList');if(!host)return;
+host.innerHTML='<div id="rpPcList"></div><div id="rpPcCard"></div><div class="pc-bar"><button class="pc-add" data-pa="add">'+ico('plus')+'Nuovo personaggio</button><button class="pc-add" data-pa="diag">'+ico('network')+'Relazioni</button></div>';
+let sel=null,tab='scheda',q='',lastLen=0;
+const chr=id=>play.characters.find(c=>c.id===id);
+const ini=n=>(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+function acts(p){return play.acts.filter(a=>a.scenes.some(s=>(s.presentCharacters||[]).includes(p.name)||s.blocks.some(b=>b.character===p.name))).map(a=>a.title)}
+function renderList(){
+  if(!chr(sel))sel=play.characters[0]?play.characters[0].id:null;
+  const qq=q.toLowerCase();
+  $('rpPcList').innerHTML=play.characters.filter(c=>!qq||(c.name||'').toLowerCase().includes(qq)).map(c=>'<button class="pc-row'+(c.id===sel?' on':'')+'" data-pc="'+c.id+'"><span class="av" style="background:'+esc(c.color||'#8A1E3E')+'">'+esc(ini(c.name))+'</span><span class="pc-t"><b>'+esc(c.name)+'</b><small>'+esc(c.role||'Ruolo non indicato')+'</small></span>'+ico('chevR')+'</button>').join('')||'<div class="pc-empty">Nessun personaggio trovato.</div>';
+}
+function renderCard(){
+  const p=chr(sel),box=$('rpPcCard');
+  if(!p){box.innerHTML='';return}
+  const roles=ROLE_OPTIONS.slice();if(p.role&&!roles.includes(p.role))roles.push(p.role);
+  let body='';
+  if(tab==='scheda'){
+    const ac=acts(p);
+    body='<div class="pf"><label>Età</label><input data-pf="age" value="'+esc(p.age)+'"></div>'
+     +'<div class="pf"><label>Ruolo</label><select data-pf="role"><option value="">—</option>'+roles.map(r=>'<option'+(r===p.role?' selected':'')+'>'+esc(r)+'</option>').join('')+'</select></div>'
+     +'<div class="pf"><label>Attore</label><input data-pf="actor" value="'+esc(p.actor)+'" placeholder="chi lo interpreta"></div>'
+     +'<div class="pf col"><label>Descrizione</label><textarea rows="3" data-pf="desc" placeholder="Età, ruolo, cosa vuole…">'+esc(p.desc)+'</textarea></div>'
+     +'<div class="pf"><label>In scena in</label><div class="pc-chips">'+(ac.length?ac.map(a=>'<span>'+esc(a)+'</span>').join(''):'<small style="color:var(--grigio)">Non ancora in scena</small>')+'</div></div>'
+     +'<button class="pc-full" data-pa="sheet">'+ico('pen')+'Scheda completa</button>';
+  }else if(tab==='rel'){
+    const others=play.characters.filter(c=>c.id!==p.id),rels=p.relationships||[];
+    body=(rels.map((r,i)=>'<div class="pc-rel"><select data-rs="'+i+'"><option value="">— chi —</option>'+others.map(o=>'<option value="'+o.id+'"'+(r.targetId===o.id?' selected':'')+'>'+esc(o.name)+'</option>').join('')+'</select><input data-rl="'+i+'" value="'+esc(r.label)+'" placeholder="es. madre di, rivale di"><button data-rd="'+i+'" title="Rimuovi">'+ico('x')+'</button></div>').join('')||'<div class="pc-hint">Nessuna relazione ancora.</div>')
+     +'<button class="pc-full" data-ra="1"'+(others.length?'':' disabled')+'>'+ico('plus')+'Aggiungi relazione</button>';
+  }else{
+    body='<div class="pf col"><label>Retroscena e note per l\'attore</label><textarea rows="5" data-pf="backstory" placeholder="Motivazioni, storia pregressa…">'+esc(p.backstory)+'</textarea></div>'
+     +'<div class="pf col"><label>Note di regia (private)</label><textarea rows="5" data-pf="directorNotes" placeholder="Indicazioni di regia sul personaggio…">'+esc(p.directorNotes)+'</textarea></div>';
+  }
+  box.innerHTML='<div class="pc"><div class="pc-top"><span class="av lg" style="background:'+esc(p.color||'#8A1E3E')+'">'+esc(ini(p.name))+'</span><div class="pc-id"><input class="pc-name" data-pf="name" value="'+esc(p.name)+'"><small>'+esc(p.role||'Ruolo non indicato')+'</small></div><div class="pc-ico"><button data-pa="filter" title="Mostra solo le scene con questo personaggio">'+ico('search')+'</button><button data-pa="del" title="Elimina personaggio">'+ico('trash')+'</button></div></div><div class="pc-tabs"><button data-pt="scheda" class="'+(tab==='scheda'?'on':'')+'">Scheda</button><button data-pt="rel" class="'+(tab==='rel'?'on':'')+'">Relazioni</button><button data-pt="note" class="'+(tab==='note'?'on':'')+'">Note</button></div>'+body+'</div>';
+}
+function renderAllPc(){renderList();renderCard()}
+const orig=(sel_,id)=>document.querySelector('#panel-personaggi '+sel_.replace('$',id));
+host.addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;const p=chr(sel);
+  if(b.dataset.pc){sel=b.dataset.pc;renderAllPc();return}
+  if(b.dataset.pt){tab=b.dataset.pt;renderCard();return}
+  if(b.dataset.ra&&p){(p.relationships=p.relationships||[]).push({targetId:'',label:''});scheduleSave();renderCard();return}
+  if(b.dataset.rd!==undefined&&p){p.relationships.splice(Number(b.dataset.rd),1);scheduleSave();renderCard();return}
+  const a=b.dataset.pa;if(!a)return;
+  let o=null;
+  if(a==='add')o=$('addPers');
+  else if(a==='diag')o=$('btnDiagrammaRelazioni');
+  else if(p&&a==='del')o=orig('[data-del-pers="$"]',p.id);
+  else if(p&&a==='filter')o=orig('[data-filter-pers="'+(p.name||'').replace(/"/g,'&quot;')+'"]','');
+  else if(p&&a==='sheet')o=orig('[data-open-pers="$"]',p.id);
+  if(o)o.click();
+});
+host.addEventListener('input',e=>{
+  const p=chr(sel);if(!p)return;const t=e.target;
+  if(t.dataset.pf){const f=t.dataset.pf;
+    if(f==='name'){renameCharacterEverywhere(p,t.value);renderStage()}else p[f]=t.value;
+    scheduleSave();if(f==='name'||f==='role'){renderList();const s=host.querySelector('.pc-id small');if(s)s.textContent=p.role||'Ruolo non indicato'}
+    return}
+  if(t.dataset.rs!==undefined){p.relationships[Number(t.dataset.rs)].targetId=t.value;scheduleSave();return}
+  if(t.dataset.rl!==undefined){p.relationships[Number(t.dataset.rl)].label=t.value;scheduleSave()}
+});
+$('rpPersQ').addEventListener('input',e=>{q=e.target.value.trim();renderList()});
+const _rp=renderPersonaggi;
+renderPersonaggi=function(){
+  const r=_rp.apply(this,arguments);
+  const n=play.characters.length;if(lastLen>0&&n>lastLen)sel=play.characters[n-1].id;lastLen=n;
+  renderList();const ae=document.activeElement;if(!(ae&&host.contains(ae)&&/INPUT|TEXTAREA|SELECT/.test(ae.tagName)))renderCard();
+  return r};
+lastLen=play.characters.length;renderAllPc();
 })();
 </script>
 
