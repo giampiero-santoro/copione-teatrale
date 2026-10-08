@@ -1,183 +1,206 @@
-# Guida a Editor di Copioni
+# Guida all'uso — Copione, editor per il teatro
 
-Guida pratica all'uso di **Editor di Copioni**. Se cerchi informazioni generali sul progetto, vedi [`README.md`](./README.md).
+Questa guida accompagna dalla prima apertura fino all'esportazione del copione. Per una panoramica e per la pubblicazione su GitHub vedi il [README](README.md).
 
-## Indice
-
-1. [Primo avvio](#1-primo-avvio)
-2. [Creare un nuovo copione](#2-creare-un-nuovo-copione)
-3. [Struttura: atti, scene e blocchi](#3-struttura-atti-scene-e-blocchi)
-4. [Personaggi](#4-personaggi)
-5. [Diagramma delle relazioni](#5-diagramma-delle-relazioni)
-6. [Personaggi in scena e lettura mirata](#6-personaggi-in-scena-e-lettura-mirata)
-7. [Modalità prova e sintesi vocale](#7-modalità-prova-e-sintesi-vocale)
-8. [Statistiche e piano di scena](#8-statistiche-e-piano-di-scena)
-9. [Esportazione: PDF, testo, fountain, lettura HTML](#9-esportazione-pdf-testo-fountain-lettura-html)
-10. [QR code in copertina](#10-qr-code-in-copertina)
-11. [Salvataggio e dove va a finire il tuo lavoro](#11-salvataggio-e-dove-va-a-finire-il-tuo-lavoro)
-12. [Progetto: esportazione, importazione, versioni](#12-progetto-esportazione-importazione-versioni)
-13. [Aspetto: temi grafici e layout](#13-aspetto-temi-grafici-e-layout)
-14. [Scorciatoie da tastiera](#14-scorciatoie-da-tastiera)
+**Indice**
+1. [Primi passi](#1-primi-passi)
+2. [Orientarsi nella schermata](#2-orientarsi-nella-schermata)
+3. [Scrivere il copione](#3-scrivere-il-copione)
+4. [I personaggi](#4-i-personaggi)
+5. [Dettagli e note di ogni scena](#5-dettagli-e-note-di-ogni-scena)
+6. [La libreria e la pagina iniziale](#6-la-libreria-e-la-pagina-iniziale)
+7. [Salvare e non perdere il lavoro](#7-salvare-e-non-perdere-il-lavoro)
+8. [Importare](#8-importare)
+9. [Esportare e stampare](#9-esportare-e-stampare)
+10. [Analisi del copione](#10-analisi-del-copione)
+11. [Cercare e sostituire](#11-cercare-e-sostituire)
+12. [Aspetto e comodità](#12-aspetto-e-comodità)
+13. [Smartphone](#13-smartphone)
+14. [Scorciatoie](#14-scorciatoie)
 15. [Domande frequenti](#15-domande-frequenti)
 
 ---
 
-## 1. Primo avvio
+## 1. Primi passi
 
-Apri `index.html` in un browser. Non serve creare un account: l'app parte già pronta all'uso, con un piccolo copione di esempio la prima volta che la apri, così puoi farti un'idea della struttura prima di iniziare il tuo.
+1. Apri l'editor: https://giampiero-santoro.github.io/copione-teatrale/
+2. All'avvio compare la domanda **«Dove vuoi salvare questo copione?»**:
+   - **Collega un file sul mio computer** — consigliato: il copione viene salvato in un vero file (disponibile nei browser Chrome ed Edge da computer).
+   - **Solo salvataggio automatico nel browser** — comodo, ma i dati si perdono se svuoti la cache o cambi dispositivo.
+3. Dai un titolo all'opera e scrivi il tuo nome come autore, in alto.
+4. Crea la prima scena e inizia a scrivere.
 
-L'interfaccia è divisa in tre zone:
+> **Regola d'oro:** anche se usi il salvataggio automatico, tieni sempre una copia in un file (`File → Scegli dove salvare` oppure `Pubblicazione → Salva progetto (.json)`).
 
-- **Barra laterale** (sinistra): due schede, *Struttura* (atti e scene) e *Personaggi*.
-- **Area centrale**: la scena attualmente aperta, mostrata come una pagina di copione.
-- **Barra in alto**: titolo del copione, pulsanti di esportazione e impostazioni.
+## 2. Orientarsi nella schermata
 
-## 2. Creare un nuovo copione
+Su uno schermo largo, con lo stile **Bordeaux moderno**, l'editor è diviso in tre pannelli.
 
-Per iniziare un lavoro completamente nuovo, usa **"🆕 Nuovo copione"**. Ti verrà chiesta conferma, perché questa azione sostituisce quello attualmente aperto nella pagina.
-
-Il nuovo copione parte **vuoto**: nessun personaggio, nessun atto già presente. Dovrai creare tu il primo atto (pulsante **"+ Nuovo atto"** nella barra laterale) e la prima scena.
-
-> 💡 Se vuoi conservare il lavoro attuale prima di iniziarne uno nuovo, usa prima **"Salva progetto (.json)"** (vedi [sezione 12](#12-progetto-esportazione-importazione-versioni)).
-
-## 3. Struttura: atti, scene e blocchi
-
-Nella scheda **Struttura** della barra laterale trovi l'elenco di atti e scene. Ogni scena è composta da **blocchi**, di tre tipi:
-
-- **Didascalia** — descrizione dell'azione scenica, sempre in corsivo nel PDF.
-- **Battuta** — il nome del personaggio seguito dal testo che dice.
-- **Fuori scena** — una battuta pronunciata da un personaggio non visibile sul palco.
-
-Mentre scrivi il nome di un personaggio in una battuta, l'editor lo riconosce automaticamente e lo aggiunge, se non esiste già, all'elenco dei personaggi.
-
-Ogni scena ha anche dei campi propri: titolo, ambientazione, note di regia, stato (es. "Bozza" / "Definitiva").
-
-## 4. Personaggi
-
-Nella scheda **Personaggi** trovi l'elenco completo. Aprendo la scheda di un personaggio puoi compilare:
-
-- **Ruolo drammaturgico**: Protagonista, Deuteragonista, Antagonista, Confidente, Comprimario, Caratterista, Aiutante, Coro, Voce narrante, Comparsa.
-- Descrizione, età, aspetto fisico, costume, oggetti di scena, foto.
-- Relazioni con altri personaggi (es. "madre di", "rivale di"), usate anche per generare il diagramma delle relazioni.
-
-Questi campi non sono obbligatori, ma più li compili più diventano utili le statistiche, il PDF "Personaggi" (dramatis personae) e il diagramma delle relazioni.
-
-## 5. Diagramma delle relazioni
-
-Dal pulsante dedicato nella scheda Personaggi si apre un diagramma generato automaticamente dalle relazioni inserite: i personaggi sono disposti lungo il perimetro di un quadrato, con le frecce delle relazioni etichettate direttamente lungo la linea.
-
-Puoi scaricarlo come:
-- **SVG** — immagine vettoriale, modificabile con un editor grafico.
-- **PDF** — pronto per la stampa, dimensionato esattamente sul diagramma.
-
-## 6. Personaggi in scena e lettura mirata
-
-In cima a ogni scena trovi i chip con i nomi dei personaggi, sotto l'etichetta *"Personaggi in scena"*. Selezionandone uno o più:
-
-- la scena mostra **solo** le battute dei personaggi selezionati (utile per isolare le battute di un attore durante una prova);
-- le didascalie restano sempre visibili, perché non appartengono a un singolo personaggio.
-
-Il chip **"TUTTI"** azzera la selezione e torna a mostrare tutto. Il pulsante **"rileva dai dialoghi"** seleziona automaticamente tutti i personaggi che effettivamente parlano in quella scena.
-
-## 7. Modalità prova e sintesi vocale
-
-Il pulsante **🎭** attiva la **modalità prova**: i campi di testo diventano di sola lettura, per evitare modifiche accidentali mentre reciti o dirigi, e alcuni controlli di modifica vengono nascosti.
-
-Se le prove si svolgono con il cast non al completo, il pulsante **"🔊 leggi le battute degli assenti"** (accanto ai chip "Personaggi in scena") fa leggere ad alta voce, con la sintesi vocale del browser, tutte le battute dei personaggi **non** selezionati come presenti in quella scena — così gli attori presenti possono provare le proprie battute con le risposte "recitate" dal computer. Premi di nuovo il pulsante (diventa "⏹ interrompi lettura") per fermarla in ogni momento.
-
-> Richiede un browser con supporto alla sintesi vocale (la maggior parte dei browser desktop e mobile moderni la supportano).
-
-## 8. Statistiche e piano di scena
-
-**"📊 Statistiche"** mostra:
-- tempo di lettura stimato per ciascun atto (e totale);
-- grafico a barre del bilanciamento delle battute tra i personaggi;
-- elenco aggregato di oggetti di scena e costumi, raccolto dalle schede dei personaggi.
-
-**"🎭 Piano scene"** mostra una tabella con i personaggi sulle righe e le scene sulle colonne: un pallino indica in quali scene compare ciascun personaggio (basato sui chip "Personaggi in scena", o — se non li hai impostati — dedotto automaticamente da chi parla in quella scena).
-
-## 9. Esportazione: PDF, testo, fountain, lettura HTML
-
-Dalla barra in alto:
-
-- **"Esporta PDF" / "👁️ Anteprima PDF"** — il copione completo, con copertina, indice e pagina "Personaggi".
-- **"📄 Per personaggio"** — un PDF ridotto con solo le battute di un personaggio scelto, utile per le prove individuali.
-- **"Esporta .txt"** — il testo semplice del copione.
-- **"Esporta .fountain"** — formato standard aperto per sceneggiature, leggibile da altri programmi compatibili (es. per un futuro adattamento cinematografico/televisivo).
-- **"👁️ Copia di lettura (HTML)"** — un file HTML statico e di sola lettura, con lo stesso aspetto grafico dell'app, pensato per essere condiviso via email o chat con attori e collaboratori che non devono modificare nulla.
-
-Formato pagina e margini del PDF si impostano da **"⚙️ Impostazioni PDF"** (A4 o Letter; margini normali, stretti o ampi).
-
-## 10. QR code in copertina
-
-Se pubblichi il tuo copione anche online (ad esempio su un sito, un Google Drive condiviso, o via GitHub Pages), puoi compilare il campo **"Link alla versione digitale"** in "⚙️ Impostazioni PDF": da quel momento, la copertina del PDF completo mostrerà un QR code che rimanda a quell'indirizzo, comodo per chi ha il copione stampato in mano e vuole aprire rapidamente la versione digitale sul telefono.
-
-> Il QR code punta all'indirizzo che inserisci tu: l'app non pubblica né ospita nulla in autonomia.
-
-## 11. Salvataggio e dove va a finire il tuo lavoro
-
-Editor di Copioni salva **automaticamente** ogni modifica nel browser che stai usando (localStorage). Questo significa che:
-
-- il lavoro resta sul dispositivo/browser in cui hai scritto;
-- se cambi computer, o cancelli i dati di navigazione del browser, il salvataggio automatico locale va perso.
-
-Per un salvataggio più solido, hai due alternative (dal menù di salvataggio in alto):
-
-- **"📁 Collega un file sul mio computer"** — collega un file reale sul disco, che viene aggiornato automaticamente mentre scrivi.
-- **"📁 Scegli dove salvare"** / **"Salva progetto (.json)"** — esporta manualmente un file di backup completo del progetto.
-
-> 💡 Consiglio: anche se usi il salvataggio automatico nel browser, esporta periodicamente un `.json` di backup — è l'unico modo per portare il lavoro su un altro dispositivo o recuperarlo in caso di problemi col browser.
-
-## 12. Progetto: esportazione, importazione, versioni
-
-- **"Salva progetto (.json)"** — scarica l'intero copione (testo, personaggi, impostazioni) in un unico file.
-- **"Importa progetto"** — carica un file `.json` precedentemente esportato. Se il copione attualmente aperto contiene già del lavoro, ti viene chiesto se vuoi salvarlo prima di sostituirlo.
-- **"🕘 Versioni"** — cronologia delle versioni salvate nel tempo. Per ogni versione puoi:
-  - **Ripristina** — torna a quella versione (sovrascrive il copione attuale);
-  - **Confronta** — mostra un confronto riga per riga tra quella versione salvata e il copione attuale (righe rosse: solo nella versione salvata; righe verdi: solo nel copione attuale);
-  - **Elimina** — rimuove quella versione salvata.
-
-## 13. Aspetto: temi grafici e layout
-
-Il pulsante **🎨** apre la scelta tra quattro temi grafici:
-
-| Tema | Atmosfera |
+| Zona | Cosa contiene |
 |---|---|
-| Velluto & oro | Il tema predefinito, ispirato al teatro all'italiana |
-| Manoscritto d'archivio | Sobrio, ispirato ai copioni da regia annotati a macchina |
-| Palcoscenico contemporaneo | Scuro, minimale, con un accento ambra |
-| Carta di piazza | Caldo e popolare, ispirato alle locandine dei teatranti girovaghi |
+| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Personaggi · Analisi · Pubblicazione** e, a destra, il menu con l'icona dei cursori (**Stile grafico, Tema scuro, Modalità prova**) |
+| **Barra strumenti** | Nuovo copione, Apri, Salva, Annulla, Ripristina, Cerca, Struttura, dimensione del testo (A− A A+), Zoom e stato del salvataggio |
+| **Sinistra** | **Struttura del copione**: albero di atti e scene, ricerca rapida, navigazione rapida |
+| **Centro** | Il foglio del copione, con il percorso «Atto › Scena» sopra |
+| **Destra** | Schede **Personaggi**, **Note di regia**, **Dettagli scena** |
+| **In basso** | Percorso, larghezza del testo, interlinea, carattere e schermo intero |
 
-Il pulsante **🌙** attiva/disattiva un tema scuro indipendente, che puoi combinare con qualsiasi tema grafico.
+**Nascondere i pannelli.** Il pulsante accanto al «+» di *Struttura del copione* nasconde il menu di sinistra; il pulsante in fondo alle schede nasconde il pannello di destra. Quando un pannello è nascosto compare una piccola linguetta sul bordo dello schermo: cliccala per riaprirlo.
 
-Il pulsante **▦** permette di mostrare/nascondere intestazione, barra laterale e barra inferiore, per avere più spazio quando scrivi. **A＋ / A－** regolano la dimensione del testo.
+> Sugli altri stili grafici e sugli schermi stretti (telefoni, tablet in verticale) il layout è quello classico con menu laterale e barra inferiore. Vedi [Smartphone](#13-smartphone).
 
-## 14. Scorciatoie da tastiera
+## 3. Scrivere il copione
 
-| Scorciatoia | Azione |
+### Atti e scene
+- Nella struttura a sinistra usa **«+ Aggiungi atto»** per creare un atto; il «+» accanto a ogni atto aggiunge una **scena**.
+- Clicca una scena per aprirla; clicca il nome per rinominare atti e scene.
+- Ogni scena ha una **riga del luogo** (es. «Cucina, sera»), subito sotto il titolo.
+
+### I blocchi di testo
+In fondo alla scena (e nei pulsanti flottanti) trovi tre tipi di blocco:
+
+| Blocco | A cosa serve |
 |---|---|
-| `Ctrl/Cmd + S` | Forza il salvataggio immediato |
-| `Ctrl/Cmd + Invio` | Aggiunge rapidamente una nuova battuta nella scena aperta |
-| `Ctrl/Cmd + Z` | Annulla l'ultima modifica |
-| `Ctrl/Cmd + Maiusc + Z` (o `Ctrl/Cmd + Y`) | Ripete la modifica annullata |
+| **Battuta** | Nome del personaggio (in maiuscolo) + testo detto |
+| **Didascalia** | Indicazioni di scena: azioni, movimenti, luci |
+| **Fuori scena** | Voci o rumori che arrivano da fuori dal palco |
+
+Altri strumenti:
+- Sopra ogni battuta puoi aggiungere una **nota tra parentesi** (es. *«sorridendo»*) e una didascalia dopo la battuta.
+- Passando il mouse su un blocco compaiono le frecce per spostarlo su o giù e il comando per eliminarlo.
+- **`Ctrl/Cmd + Invio`** aggiunge subito una nuova battuta.
+
+### Annullare un errore
+`Ctrl/Cmd + Z` annulla, `Ctrl/Cmd + Maiusc + Z` ripristina (anche i pulsanti *Annulla* e *Ripristina* nella barra strumenti).
+
+## 4. I personaggi
+
+- Nel pannello di destra, scheda **Personaggi**, trovi l'elenco; il campo in alto filtra per nome.
+- Ogni personaggio ha **colore**, nome, ruolo e una **scheda completa**: età, descrizione, foto e **relazioni** con gli altri personaggi.
+- L'icona del filtro mostra **solo le battute** di quel personaggio nella scena.
+- Quando scrivi una battuta scegli il personaggio dall'elenco: il nome compare sempre in maiuscolo.
+
+## 5. Dettagli e note di ogni scena
+
+Nel pannello di destra:
+
+- **Dettagli scena**
+  - **Stato**: *Bozza*, *Da rivedere* o *Definitiva* (il pallino colorato compare anche nella struttura a sinistra).
+  - **Descrizione** della scena e **Scenografia e oggettistica**.
+  - **Personaggi in scena**: seleziona chi c'è; «rileva dai dialoghi» li imposta in automatico. Alimenta il *Piano di scena*.
+- **Note di regia**: appunti **privati** (luci, movimenti, idee). **Non** vengono incluse nelle esportazioni per gli attori.
+
+## 6. La libreria e la pagina iniziale
+
+La **Pagina iniziale** si apre dal pulsante in alto a sinistra (o da *File → Pagina iniziale*, o dal pulsante «Inizio» su telefono). Contiene:
+
+- il **logo** e la tua **libreria**: ogni copione è un libro su uno scaffale, con titolo, autore, atti, scene e minuti stimati;
+- il riepilogo del **copione aperto** (scene, personaggi, parole, minuti) con le azioni rapide e l'elenco delle scene.
+
+Sui libri puoi:
+- **Aprire** un copione cliccandolo (quello in uso viene messo da parte automaticamente);
+- **Esportare** (icona di download): *Fountain* o *Progetto .json*;
+- **Duplicare** (icona copia) per fare una variante;
+- **Eliminare** (icona cestino, con conferma — l'operazione non si può annullare).
+
+I due «libri» tratteggiati iniziali servono a creare un **Nuovo copione** e a **Importare un copione** da file.
+
+> La libreria vive nel browser che stai usando. Telefono e computer hanno librerie separate: per spostare un copione esportalo e importalo di là.
+
+## 7. Salvare e non perdere il lavoro
+
+- **Salvataggio automatico**: avviene a ogni modifica; lo stato compare nella barra strumenti (es. «Tutte le modifiche salvate»).
+- **Salva subito**: `Ctrl/Cmd + S` o il pulsante *Salva*.
+- **Collegare un file** (*File → Scegli dove salvare*, solo Chrome/Edge da computer): il copione viene scritto anche su un file del tuo computer.
+- **Progetto `.json`** (*Pubblicazione → Salva progetto*): copia completa, funziona su qualunque browser.
+- **Versioni** (*File → Versioni*): salva una **istantanea** con un nome, tornaci quando vuoi e **confronta** con il copione attuale (righe rosse = solo nella versione salvata, verdi = solo nell'attuale).
+
+> Le versioni sono comuni a tutti i copioni della libreria: nell'elenco compaiono tutte, anche quelle di altri titoli.
+
+## 8. Importare
+
+| Cosa | Come |
+|---|---|
+| **Testo già scritto altrove** | *File → Importa testo*, incolla. Le righe in **MAIUSCOLO** diventano nomi di personaggio, le righe tra **(parentesi)** didascalie, il resto battute. Viene creata una **nuova scena** |
+| **Un copione come nuovo libro** | Nella Pagina iniziale: libro **«Importa copione»**. Accetta `.fountain`, `.txt` e `.json`, anche più file insieme. Non tocca il copione aperto |
+| **Aggiungere un file Fountain al copione aperto** | *File → Aggiungi da .fountain* |
+| **Sostituire il copione aperto con un progetto** | *File → Sostituisci da .json* |
+
+Dai file `.fountain` titolo e autore vengono letti dall'intestazione; i personaggi sono ricavati dai nomi in maiuscolo delle battute.
+
+## 9. Esportare e stampare
+
+Tutto nel menu **Pubblicazione**:
+
+- **Anteprima PDF** e **Anteprima live** (il PDF si aggiorna accanto al copione mentre scrivi).
+- **Esporta PDF**: copione completo.
+- **Impostazioni PDF**: formato (**A4** o **Letter**), **margini** (normali, stretti, ampi per annotazioni a mano) e **copyright** facoltativo.
+- **Per personaggio**: PDF con tutte le battute di un attore e le battute-imbeccata (cue) degli altri, ideale per studiare la parte.
+- **Insieme**: vista d'insieme del copione.
+- **Copia di lettura (HTML)**: versione di sola lettura da condividere.
+- **Esporta `.fountain`**, **Esporta `.txt`**, **Copia testo**, **Salva progetto `.json`**.
+
+> Il `.fountain` mantiene testo e struttura. Le **schede dei personaggi** e le **note di regia** si conservano solo nel `.json`.
+
+## 10. Analisi del copione
+
+Nel menu **Analisi**:
+- **Statistiche**: tempo di lettura per atto, bilanciamento delle battute tra i personaggi, oggetti di scena.
+- **Qualità**: una scansione rapida per non dimenticare nulla prima di stampare.
+- **Piano scene**: chi è presente in ogni scena (basato su «Personaggi in scena» o, se non impostato, su chi parla).
+
+Nella *Navigazione rapida* a sinistra trovi anche l'accesso veloce al Piano scene.
+
+## 11. Cercare e sostituire
+
+- **Ricerca rapida** (campo nel menu di sinistra, `Ctrl/Cmd + K`): scrivi almeno due lettere e vedi scene, personaggi e battute; un clic ti porta al punto.
+- **Cerca e sostituisci** (barra strumenti): sostituisce il testo in **tutto il copione** — battute, didascalie, note, nomi di personaggi e scene, note di regia — con l'opzione *Distingui maiuscole/minuscole*.
+
+## 12. Aspetto e comodità
+
+- **Stile grafico** (menu con l'icona dei cursori → *Stile grafico*): *Bordeaux moderno*, *Velluto & oro*, *Manoscritto d'archivio*, *Palcoscenico contemporaneo*, *Carta di piazza*. La scelta resta memorizzata.
+- **Tema scuro / chiaro** dallo stesso menu.
+- **Modalità prova e lettura**: nasconde gli strumenti di modifica per leggere il copione come una pagina pulita.
+- **Foglio**: dalla barra in basso regola **larghezza del testo**, **interlinea** e **carattere**; dalla barra strumenti dimensione (A− A A+) e **Zoom**. Il pulsante in basso a destra attiva lo **schermo intero**.
+
+## 13. Smartphone
+
+Sotto circa 1000 pixel di larghezza l'editor usa un layout semplificato:
+- barra in basso con **Inizio**, **Struttura**, **Personaggi** e **Strumenti**;
+- il menu laterale si apre come un cassetto, con struttura e personaggi in due schede;
+- le finestre salgono dal basso come pannelli;
+- pulsanti *Battuta / Didascalia / Fuori scena* sempre a portata di pollice.
+
+## 14. Scorciatoie
+
+| Tasti | Azione |
+|---|---|
+| `Ctrl/Cmd + S` | Salva subito |
+| `Ctrl/Cmd + Invio` | Nuova battuta |
+| `Ctrl/Cmd + Z` | Annulla |
+| `Ctrl/Cmd + Maiusc + Z` / `Ctrl/Cmd + Y` | Ripristina |
+| `Ctrl/Cmd + K` | Ricerca rapida |
+| `Esc` | Chiude la finestra aperta |
 
 ## 15. Domande frequenti
 
-**Devo installare qualcosa?**
-No. Basta un browser. Nessun account, nessun server.
+**Ho svuotato la cache e il copione è sparito.**
+Il salvataggio automatico vive nella memoria del browser. Se avevi collegato un file o salvato un `.json`, riaprilo con *File → Apri* / *Importa copione*. Per il futuro tieni sempre una copia su file.
 
-**I miei dati vengono inviati da qualche parte?**
-No: tutto resta nel tuo browser, salvo le librerie esterne (jsPDF, il generatore di QR code, i font) caricate da CDN pubblici la prima volta che ti servono, e solo se hai una connessione internet attiva in quel momento.
+**Non vedo «Collega un file sul mio computer».**
+Questa funzione esiste solo su Chrome ed Edge da computer. Altrove usa *Salva progetto (.json)* e importalo quando serve.
 
-**Posso usarlo da tablet?**
-Sì, l'interfaccia è ottimizzata anche per schermi touch.
+**Sul telefono non vedo i tre pannelli.**
+È voluto: lo schermo è stretto e l'editor usa il layout a cassetto. I tre pannelli compaiono da circa 1000 pixel di larghezza, con lo stile *Bordeaux moderno*.
 
-**Posso scrivere in team, con altre persone contemporaneamente?**
-No: è uno strumento locale, pensato per un autore/una autrice alla volta. Per condividere il lavoro con altri, usa "Esporta progetto (.json)" o la "Copia di lettura (HTML)".
+**Un copione aperto da .fountain ha perso le schede dei personaggi.**
+Il formato Fountain non le contiene. Per copiare tutto usa il `.json`.
 
-**Ho perso il lavoro cambiando browser: si può recuperare?**
-Solo se avevi esportato un backup `.json` in precedenza, o collegato un file locale. Per questo è consigliato farlo periodicamente (vedi [sezione 11](#11-salvataggio-e-dove-va-a-finire-il-tuo-lavoro)).
+**Come passo un copione dal telefono al computer?**
+Dal libro in libreria: *esporta → Progetto (.json)*, invialo a te stesso, poi sul computer *Importa copione* dalla Pagina iniziale.
 
----
+**Il carattere del foglio sembra diverso.**
+I caratteri vengono caricati da Google Fonts: senza connessione l'editor usa caratteri di riserva. Puoi cambiarlo dalla barra in basso.
 
-Per domande o segnalazioni, apri una *Issue* sulla repository GitHub del progetto.
+**Ho trovato un problema.**
+Apri una *Issue* nel repository GitHub indicando browser, dispositivo e i passaggi per riprodurlo.

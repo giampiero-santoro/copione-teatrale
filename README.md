@@ -1,102 +1,120 @@
-# ✦ Editor di Copioni
+# Copione — Editor per il teatro
 
-**Editor di Copioni** è uno strumento gratuito, open source e completamente offline per scrivere, organizzare e stampare copioni teatrali. È pensato per compagnie amatoriali, scuole e cooperative teatrali che hanno bisogno di uno strumento pratico, senza account, senza cloud e senza costi.
+Un editor di copioni teatrali che funziona direttamente nel browser, in **un solo file HTML**: niente installazione, niente account, niente server. Scrivi atti, scene, battute e didascalie, gestisci i personaggi, esporti in PDF e in formato Fountain.
 
-Sviluppato da **Giampiero Santoro** per **Clan Destino**.
+Creato da **Giampiero Santoro — Clan Destino**.
 
-> 📖 Per la guida completa all'uso, vedi [`GUIDA.md`](./GUIDA.md).
+**▶ Provalo online:** https://giampiero-santoro.github.io/copione-teatrale/
+
+> 📖 Per l'uso passo per passo vedi la [**Guida all'uso**](GUIDA.md).
 
 ---
 
-## Perché questo progetto
+## Cosa puoi fare
 
-La maggior parte degli editor di testo non è pensata per un copione: non gestisce bene i nomi dei personaggi, non separa didascalie e battute, non calcola quanto parla ciascun personaggio, non genera un PDF con l'impaginazione giusta. I software di sceneggiatura professionali, dall'altra parte, sono pensati per il cinema, sono a pagamento o richiedono un account online.
+**Scrivere**
+- Struttura in **atti e scene**, con luogo e momento di ogni scena.
+- Tre tipi di blocco: **battuta**, **didascalia**, **voce fuori scena**, più note tra parentesi.
+- **Personaggi** con scheda (età, ruolo, descrizione, relazioni, foto, colore) e filtro per vedere solo le loro battute.
+- Dettagli di scena: stato (bozza / da rivedere / definitiva), descrizione, scenografia, personaggi in scena, **note di regia private**.
+- Annulla/ripristina, cerca e sostituisci su tutto il copione, ricerca rapida (`Ctrl+K`).
 
-Editor di Copioni nasce per colmare questo spazio: **un solo file HTML**, senza installazione, che gira interamente nel browser e salva tutto in locale.
+**Organizzare**
+- **Libreria** dei copioni nella pagina iniziale, a scaffali, con logo, statistiche e scene.
+- **Versioni**: salva istantanee del copione e confrontale con quello attuale.
+- Salvataggio automatico nel browser e, dove supportato, **collegamento a un file** sul tuo computer.
 
-## Caratteristiche principali
+**Importare ed esportare**
+- Importa: testo incollato, file `.fountain`, progetti `.json`.
+- Esporta: **PDF** (A4 o Letter, margini regolabili), anteprima PDF anche **in tempo reale**, **copione per personaggio** (le sue battute con le battute-imbeccata), copia di lettura HTML, `.fountain`, `.txt`, progetto `.json`.
 
-**Scrittura**
-- Struttura in atti, scene e blocchi (didascalie, battute, voci fuori scena)
-- Riconoscimento automatico dei nomi dei personaggi mentre scrivi
-- Importazione di testo incollato e di file `.fountain`
-- Cerca e sostituisci nel testo del copione
-- Annulla/ripeti (`Ctrl+Z` / `Ctrl+Y`)
-- Salvataggio automatico nel browser, con possibilità di collegare un file locale o un servizio cloud
+**Analizzare**
+- Statistiche avanzate (tempo di lettura per atto, bilanciamento delle battute).
+- Controllo qualità prima di stampare.
+- Piano di scena: chi c'è in ogni scena.
+- Vista d'insieme con anteprima di tutte le scene.
 
-**Personaggi**
-- Schede complete: ruolo drammaturgico, descrizione, età, aspetto fisico, costume, oggetti di scena, foto
-- Diagramma delle relazioni tra personaggi (esportabile in SVG o PDF)
-- Filtro "Personaggi in scena": mostra solo le battute dei personaggi selezionati
+**Lavorare comodi**
+- Cinque **stili grafici** (tra cui *Bordeaux moderno*) e **tema scuro**.
+- Layout a tre pannelli su schermi larghi (menu in alto, struttura a sinistra, personaggi e dettagli a destra), con pannelli nascondibili.
+- Versione ottimizzata per **smartphone**, con barra di navigazione in basso.
+- **Modalità prova/lettura** per leggere il copione senza gli strumenti di modifica.
 
-**Regia e prove**
-- Modalità prova/lettura, con campi di sola lettura per non modificare il testo per errore
-- Piano di scena: tabella che mostra in quali scene compare ogni personaggio
-- Lettura ad alta voce (sintesi vocale) delle battute dei personaggi assenti, per le prove a organico ridotto
-- Statistiche avanzate: tempo di lettura stimato per atto, bilanciamento delle battute tra personaggi, elenco aggregato di oggetti di scena e costumi
-
-**Esportazione**
-- PDF completo del copione, con copertina, indice, pagina "Personaggi" e numerazione pagine
-- PDF "ridotto" per singolo personaggio (solo le sue battute, per le prove)
-- Esportazione in `.txt` e `.fountain`
-- Copia di lettura in HTML statico, di sola lettura, condivisibile col cast
-- QR code opzionale in copertina, che rimanda a una versione digitale del copione online
-
-**Personalizzazione**
-- Quattro temi grafici selezionabili (incluso un tema scuro)
-- Dimensione del testo regolabile
-- Layout adattabile: mostra/nascondi intestazione, barra laterale, barra inferiore
-- Ottimizzato anche per tablet e uso touch
-
-**Progetto e versioni**
-- Esportazione/importazione dell'intero progetto in `.json`
-- Cronologia delle versioni salvate, con confronto (diff) tra una versione salvata e il copione attuale
+---
 
 ## Come si usa
 
-Non serve installare nulla:
+### Online
+Apri il link qui sopra. Non serve altro.
 
-1. Scarica il file `index.html` da questa repository (o clona la repository).
-2. Aprilo con un doppio clic in un browser moderno (Chrome, Firefox, Safari, Edge).
-3. Inizia a scrivere: il copione viene salvato automaticamente nel browser.
+### In locale
+1. Scarica `index.html` (pulsante *Raw* → *Salva con nome*, oppure clona il repository).
+2. Aprilo con un doppio clic nel browser.
 
-Se preferisci accedervi da qualsiasi dispositivo tramite un link, puoi pubblicare la repository con **GitHub Pages** (Impostazioni → Pages → seleziona il branch) e usare l'URL generato.
+### Pubblicarlo con GitHub Pages
+1. Carica `index.html` nella radice del repository (o in una cartella).
+2. Vai su **Settings → Pages**.
+3. In *Build and deployment* scegli **Deploy from a branch**, seleziona il branch `main` e la cartella `/ (root)`.
+4. Dopo un minuto il sito è disponibile su `https://<utente>.github.io/<repository>/`.
 
-> ⚠️ Il salvataggio automatico è legato al browser e al dispositivo in uso. Per portare il lavoro su un altro computer, o per fare un backup sicuro, usa **"Salva progetto (.json)"** e conserva il file. Per un salvataggio ancora più solido, collega un file locale tramite **"📁 Collega un file sul mio computer"**.
+Per aggiornare l'editor basta sostituire `index.html` e fare commit.
 
-## Requisiti tecnici
+---
 
-- Un browser moderno con supporto a JavaScript (nessuna estensione richiesta)
-- Connessione internet solo per: caricare i caratteri Google Fonts, generare il QR code opzionale, ed esportare in PDF (le librerie sono caricate da CDN)
-- Nessun server, nessun database, nessun account
+## I tuoi dati
 
-## Struttura del progetto
+- **Tutto resta sul tuo dispositivo.** Il copione non viene inviato a nessun server.
+- Il salvataggio automatico usa la memoria del browser (`localStorage`). Svuotare la cache o i dati del sito, o cambiare browser/dispositivo, significa perdere i copioni salvati in questo modo.
+- **Per sicurezza salva sempre anche un file:** *File → Scegli dove salvare* (browser basati su Chromium) oppure *Pubblicazione → Salva progetto (.json)*.
+- La libreria è **per browser**: telefono e computer hanno librerie diverse. Per spostare un copione usa l'esportazione `.json` e poi *Importa copione*.
 
-Il progetto è deliberatamente un **singolo file HTML autonomo** (`index.html`), che contiene markup, stile e logica applicativa. Questa scelta è intenzionale: rende il progetto facile da scaricare, aprire, modificare e distribuire, anche per chi non ha esperienza di sviluppo web.
+## Compatibilità
+
+| Funzione | Chrome / Edge | Safari / Firefox | Telefono |
+|---|---|---|---|
+| Scrittura, esportazioni, importazioni | ✅ | ✅ | ✅ |
+| Collegare un file sul computer (salvataggio diretto) | ✅ | ❌ (si usa *Salva progetto .json*) | ❌ |
+| Layout a tre pannelli | ✅ (da ~1000 px di larghezza) | ✅ | layout dedicato |
+
+Serve una connessione per caricare i caratteri di Google Fonts e una piccola libreria per i QR code (`qrcodejs`); senza connessione l'editor funziona comunque con caratteri di riserva.
+
+## Scorciatoie da tastiera
+
+| Tasti | Azione |
+|---|---|
+| `Ctrl/Cmd + S` | Salva subito |
+| `Ctrl/Cmd + Invio` | Aggiunge una nuova battuta nella scena |
+| `Ctrl/Cmd + Z` | Annulla |
+| `Ctrl/Cmd + Maiusc + Z` oppure `Ctrl/Cmd + Y` | Ripristina |
+| `Ctrl/Cmd + K` | Ricerca rapida (scene, personaggi, battute) |
+| `Esc` | Chiude la finestra aperta |
+
+## Formati
+
+| Formato | Importa | Esporta | Contenuto |
+|---|---|---|---|
+| **Progetto `.json`** | ✅ | ✅ | Tutto: testo, schede personaggio, note di regia, impostazioni |
+| **Fountain `.fountain`** | ✅ | ✅ | Titolo, autore, atti (`#`), scene (`##`), didascalie, battute. *Non* contiene schede personaggio né note di regia |
+| **Testo `.txt`** | ✅ (incolla) | ✅ | Solo testo. Importando: righe in MAIUSCOLO = personaggi, righe tra (parentesi) = didascalie |
+| **PDF** | — | ✅ | Copione completo o per personaggio |
+| **HTML di lettura** | — | ✅ | Copia di sola lettura |
+
+## Struttura del repository
 
 ```
-.
-├── index.html      # l'intera applicazione
-├── README.md        # questo file
-└── GUIDA.md          # guida utente completa, in italiano
+├── index.html     # l'intero editor (HTML + CSS + JavaScript)
+├── README.md      # questo file
+└── GUIDA.md       # guida all'uso
 ```
 
-## Librerie di terze parti utilizzate
-
-Caricate via CDN, nessuna installazione richiesta:
-
-- [jsPDF](https://github.com/parallax/jsPDF) — generazione dei file PDF
-- [qrcode.js](https://github.com/davidshimjs/qrcodejs) — generazione del QR code opzionale in copertina
-- [Google Fonts](https://fonts.google.com/) — Playfair Display, Courier Prime, Inter, Space Grotesk
+L'editor è volutamente un unico file: per modificarlo basta un editor di testo e per distribuirlo basta copiarlo.
 
 ## Contribuire
 
-Segnalazioni di bug, richieste di funzionalità e correzioni sono benvenute tramite le *Issue* e le *Pull Request* di questa repository.
+Segnalazioni e idee sono benvenute: apri una *Issue* descrivendo cosa hai fatto, cosa ti aspettavi e cosa è successo (indica anche browser e dispositivo).
 
-## Licenza
+## Licenza e crediti
 
-Questo progetto è distribuito come software libero. Se intendi riutilizzarlo o adattarlo, cita l'autore originale.
+Autore: **Giampiero Santoro — Clan Destino**.
 
-## Crediti
-
-Creato da **Giampiero Santoro** per **Clan Destino**.
+Licenza: *da definire*. Se vuoi permettere ad altri di usare e modificare il progetto, aggiungi un file `LICENSE` (ad esempio MIT) al repository.
