@@ -28,7 +28,7 @@ Questa guida accompagna dalla prima apertura fino all'esportazione del copione. 
    - **Collega un file sul mio computer** — consigliato: il copione viene salvato in un vero file (disponibile nei browser Chrome ed Edge da computer).
    - **Solo salvataggio automatico nel browser** — comodo, ma i dati si perdono se svuoti la cache o cambi dispositivo.
 3. Dai un titolo all'opera e scrivi il tuo nome come autore, in alto.
-4. Crea la prima scena e inizia a scrivere.
+4. Crea la prima scena e inizia a scrivere. Quando qualcosa è ancora vuoto (copione, scena, atto, elenco dei personaggi) l'editor te lo segnala con un messaggio e un pulsante per cominciare: «Crea la prima scena», «Battuta / Didascalia / Fuori scena», «Aggiungi il primo personaggio».
 
 > **Regola d'oro:** anche se usi il salvataggio automatico, tieni sempre una copia in un file (`File → Scegli dove salvare` oppure `Pubblicazione → Salva progetto (.json)`).
 
@@ -52,7 +52,9 @@ Su uno schermo largo l'editor è diviso in tre pannelli.
 ## 3. Scrivere il copione
 
 ### Atti e scene
-- Nella struttura a sinistra usa **«+ Aggiungi atto»** per creare un atto; il «+» accanto a ogni atto aggiunge una **scena**.
+- Nella struttura a sinistra usa **«Aggiungi atto»** per creare un atto e **«Aggiungi scena»** per aggiungere una scena all'atto in cui stai lavorando (il «+» accanto a ogni atto fa lo stesso su quell'atto).
+- Ogni atto ha una **freccia** per comprimerlo o espanderlo e un numero che indica quante scene contiene. Lo stato (atti compressi o aperti) resta memorizzato; l'atto della scena aperta si riapre da solo.
+- Il **pallino a destra di ogni scena** indica lo stato: passandoci sopra leggi *Bozza*, *Da rivedere* o *Definitiva*.
 - Clicca una scena per aprirla; clicca il nome per rinominare atti e scene.
 - Ogni scena ha una **riga del luogo** (es. «Cucina, sera»), subito sotto il titolo.
 
@@ -94,13 +96,14 @@ Nel pannello di destra:
   - **Stato**: *Bozza*, *Da rivedere* o *Definitiva* (il pallino colorato compare anche nella struttura a sinistra).
   - **Descrizione** della scena e **Scenografia e oggettistica**.
   - **Personaggi in scena**: seleziona chi c'è; «rileva dai dialoghi» li imposta in automatico. Alimenta il *Piano di scena*.
+  - **Leggi le battute degli assenti**: una voce sintetica italiana legge le battute dei personaggi **non** segnati come presenti, così puoi provare la tua parte da solo. Dipende dal browser (funziona nei principali; se non è disponibile compare un avviso). Un secondo clic interrompe la lettura.
 - **Note di regia**: appunti **privati** (luci, movimenti, idee). **Non** vengono incluse nelle esportazioni per gli attori.
 
 ## 6. La libreria e la pagina iniziale
 
 La **Pagina iniziale** si apre dal pulsante in alto a sinistra (o da *File → Pagina iniziale*, o dal pulsante «Inizio» su telefono). Contiene:
 
-- il **logo** e la tua **libreria**: ogni copione è un libro su uno scaffale, con titolo, autore, atti, scene e minuti stimati;
+- il **logo** e la tua **libreria**: ogni copione è un libro su uno scaffale, con titolo, autore, atti, scene, minuti stimati e data dell'ultima modifica. Sopra lo scaffale puoi **cercare** per titolo o autore e **ordinare** per ultima modifica, titolo o lunghezza;
 - il riepilogo del **copione aperto** (scene, personaggi, parole, minuti) con le azioni rapide e l'elenco delle scene.
 
 Sui libri puoi:
@@ -121,7 +124,19 @@ I due «libri» tratteggiati iniziali servono a creare un **Nuovo copione** e a 
 - **Progetto `.json`** (*Pubblicazione → Salva progetto*): copia completa, funziona su qualunque browser.
 - **Versioni** (*File → Versioni*): salva una **istantanea** con un nome, tornaci quando vuoi e **confronta** con il copione attuale (righe rosse = solo nella versione salvata, verdi = solo nell'attuale).
 
-> Le versioni sono comuni a tutti i copioni della libreria: nell'elenco compaiono tutte, anche quelle di altri titoli.
+> Le versioni sono **separate per ogni copione**: nell'elenco vedi solo quelle del copione aperto, e il titolo in alto ti ricorda di quale. Eliminando un copione dalla libreria si eliminano anche le sue versioni. Le versioni create prima di questo aggiornamento sono state assegnate al copione che avevi aperto la prima volta che hai aperto l'elenco.
+
+### Backup di tutta la libreria
+
+Nella **Pagina iniziale**, sotto la libreria, c'è il riquadro **Backup della libreria** (lo trovi anche in *File → Backup di tutta la libreria*):
+
+- **Scarica il backup**: salva un unico file `Copioni_backup_AAAA-MM-GG.json` con **tutti i copioni** e le loro **versioni**. Conservalo fuori dal browser (computer, cloud, chiavetta).
+- **Ripristina da file**: scegli un file di backup; i copioni vengono aggiunti alla libreria. Quelli già presenti non vengono duplicati, e il copione aperto non viene toccato. Puoi usare lo stesso pulsante anche per importare un solo copione (`.json` o `.fountain`).
+- **Promemoria**: se sono passati 7 giorni dall'ultimo backup (o dal primo utilizzo) il riquadro diventa rosato e ti avvisa. «Più tardi» lo rimanda di 3 giorni.
+
+### Due schede aperte
+
+Se apri l'editor in due schede e modifichi il copione in una, l'altra mostra una barra in alto e **mette in pausa il salvataggio** per non sovrascrivere le modifiche. Scegli *Ricarica la pagina* per vedere la versione più recente, oppure *Continua qui* se vuoi che questa scheda prevalga.
 
 ## 8. Importare
 
@@ -140,7 +155,7 @@ Tutto nel menu **Pubblicazione**:
 
 - **Anteprima PDF** e **Anteprima live** (il PDF si aggiorna accanto al copione mentre scrivi).
 - **Esporta PDF**: copione completo.
-- **Impostazioni PDF**: formato (**A4** o **Letter**), **margini** (normali, stretti, ampi per annotazioni a mano) e **copyright** facoltativo.
+- **Impostazioni PDF**: formato (**A4** o **Letter**), **margini** (normali, stretti, ampi per annotazioni a mano), **copyright** facoltativo, link con QR code e l'opzione **Mostra il logo Clan Destino nella copertina** (attiva di default).
 - **Per personaggio**: PDF con tutte le battute di un attore e le battute-imbeccata (cue) degli altri, ideale per studiare la parte.
 - **Insieme**: vista d'insieme del copione.
 - **Copia di lettura (HTML)**: versione di sola lettura da condividere.
@@ -165,7 +180,14 @@ Nella *Navigazione rapida* a sinistra trovi anche l'accesso veloce al Piano scen
 ## 12. Aspetto e comodità
 
 - **Aspetto**: l'editor ha un solo tema, chiaro e moderno (carta bianca, accento bordeaux, copione in carattere con le grazie).
-- **Modalità prova e lettura** (pulsante in alto a destra): nasconde gli strumenti di modifica per leggere il copione come una pagina pulita.
+- **Modalità prova** (pulsante in alto a destra): il foglio diventa di sola lettura e senza strumenti di modifica; cliccando una battuta la evidenzi come punto di lettura. Insieme a *Leggi le battute degli assenti* (vedi sotto) serve per provare la tua parte.
+- **Modalità studio** (icona con l'occhio barrato, accanto alla modalità prova): serve per **imparare la propria parte a memoria**.
+  1. Scegli il personaggio nella barra che compare sopra il foglio («Parte di…»).
+  2. Le sue battute si coprono con un riquadro che indica quante parole sono.
+  3. **Tocca una battuta**: al primo tocco vedi un **suggerimento** (l'iniziale di ogni parola, per esempio «N… è t… v…»); al secondo tocco la **rivela** per intero. Il piccolo occhio barrato in alto a destra la nasconde di nuovo.
+  4. **Rivela tutto** e **Nascondi tutto** agiscono sulla scena aperta. Con **Nascondi le altre** si coprono invece le battute degli altri personaggi, per provare le tue con la battuta di richiamo.
+  
+  Non modifica il copione: è solo una vista. Per uscire premi **Esci dallo studio**; aprire la modalità prova chiude lo studio.
 - **Foglio**: dalla barra in basso regola **larghezza del testo**, **interlinea** e **carattere**; dalla barra strumenti dimensione (A− A A+) e **Zoom**. Il pulsante in basso a destra attiva lo **schermo intero**.
 
 ## 13. Smartphone
@@ -175,6 +197,15 @@ Sotto circa 1000 pixel di larghezza l'editor usa un layout semplificato:
 - il menu laterale si apre come un cassetto, con struttura e personaggi in due schede;
 - le finestre salgono dal basso come pannelli;
 - pulsanti *Battuta / Didascalia / Fuori scena* sempre a portata di pollice.
+
+### Aggiungerlo come app
+
+L'editor ha un'icona (il logo Clan Destino) e può stare sulla schermata del telefono o del computer come una vera app, a schermo intero:
+
+- **Android / Chrome**: apri il menu del browser → *Installa app* (o *Aggiungi a schermata Home*). Su computer, in Chrome ed Edge, usa la voce **File → Installa come app** quando compare, o l'icona di installazione nella barra degli indirizzi.
+- **iPhone e iPad / Safari**: tocca il pulsante *Condividi* → *Aggiungi a Home*.
+
+> Funziona solo quando l'editor è aperto dall'indirizzo web (GitHub Pages), non dal file salvato sul computer. Serve ancora la connessione per aprirlo: non è un'app offline.
 
 ## 14. Scorciatoie
 
@@ -186,6 +217,16 @@ Sotto circa 1000 pixel di larghezza l'editor usa un layout semplificato:
 | `Ctrl/Cmd + Maiusc + Z` / `Ctrl/Cmd + Y` | Ripristina |
 | `Ctrl/Cmd + K` | Ricerca rapida |
 | `Esc` | Chiude la finestra aperta |
+
+### Uso da tastiera e accessibilità
+
+- **Tab** e **Maiusc + Tab** spostano da un comando all'altro; il comando attivo ha sempre un **contorno bordeaux** ben visibile. Il primo `Tab` dopo l'apertura offre il collegamento **«Vai al copione»**.
+- **Menu in alto**: `Invio` apre il menu, `↓` e `↑` scorrono le voci, `Esc` lo chiude e riporta il cursore sul pulsante.
+- **Scene a sinistra**: spostati sul titolo di una scena e premi `Invio` per aprirla.
+- **Finestre**: quando si aprono il cursore va al primo campo, `Tab` resta dentro la finestra, `Esc` la chiude e il cursore torna dove eri.
+- I pulsanti con sola icona e i campi hanno un nome leggibile dai **lettori di schermo**; lo stato delle scene (bozza, da rivedere, definitiva) viene letto a voce, non solo indicato dal colore.
+- Su **telefono e tablet** i pulsanti hanno un'area di tocco di almeno 44 pixel e i campi di testo sono abbastanza grandi da non far ingrandire la pagina.
+- Se il dispositivo ha attivato «riduci movimento», le animazioni si spengono; con «contrasto alto» bordi e testi grigi diventano più scuri.
 
 ## 15. Domande frequenti
 

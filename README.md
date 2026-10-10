@@ -20,13 +20,15 @@ Creato da **Giampiero Santoro — Clan Destino**.
 - Annulla/ripristina, cerca e sostituisci su tutto il copione, ricerca rapida (`Ctrl+K`).
 
 **Organizzare**
-- **Libreria** dei copioni nella pagina iniziale, a scaffali, con logo, statistiche e scene.
+- **Libreria** dei copioni nella pagina iniziale, a scaffali, con logo, ricerca, ordinamento e data dell'ultima modifica.
+- Struttura con **atti comprimibili** e indicatore dello stato di ogni scena.
 - **Versioni**: salva istantanee del copione e confrontale con quello attuale.
 - Salvataggio automatico nel browser e, dove supportato, **collegamento a un file** sul tuo computer.
+- **Backup dell'intera libreria** in un solo file (con le versioni), ripristino senza duplicati, **promemoria settimanale** e avviso se il copione è aperto in due schede.
 
 **Importare ed esportare**
 - Importa: testo incollato, file `.fountain`, progetti `.json`.
-- Esporta: **PDF** (A4 o Letter, margini regolabili), anteprima PDF anche **in tempo reale**, **copione per personaggio** (le sue battute con le battute-imbeccata), copia di lettura HTML, `.fountain`, `.txt`, progetto `.json`.
+- Esporta: **PDF** (A4 o Letter, margini regolabili, copertina con logo opzionale), anteprima PDF anche **in tempo reale**, **copione per personaggio** (le sue battute con le battute-imbeccata), copia di lettura HTML, `.fountain`, `.txt`, progetto `.json`.
 
 **Analizzare**
 - Statistiche avanzate (tempo di lettura per atto, bilanciamento delle battute).
@@ -38,7 +40,10 @@ Creato da **Giampiero Santoro — Clan Destino**.
 - Un unico aspetto **chiaro e moderno**: carta bianca, accento bordeaux e copione in carattere con le grazie.
 - Layout a tre pannelli su schermi larghi (menu in alto, struttura a sinistra, personaggi e dettagli a destra), con pannelli nascondibili.
 - Versione ottimizzata per **smartphone**, con barra di navigazione in basso.
+- **Installabile come app** sulla schermata Home di telefono e computer, con l'icona Clan Destino.
+- **Accessibile**: uso completo da tastiera, contorno di focus visibile, etichette per i lettori di schermo, contrasti elevati e bersagli di tocco ampi.
 - **Modalità prova/lettura** per leggere il copione senza gli strumenti di modifica.
+- **Modalità studio**: nasconde le battute di un personaggio, con suggerimento a iniziali e rivelazione a tocco, per imparare la parte a memoria.
 
 ---
 
