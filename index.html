@@ -5537,5 +5537,55 @@ if(grid){
 })();
 </script>
 
+<style id="pc-b">
+body.pro #rpPers.on{display:flex;flex-direction:column;overflow:hidden;padding-bottom:10px}
+body.pro #rpPers .rp-search{flex:none}
+body.pro #rpPersList{display:flex;flex-direction:column;min-height:0;flex:1}
+body.pro #rpPcList{flex:1 1 auto;overflow-y:auto}
+body.pro #rpPersList.pc-detail #rpPcList,body.pro #rpPersList.pc-detail .pc-bar,body.pro #rpPers:has(.pc-detail) .rp-search{display:none}
+body.pro #rpPcCard{flex:1 1 0;overflow-y:auto}
+body.pro #rpPersList:not(.pc-detail) #rpPcCard{display:none}
+.pc-nav{display:flex;align-items:center;gap:6px;margin:0 0 8px}
+.pc-nav .pc-back{display:inline-flex;align-items:center;gap:4px;border:none;background:none;color:var(--sipario);font:600 13px Inter,sans-serif;cursor:pointer;padding:6px 8px;border-radius:8px}
+.pc-nav .pc-back:hover{background:#F3E7EA}
+.pc-nav .pc-n{margin-left:auto;font:12px Inter,sans-serif;color:var(--grigio)}
+.pc-nav .pc-step{width:30px;height:30px;border:1px solid #E0DAD6;background:#fff;border-radius:8px;cursor:pointer;color:var(--inchiostro);display:flex;align-items:center;justify-content:center;padding:0}
+.pc-nav .pc-step:disabled{opacity:.35;cursor:default}
+</style>
+<script id="pc-b-js">
+(function(){
+var U=window.__ui,ico=U.ico,host=document.getElementById('rpPersList'),card=document.getElementById('rpPcCard');
+if(!host||!card)return;
+function rows(){return Array.prototype.slice.call(document.querySelectorAll('#rpPcList .pc-row'))}
+function nav(){
+  if(!host.classList.contains('pc-detail'))return;
+  if(card.querySelector('.pc-nav'))return;
+  var r=rows(),i=r.findIndex(function(x){return x.classList.contains('on')});
+  var d=document.createElement('div');d.className='pc-nav';
+  d.innerHTML='<button type="button" class="pc-back">'+ico('chevL')+'Personaggi</button><span class="pc-n">'+(i+1)+' / '+r.length+'</span><button type="button" class="pc-step" data-st="-1" aria-label="Personaggio precedente">'+ico('up')+'</button><button type="button" class="pc-step" data-st="1" aria-label="Personaggio successivo">'+ico('chev')+'</button>';
+  d.querySelector('[data-st="-1"]').disabled=i<=0;d.querySelector('[data-st="1"]').disabled=i>=r.length-1;
+  card.insertBefore(d,card.firstChild);
+}
+new MutationObserver(nav).observe(card,{childList:true});
+var lastCount=rows().length;
+new MutationObserver(function(){
+  var n=rows().length;
+  if(host.classList.contains('pc-detail')&&(n<lastCount||n===0))host.classList.remove('pc-detail');
+  lastCount=n;
+}).observe(document.getElementById('rpPcList'),{childList:true});
+host.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&host.classList.contains('pc-detail')&&!document.querySelector('.modal-overlay.open')){host.classList.remove('pc-detail');var s=document.querySelector('#rpPcList .pc-row.on');if(s)s.focus()}
+});
+host.addEventListener('click',function(e){
+  if(e.target.closest('[data-pa="add"]')){setTimeout(function(){host.classList.add('pc-detail');nav()},300);return}
+  var row=e.target.closest('.pc-row');
+  if(row){host.classList.add('pc-detail');setTimeout(nav,0);return}
+  if(e.target.closest('.pc-back')){host.classList.remove('pc-detail');var s=document.querySelector('#rpPcList .pc-row.on');if(s)s.scrollIntoView({block:'nearest'});return}
+  var st=e.target.closest('.pc-step');
+  if(st&&!st.disabled){var r=rows(),i=r.findIndex(function(x){return x.classList.contains('on')}),n=r[i+Number(st.dataset.st)];if(n)n.click()}
+});
+})();
+</script>
+
 </body>
 </html>

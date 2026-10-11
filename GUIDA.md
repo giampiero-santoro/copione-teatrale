@@ -79,13 +79,14 @@ Altri strumenti:
 
 Nel pannello di destra, scheda **Personaggi**:
 
-- **Elenco**: ogni personaggio ha un cerchio colorato con le iniziali, il nome e il ruolo. Il campo in alto filtra per nome. Cliccando un personaggio ne vedi la scheda sotto l'elenco.
-- **Scheda** con tre sezioni:
+- **Elenco**: ogni personaggio ha un cerchio colorato con le iniziali, il nome e il ruolo. Il campo in alto filtra per nome.
+- **Scheda**: cliccando un personaggio l'elenco lascia il posto alla sua scheda, che usa tutto il pannello (così si legge bene anche con tanti personaggi).
+  - In alto: **‹ Personaggi** (oppure `Esc`) torna all'elenco; il contatore (per esempio *3 / 10*) dice dove sei; le **frecce** passano al personaggio precedente o successivo senza tornare all'elenco.
   - **Scheda**: età, ruolo (scelto da un elenco), attore, descrizione e gli atti in cui il personaggio compare. Il pulsante **Scheda completa** apre tutti gli altri campi (aspetto, costume, voce, obiettivo, conflitto, foto, colore…).
-  - **Relazioni**: con chi è in rapporto e come (es. «madre di», «rivale di»). Il pulsante **Relazioni** in fondo apre il diagramma.
+  - **Relazioni**: con chi è in rapporto e come (es. «madre di», «rivale di»). Il pulsante **Relazioni** in fondo all'elenco apre il diagramma.
   - **Note**: retroscena per l'attore e note di regia private.
-- In alto nella scheda: la lente mostra **solo le scene** con quel personaggio, il cestino lo elimina (chiede conferma e rimuove anche le relazioni collegate).
-- **Nuovo personaggio** in fondo all'elenco lo aggiunge e lo seleziona.
+  - La lente mostra **solo le scene** con quel personaggio, il cestino lo elimina (chiede conferma, rimuove anche le relazioni collegate e riporta all'elenco).
+- **Nuovo personaggio** (in fondo all'elenco) lo aggiunge e apre subito la sua scheda.
 - Quando scrivi una battuta scegli il personaggio dall'elenco: il nome compare sempre in maiuscolo.
 
 ## 5. Dettagli e note di ogni scena

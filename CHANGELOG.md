@@ -14,6 +14,7 @@ Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento 
 
 ## Personaggi
 - Nuovo elenco con cerchi colorati e ruolo; scheda con tre sezioni (Scheda, Relazioni, Note) modificabile direttamente.
+- Con molti personaggi la scheda occupa tutto il pannello: si passa dall'elenco alla scheda e viceversa, con frecce per scorrere i personaggi e `Esc` per tornare indietro.
 
 ## Libreria e dati
 - **Più copioni** nella libreria: aprire, duplicare, eliminare, cercare, ordinare.
