@@ -6,7 +6,23 @@ Creato da **Giampiero Santoro — Clan Destino**.
 
 **▶ Provalo online:** https://giampiero-santoro.github.io/copione-teatrale/
 
-> 📖 Per l'uso passo per passo vedi la [**Guida all'uso**](GUIDA.md).
+> 📖 Per l'uso passo per passo vedi la [**Guida all'uso**](GUIDA.md). Le novità sono nell'[elenco delle modifiche](CHANGELOG.md).
+
+## Com'è fatto
+
+![L'editor su computer: struttura a sinistra, foglio al centro, personaggi a destra](docs/02-editor.png)
+
+| La pagina iniziale con la libreria | La modalità studio |
+|---|---|
+| ![Pagina iniziale con la libreria dei copioni a scaffali](docs/01-pagina-iniziale.png) | ![Modalità studio: le battute di un personaggio sono nascoste e si rivelano con un tocco](docs/03-modalita-studio.png) |
+
+<p>
+  <img src="docs/04-telefono-editor.png" alt="L'editor su telefono" width="260">
+  &nbsp;&nbsp;
+  <img src="docs/05-telefono-pagina-iniziale.png" alt="La pagina iniziale su telefono" width="260">
+</p>
+
+*Gli esempi usano testi di fantasia e titoli di opere di pubblico dominio.*
 
 ---
 
@@ -107,9 +123,11 @@ Serve una connessione per caricare i caratteri di Google Fonts e una piccola lib
 ## Struttura del repository
 
 ```
-├── index.html     # l'intero editor (HTML + CSS + JavaScript)
-├── README.md      # questo file
-└── GUIDA.md       # guida all'uso
+├── index.html      # l'intero editor (HTML + CSS + JavaScript)
+├── README.md       # questo file
+├── GUIDA.md        # guida all'uso
+├── CHANGELOG.md    # elenco delle modifiche
+└── docs/           # screenshot usati nel README
 ```
 
 L'editor è volutamente un unico file: per modificarlo basta un editor di testo e per distribuirlo basta copiarlo.
@@ -118,8 +136,21 @@ L'editor è volutamente un unico file: per modificarlo basta un editor di testo 
 
 Segnalazioni e idee sono benvenute: apri una *Issue* descrivendo cosa hai fatto, cosa ti aspettavi e cosa è successo (indica anche browser e dispositivo).
 
-## Licenza e crediti
+## Licenza
+
+*Da definire.* Finché non viene aggiunto un file `LICENSE`, tutti i diritti sono riservati all'autore: il codice si può vedere, ma non riutilizzare o ridistribuire senza permesso.
+
+Il **logo e il nome «Clan Destino»** sono marchi della compagnia e non sono ceduti con il codice, qualunque licenza venga scelta.
+
+## Crediti
 
 Autore: **Giampiero Santoro — Clan Destino**.
 
-Licenza: *da definire*. Se vuoi permettere ad altri di usare e modificare il progetto, aggiungi un file `LICENSE` (ad esempio MIT) al repository.
+L'editor si appoggia a componenti di terzi, ciascuno con la propria licenza:
+
+| Componente | Uso | Licenza |
+|---|---|---|
+| [jsPDF](https://github.com/parallax/jsPDF) 2.5.1 | creazione dei PDF | MIT |
+| [qrcodejs](https://github.com/davidshimjs/qrcodejs) 1.0.0 | QR code nel PDF | MIT |
+| [Google Fonts](https://fonts.google.com): Inter, Playfair Display, Courier Prime, Space Grotesk, Noto Serif | caratteri | SIL Open Font License |
+| Icone lineari | interfaccia | disegnate a mano nello stile di [Lucide](https://lucide.dev) / [Feather](https://feathericons.com) (licenze ISC / MIT) |

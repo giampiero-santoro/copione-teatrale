@@ -4560,7 +4560,7 @@ function shelfHtml(){
   if(!LIB.length)h+='<div class="bk-slot bk-none"><span>Qui compariranno i tuoi copioni, man mano che li salvi.</span></div>';
   if(!list.length&&LIB.length)h+='<div class="bk-slot bk-none"><span>Nessun copione trovato</span></div>';
   list.forEach(m=>{const cur=m.id===curId;
-    h+='<div class="bk-slot"><button class="bk'+(cur?' cur':'')+'" data-o="'+m.id+'" style="--c:'+covOf(m.id)+'" title="Apri «'+esc(m.title)+'»"><span class="bk-t">'+esc(m.title)+'</span><i></i><span class="bk-a">'+esc(m.author)+'</span><span class="bk-m">'+m.acts+' atti · '+m.scenes+' scene · ~'+Math.max(1,Math.round(m.words/250))+' min<br>'+fd(m.updated)+'</span>'+(cur?'<em>Aperto</em>':'')+'</button><div class="bk-ac"><button data-exp="'+m.id+'" aria-label="Esporta" title="Esporta">'+ico('download')+'</button><button data-dup="'+m.id+'" aria-label="Duplica" title="Duplica">'+ico('copy')+'</button><button data-del="'+m.id+'" aria-label="Elimina" title="Elimina">'+ico('trash')+'</button></div></div>';});
+    h+='<div class="bk-slot"><button class="bk'+(cur?' cur':'')+'" data-o="'+m.id+'" style="--c:'+covOf(m.id)+'" title="Apri «'+esc(m.title)+'»"><span class="bk-t">'+esc(m.title)+'</span><i></i><span class="bk-a">'+esc(m.author)+'</span><span class="bk-m">'+m.acts+' atti · '+m.scenes+' scene<br>~'+Math.max(1,Math.round(m.words/250))+'\u00a0min · '+fd(m.updated)+'</span>'+(cur?'<em>Aperto</em>':'')+'</button><div class="bk-ac"><button data-exp="'+m.id+'" aria-label="Esporta" title="Esporta">'+ico('download')+'</button><button data-dup="'+m.id+'" aria-label="Duplica" title="Duplica">'+ico('copy')+'</button><button data-del="'+m.id+'" aria-label="Elimina" title="Elimina">'+ico('trash')+'</button></div></div>';});
   return h;
 }
 
