@@ -38,9 +38,9 @@ Su uno schermo largo l'editor è diviso in tre pannelli.
 
 | Zona | Cosa contiene |
 |---|---|
-| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Personaggi · Analisi · Pubblicazione** e, a destra, il pulsante **Modalità prova e lettura** |
-| **Barra strumenti** | Nuovo copione, Apri, Salva, Annulla, Ripristina, Cerca, Struttura, dimensione del testo (A− A A+), Zoom e stato del salvataggio |
-| **Sinistra** | **Struttura del copione**: albero di atti e scene, ricerca rapida, navigazione rapida |
+| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Analisi · Pubblicazione** e, a destra, il pulsante **Modalità prova e lettura** |
+| **Barra strumenti** | Annulla, Ripristina, Cerca, dimensione del testo (A− A A+), Zoom e lo **stato del salvataggio** (la pillola verde: cliccala per salvare subito). Nuovo copione, apertura e salvataggio sono nel menu **File** |
+| **Sinistra** | **Struttura del copione**: albero di atti e scene e ricerca rapida |
 | **Centro** | Il foglio del copione, con il percorso «Atto › Scena» sopra |
 | **Destra** | Schede **Personaggi**, **Note di regia**, **Dettagli scena** |
 | **In basso** | Percorso, larghezza del testo, interlinea, carattere e schermo intero |
@@ -119,7 +119,7 @@ I due «libri» tratteggiati iniziali servono a creare un **Nuovo copione** e a 
 ## 7. Salvare e non perdere il lavoro
 
 - **Salvataggio automatico**: avviene a ogni modifica; lo stato compare nella barra strumenti (es. «Tutte le modifiche salvate»).
-- **Salva subito**: `Ctrl/Cmd + S` o il pulsante *Salva*.
+- **Salva subito**: `Ctrl/Cmd + S`, la pillola dello stato nella barra strumenti, oppure *File → Salva*.
 - **Collegare un file** (*File → Scegli dove salvare*, solo Chrome/Edge da computer): il copione viene scritto anche su un file del tuo computer.
 - **Progetto `.json`** (*Pubblicazione → Salva progetto*): copia completa, funziona su qualunque browser.
 - **Versioni** (*File → Versioni*): salva una **istantanea** con un nome, tornaci quando vuoi e **confronta** con il copione attuale (righe rosse = solo nella versione salvata, verdi = solo nell'attuale).
@@ -170,7 +170,6 @@ Nel menu **Analisi**:
 - **Qualità**: una scansione rapida per non dimenticare nulla prima di stampare.
 - **Piano scene**: chi è presente in ogni scena (basato su «Personaggi in scena» o, se non impostato, su chi parla).
 
-Nella *Navigazione rapida* a sinistra trovi anche l'accesso veloce al Piano scene.
 
 ## 11. Cercare e sostituire
 
@@ -247,6 +246,12 @@ Dal libro in libreria: *esporta → Progetto (.json)*, invialo a te stesso, poi 
 
 **Il carattere del foglio sembra diverso.**
 I caratteri vengono caricati da Google Fonts: senza connessione l'editor usa caratteri di riserva. Puoi cambiarlo dalla barra in basso.
+
+**Il copione è molto lungo: l'editor rallenta?**
+L'editor è pensato per copioni teatrali interi (decine di scene). Alcuni accorgimenti per tenerlo veloce:
+- Dividi in **scene di lunghezza ragionevole**: il foglio mostra una scena alla volta, quindi una scena da molte centinaia di battute si ridisegna più lentamente di tante scene brevi.
+- Con copioni molto grandi il numero di passi di **Annulla** si riduce da solo (fino a 8) per non riempire la memoria.
+- Il salvataggio automatico usa lo spazio del browser; se questo non basta (copione molto grande, tante versioni o foto) i dati vanno in automatico in un archivio più capiente del browser, senza che tu debba fare nulla. Il backup della libreria resta comunque consigliato.
 
 **Ho trovato un problema.**
 Apri una *Issue* nel repository GitHub indicando browser, dispositivo e i passaggi per riprodurlo.

@@ -4402,6 +4402,7 @@ async function libInit(){
 }
 function resetState(){fileHandle=null;filterCharacter=null;rehearsalMode=false;readingBlockId=null;undoStack=[];redoStack=[];$('fileLocLabel').textContent=''}
 async function stash(){
+  syncMeta();
   if(curId&&LIB.some(x=>x.id===curId)){const ok=await _ss(LK+curId,JSON.stringify(play));if(!ok)throw new Error('Lo spazio del browser è pieno: copione non spostato in libreria.')}
 }
 async function loadInto(raw,id){
@@ -4649,7 +4650,7 @@ body.pro #proBar{display:flex;align-items:center;gap:4px;padding:8px 22px;backgr
 .sp{width:1px;height:22px;background:#E6E2DE;margin:0 8px;flex-shrink:0}
 .tz{display:flex;align-items:center;gap:6px;font:12px Inter,sans-serif;color:var(--grigio);margin-left:6px}
 .tz select,#pfF{border:1px solid #E0DAD6;border-radius:8px;background:#fff;padding:5px 8px;font:500 12.5px Inter,sans-serif;color:var(--inchiostro)}
-.ps{margin-left:auto;background:#E7F3EA;color:#2F7D4F;padding:5px 14px;border-radius:999px;font:500 12px Inter,sans-serif;white-space:nowrap}
+.ps{border:none;cursor:pointer;margin-left:auto;background:#E7F3EA;color:#2F7D4F;padding:5px 14px;border-radius:999px;font:500 12px Inter,sans-serif;white-space:nowrap}
 body.pro .mini-stats,body.pro .side-tools-grid,body.pro .file-loc-label,body.pro .tabs{display:none!important}
 body.pro #panel-struttura{display:block!important}
 body.pro.pro-noside aside{display:none}
@@ -4710,7 +4711,6 @@ const logo=new Image();logo.className='pro-logo';logo.alt='Clan Destino';logo.sr
 const MENUS=[
  {l:'File',i:'file',pri:1,items:[['btnNuovoCopione','plus'],['btnFileLocale','folder'],['btnSalvaOra','save'],['btnVersioni','clock'],0,['btnImportaTesto','download'],['btnImportaProgetto','upload'],['btnImportaFountain','upload'],0,['btnHome','home'],['btnGuida','book']]},
  {l:'Scrittura',i:'pen',go:()=>{U.hideDash();$('stage').scrollTop=0}},
- {l:'Personaggi',i:'users',go:()=>rpTab('pers')},
  {l:'Analisi',i:'chart',items:[['btnStatsAvanzate','chart'],['btnQualita','check'],['btnEntrateUscite','users']]},
  {l:'',i:'play',end:1,tip:'Modalità prova e lettura',go:()=>{const o=$('btnRehearsal');o&&o.click()}},
  {l:'Pubblicazione',i:'upload',items:[['btnAnteprima','eye'],['btnPDF','pdf'],['btnLivePreview','monitor'],['btnPdfSettings','sliders'],0,['btnOutline','grid'],['btnSides','file'],['btnEsportaLettura','eye'],0,['btnFountain','file'],['btnEsporta','file'],['btnCopia','copy'],['btnEsportaProgetto','save']]}
@@ -4738,9 +4738,9 @@ document.addEventListener('click',closeMenus);
 header.appendChild(nav);header.appendChild(endBox);
 /* barra strumenti */
 const bar=document.createElement('div');bar.id='proBar';
-bar.innerHTML='<button class="tb pri" data-c="btnNuovoCopione">'+ico('plus')+'Nuovo copione</button><button class="tb" data-c="btnFileLocale">'+ico('folder')+'Apri</button><button class="tb" data-c="btnSalvaOra">'+ico('save')+'Salva</button><i class="sp"></i><button class="tb" id="tbUndo" data-c="btnUndo">'+ico('undo')+'Annulla</button><button class="tb" id="tbRedo" data-c="btnRedo">'+ico('redo')+'Ripristina</button><i class="sp"></i><button class="tb" data-c="btnCerca">'+ico('search')+'Cerca</button><button class="tb" id="tbSide">'+ico('list')+'Struttura</button><i class="sp"></i><button class="tb" data-c="fontDown">A−</button><button class="tb" id="tbA">A</button><button class="tb" data-c="fontUp">A+</button><i class="sp"></i><label class="tz">Zoom<select id="tbZoom"><option value="0.8">80%</option><option value="0.9">90%</option><option value="1" selected>100%</option><option value="1.1">110%</option><option value="1.25">125%</option><option value="1.5">150%</option></select></label><span class="ps" id="proSave">pronto</span>';
+bar.innerHTML='<button class="tb" id="tbUndo" data-c="btnUndo">'+ico('undo')+'Annulla</button><button class="tb" id="tbRedo" data-c="btnRedo">'+ico('redo')+'Ripristina</button><i class="sp"></i><button class="tb" data-c="btnCerca">'+ico('search')+'Cerca</button><i class="sp"></i><button class="tb" data-c="fontDown">A−</button><button class="tb" id="tbA">A</button><button class="tb" data-c="fontUp">A+</button><i class="sp"></i><label class="tz">Zoom<select id="tbZoom"><option value="0.8">80%</option><option value="0.9">90%</option><option value="1" selected>100%</option><option value="1.1">110%</option><option value="1.25">125%</option><option value="1.5">150%</option></select></label><button class="ps" id="proSave" type="button" title="Salva ora (Ctrl+S)">pronto</button>';
 header.after(bar);
-bar.addEventListener('click',e=>{const b=e.target.closest('.tb');if(!b)return;
+bar.addEventListener('click',e=>{if(e.target.closest('#proSave')){const o=$('btnSalvaOra');o&&o.click();return}const b=e.target.closest('.tb');if(!b)return;
   if(b.dataset.c){const o=$(b.dataset.c);o&&o.click()}
   else if(b.id==='tbSide')B.classList.toggle('pro-noside');
   else if(b.id==='tbA'){play.fontSize=14;scheduleSave();renderStage()}});
@@ -4749,11 +4749,7 @@ const top=aside.querySelector('.sidebar-fixed-top');
 const sh=document.createElement('div');sh.id='proSideHead';sh.innerHTML='<span>'+ico('list')+'Struttura del copione</span><button title="Aggiungi atto">'+ico('plus')+'</button><button id="proHideL" title="Nascondi il menu laterale">'+ico('layout')+'</button>';
 top.insertBefore(sh,top.firstChild);
 sh.querySelector('button').addEventListener('click',()=>{const a=$('panel-struttura').querySelector('.add-btn');a&&a.click()});
-const qk=document.createElement('div');qk.id='proQuick';
-qk.innerHTML='<h4>Navigazione rapida</h4><button data-q="top">'+ico('file')+'Tutti gli atti</button><button data-q="btnEntrateUscite">'+ico('grid')+'Piano scene</button><button data-q="pers">'+ico('users')+'Personaggi</button><button data-q="note">'+ico('file')+'Note di regia</button>';
-$('panel-struttura').after(qk);
-qk.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const q=b.dataset.q;
-  if(q==='top')aside.scrollTop=0;else if(q==='pers'||q==='note')rpTab(q);else{const o=$(q);o&&o.click()}});
+
 /* pannello destro */
 const rp=document.createElement('section');rp.id='rightPanel';
 rp.innerHTML='<div class="rp-tabs"><button class="rp-tab on" data-t="pers">'+ico('users')+'Personaggi</button><button class="rp-tab" data-t="note">'+ico('file')+'Note di regia</button><button class="rp-tab" data-t="det">'+ico('list')+'Dettagli scena</button></div><div class="rp-pane on" id="rpPers"><div class="rp-search">'+ico('search')+'<input id="rpPersQ" placeholder="Cerca personaggio…"></div><div id="rpPersList"></div></div><div class="rp-pane" id="rpNote"></div><div class="rp-pane" id="rpDet"></div>';
