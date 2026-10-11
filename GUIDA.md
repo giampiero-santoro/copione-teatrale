@@ -38,12 +38,12 @@ Su uno schermo largo l'editor è diviso in tre pannelli.
 
 | Zona | Cosa contiene |
 |---|---|
-| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Scrittura · Analisi · Pubblicazione** e, a destra, il pulsante **Modalità prova e lettura** |
+| **In alto** | Logo, titolo e autore (si modificano cliccandoci sopra), menu **File · Analisi · Pubblicazione** e, a destra, il pulsante **Modalità prova e lettura** |
 | **Barra strumenti** | Annulla, Ripristina, Cerca, dimensione del testo (A− A A+), Zoom e lo **stato del salvataggio** (la pillola verde: cliccala per salvare subito). Nuovo copione, apertura e salvataggio sono nel menu **File** |
 | **Sinistra** | **Struttura del copione**: albero di atti e scene e ricerca rapida |
 | **Centro** | Il foglio del copione, con il percorso «Atto › Scena» sopra |
 | **Destra** | Schede **Personaggi**, **Note di regia**, **Dettagli scena** |
-| **In basso** | Percorso, larghezza del testo, interlinea, carattere e schermo intero |
+| **In basso** | Larghezza del testo, interlinea, carattere e schermo intero |
 
 **Nascondere i pannelli.** Il pulsante accanto al «+» di *Struttura del copione* nasconde il menu di sinistra; il pulsante in fondo alle schede nasconde il pannello di destra. Quando un pannello è nascosto compare una piccola linguetta sul bordo dello schermo: cliccala per riaprirlo.
 
@@ -52,7 +52,7 @@ Su uno schermo largo l'editor è diviso in tre pannelli.
 ## 3. Scrivere il copione
 
 ### Atti e scene
-- Nella struttura a sinistra usa **«Aggiungi atto»** per creare un atto e **«Aggiungi scena»** per aggiungere una scena all'atto in cui stai lavorando (il «+» accanto a ogni atto fa lo stesso su quell'atto).
+- Nella struttura a sinistra usa **«Nuovo atto»** per creare un atto e **«Nuova scena»** per aggiungere una scena all'atto in cui stai lavorando (il «+» accanto a ogni atto fa lo stesso su quell'atto).
 - Ogni atto ha una **freccia** per comprimerlo o espanderlo e un numero che indica quante scene contiene. Lo stato (atti compressi o aperti) resta memorizzato; l'atto della scena aperta si riapre da solo.
 - Il **pallino a destra di ogni scena** indica lo stato: passandoci sopra leggi *Bozza*, *Da rivedere* o *Definitiva*.
 - Clicca una scena per aprirla; clicca il nome per rinominare atti e scene.
@@ -101,7 +101,7 @@ Nel pannello di destra:
 
 ## 6. La libreria e la pagina iniziale
 
-La **Pagina iniziale** si apre dal pulsante in alto a sinistra (o da *File → Pagina iniziale*, o dal pulsante «Inizio» su telefono). Contiene:
+La **Pagina iniziale** si apre dal pulsante in alto a sinistra (un secondo clic ti riporta al copione; oppure da *File → Pagina iniziale*, o dal pulsante «Inizio» su telefono). Contiene:
 
 - il **logo** e la tua **libreria**: ogni copione è un libro su uno scaffale, con titolo, autore, atti, scene, minuti stimati e data dell'ultima modifica. Sopra lo scaffale puoi **cercare** per titolo o autore e **ordinare** per ultima modifica, titolo o lunghezza;
 - il riepilogo del **copione aperto** (scene, personaggi, parole, minuti) con le azioni rapide e l'elenco delle scene.
@@ -192,7 +192,9 @@ Nel menu **Analisi**:
 ## 13. Smartphone
 
 Sotto circa 1000 pixel di larghezza l'editor usa un layout semplificato:
-- barra in basso con **Inizio**, **Struttura**, **Personaggi** e **Strumenti**;
+- barra in basso con **Inizio**, **Struttura**, **Personaggi** e **Strumenti**: in *Strumenti* trovi anche **Esporta e stampa** (anteprima e PDF, `.fountain`, progetto `.json`, copia del testo);
+- i campi di descrizione, scenografia, stato e personaggi in scena sono nel riquadro **Dettagli della scena**, chiuso di default per lasciare spazio alle battute: toccalo per aprirlo;
+- la barra con annulla, ripristina e dimensione del testo sta sopra il foglio, senza coprirlo;
 - il menu laterale si apre come un cassetto, con struttura e personaggi in due schede;
 - le finestre salgono dal basso come pannelli;
 - pulsanti *Battuta / Didascalia / Fuori scena* sempre a portata di pollice.

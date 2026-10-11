@@ -4604,7 +4604,7 @@ dash.addEventListener('change',e=>{if(e.target.id==='libSort'){libSortKey=e.targ
 home.addEventListener('click',showDash);
 const brand=document.querySelector('.brand');const hb=document.createElement('button');hb.id='btnHomeTop';hb.className='home-top';hb.type='button';hb.innerHTML=ico('home')+'<span>Pagina iniziale</span>';
 if(brand)brand.insertBefore(hb,brand.firstChild);
-hb.addEventListener('click',e=>{e.stopPropagation();showDash()});
+hb.addEventListener('click',e=>{e.stopPropagation();if(dash.classList.contains('open'))hideDash();else showDash()});
 if(brand){brand.style.cursor='pointer';brand.title='Pagina iniziale';brand.addEventListener('click',showDash)}
 if(typeof renderAll==='function'){const _r=renderAll;renderAll=function(){const r=_r.apply(this,arguments);if(dash.classList.contains('open'))refreshDash();return r}}
 
@@ -4684,7 +4684,8 @@ body.pro .page{max-width:var(--pw,780px);zoom:var(--pz,1)}
 body.pro .block.dialogue textarea.line,body.pro .block.direction textarea{line-height:var(--lh,1.65)}
 body.pro #rightPanel{display:flex;width:360px;flex-shrink:0;flex-direction:column;background:#FAF8F7;border-left:1px solid #E6E2DE;min-height:0}
 .rp-tabs{display:flex;border-bottom:1px solid #E6E2DE;flex-shrink:0}
-.rp-tab{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 6px;border:none;background:none;font:500 12.5px Inter,sans-serif;color:var(--grigio);border-bottom:2px solid transparent;cursor:pointer}
+.rp-tab svg{display:none}
+.rp-tab{flex:1;padding-left:4px!important;padding-right:4px!important;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:6px;padding:13px 6px;border:none;background:none;font:500 12.5px Inter,sans-serif;color:var(--grigio);border-bottom:2px solid transparent;cursor:pointer}
 .rp-tab.on{color:var(--sipario);border-bottom-color:var(--sipario);font-weight:600}
 .rp-pane{display:none;flex:1;min-height:0;overflow-y:auto;padding:14px}.rp-pane.on{display:block}
 .rp-search{display:flex;align-items:center;gap:8px;padding:0 12px;height:38px;background:#fff;border:1px solid #E6E2DE;border-radius:10px;margin-bottom:12px;color:var(--grigio)}
@@ -4698,6 +4699,7 @@ body.pro aside #panel-personaggi{display:none!important}
 body.pro #proFoot{display:flex;align-items:center;gap:22px;padding:8px 22px;background:#fff;border-top:1px solid #E6E2DE;font:12px Inter,sans-serif;color:var(--grigio);flex-shrink:0;overflow-x:auto}
 #proFoot label{display:flex;align-items:center;gap:8px;white-space:nowrap}
 #proFoot input[type=range]{width:110px;accent-color:var(--sipario)}
+#proFoot{justify-content:flex-end}
 #proFoot .pfb{display:flex;align-items:center;gap:8px;color:var(--inchiostro);font-weight:500;margin-right:auto;white-space:nowrap}
 #pfFs{border:none;background:none;color:var(--inchiostro);cursor:pointer;padding:6px;border-radius:8px}#pfFs:hover{background:#F3E7EA}
 </style>
@@ -4710,7 +4712,6 @@ const logo=new Image();logo.className='pro-logo';logo.alt='Clan Destino';logo.sr
 /* menu in alto */
 const MENUS=[
  {l:'File',i:'file',pri:1,items:[['btnNuovoCopione','plus'],['btnFileLocale','folder'],['btnSalvaOra','save'],['btnVersioni','clock'],0,['btnImportaTesto','download'],['btnImportaProgetto','upload'],['btnImportaFountain','upload'],0,['btnHome','home'],['btnGuida','book']]},
- {l:'Scrittura',i:'pen',go:()=>{U.hideDash();$('stage').scrollTop=0}},
  {l:'Analisi',i:'chart',items:[['btnStatsAvanzate','chart'],['btnQualita','check'],['btnEntrateUscite','users']]},
  {l:'',i:'play',end:1,tip:'Modalità prova e lettura',go:()=>{const o=$('btnRehearsal');o&&o.click()}},
  {l:'Pubblicazione',i:'upload',items:[['btnAnteprima','eye'],['btnPDF','pdf'],['btnLivePreview','monitor'],['btnPdfSettings','sliders'],0,['btnOutline','grid'],['btnSides','file'],['btnEsportaLettura','eye'],0,['btnFountain','file'],['btnEsporta','file'],['btnCopia','copy'],['btnEsportaProgetto','save']]}
@@ -4738,7 +4739,7 @@ document.addEventListener('click',closeMenus);
 header.appendChild(nav);header.appendChild(endBox);
 /* barra strumenti */
 const bar=document.createElement('div');bar.id='proBar';
-bar.innerHTML='<button class="tb" id="tbUndo" data-c="btnUndo">'+ico('undo')+'Annulla</button><button class="tb" id="tbRedo" data-c="btnRedo">'+ico('redo')+'Ripristina</button><i class="sp"></i><button class="tb" data-c="btnCerca">'+ico('search')+'Cerca</button><i class="sp"></i><button class="tb" data-c="fontDown">A−</button><button class="tb" id="tbA">A</button><button class="tb" data-c="fontUp">A+</button><i class="sp"></i><label class="tz">Zoom<select id="tbZoom"><option value="0.8">80%</option><option value="0.9">90%</option><option value="1" selected>100%</option><option value="1.1">110%</option><option value="1.25">125%</option><option value="1.5">150%</option></select></label><button class="ps" id="proSave" type="button" title="Salva ora (Ctrl+S)">pronto</button>';
+bar.innerHTML='<button class="tb" id="tbUndo" data-c="btnUndo">'+ico('undo')+'Annulla</button><button class="tb" id="tbRedo" data-c="btnRedo">'+ico('redo')+'Ripristina</button><i class="sp"></i><button class="tb" data-c="btnCerca">'+ico('search')+'Cerca e sostituisci</button><i class="sp"></i><button class="tb" data-c="fontDown">A−</button><button class="tb" id="tbA">A</button><button class="tb" data-c="fontUp">A+</button><i class="sp"></i><label class="tz">Zoom<select id="tbZoom"><option value="0.8">80%</option><option value="0.9">90%</option><option value="1" selected>100%</option><option value="1.1">110%</option><option value="1.25">125%</option><option value="1.5">150%</option></select></label><button class="ps" id="proSave" type="button" title="Salva ora (Ctrl+S)">pronto</button>';
 header.after(bar);
 bar.addEventListener('click',e=>{if(e.target.closest('#proSave')){const o=$('btnSalvaOra');o&&o.click();return}const b=e.target.closest('.tb');if(!b)return;
   if(b.dataset.c){const o=$(b.dataset.c);o&&o.click()}
@@ -4774,7 +4775,7 @@ $('rpPersQ').addEventListener('input',e=>{const q=e.target.value.trim().toLowerC
 const scn=()=>currentSceneId?findScene(currentSceneId):null;
 function refreshRight(){
   const f=scn(),t=f?(f.atto.title+' › '+f.scena.title):'Nessuna scena selezionata';
-  $('proCrumbT').textContent=t;$('proFootT').textContent=t;
+  $('proCrumbT').textContent=t;
   $('tbUndo').disabled=$('btnUndo').disabled;$('tbRedo').disabled=$('btnRedo').disabled;
   $('proSave').textContent=$('saveState').textContent;
   const ae=document.activeElement;if(ae&&rp.contains(ae)&&ae.tagName==='TEXTAREA')return;
@@ -4798,7 +4799,7 @@ $('rpDet').addEventListener('input',e=>{const k=e.target.dataset.f;if(!k)return;
 const cr=document.createElement('div');cr.id='proCrumb';cr.innerHTML='<span id="proCrumbT"></span><button class="pin">'+ico('pin')+'Scena corrente</button>';
 main.insertBefore(cr,main.firstChild);cr.querySelector('.pin').addEventListener('click',()=>{$('stage').scrollTop=0});
 const ft=document.createElement('div');ft.id='proFoot';
-ft.innerHTML='<span class="pfb">'+ico('file')+'<b id="proFootT"></b></span><label>Larghezza testo<input type="range" id="pfW" min="560" max="1100" step="10" value="780"></label><label>Interlinea<input type="range" id="pfL" min="1.2" max="2.2" step="0.05" value="1.65"></label><label>Font<select id="pfF"><option value="\'Noto Serif\',Georgia,serif">Noto Serif</option><option value="\'Playfair Display\',serif">Playfair</option><option value="\'Courier Prime\',monospace">Courier Prime</option><option value="\'Inter\',sans-serif">Inter</option></select></label><button id="pfFs" title="Schermo intero">'+ico('max')+'</button>';
+ft.innerHTML='<label>Larghezza testo<input type="range" id="pfW" min="560" max="1100" step="10" value="780"></label><label>Interlinea<input type="range" id="pfL" min="1.2" max="2.2" step="0.05" value="1.65"></label><label>Font<select id="pfF"><option value="\'Noto Serif\',Georgia,serif">Noto Serif</option><option value="\'Playfair Display\',serif">Playfair</option><option value="\'Courier Prime\',monospace">Courier Prime</option><option value="\'Inter\',sans-serif">Inter</option></select></label><button id="pfFs" title="Schermo intero">'+ico('max')+'</button>';
 B.appendChild(ft);
 const KEY='copione:pro';let pf={};try{pf=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 function applyPf(){
@@ -5050,10 +5051,10 @@ function decorate(){
   if(!panel.querySelector('.atto-block')&&!filterCharacter){if(!th){th=document.createElement('div');th.className='tree-hint';th.textContent='Nessun atto ancora. Comincia aggiungendone uno.';panel.insertBefore(th,panel.firstChild)}}else if(th)th.remove();
   const add=$('addAct');
   if(add&&!add.parentNode.classList.contains('add-row')){
-    add.innerHTML=ico('plus')+'<span>Aggiungi atto</span>';
+    add.innerHTML=ico('plus')+'<span>Nuovo atto</span>';
     const row=document.createElement('div');row.className='add-row';
     add.parentNode.insertBefore(row,add);row.appendChild(add);
-    const bs=document.createElement('button');bs.className='add-btn';bs.id='addSceneBtn';bs.type='button';bs.innerHTML=ico('plus')+'<span>Aggiungi scena</span>';
+    const bs=document.createElement('button');bs.className='add-btn';bs.id='addSceneBtn';bs.type='button';bs.innerHTML=ico('plus')+'<span>Nuova scena</span>';
     row.appendChild(bs);
   }
 }
@@ -5479,6 +5480,60 @@ var end=$('proEnd');
 if(end){var w=document.createElement('div');w.className='pw';var b=document.createElement('button');b.className='pn';b.type='button';b.id='btnStudioTop';b.title='Modalit\u00e0 studio: nascondi le battute per impararle';b.innerHTML=ico('eyeoff');b.addEventListener('click',function(){setStudy(!on)});w.appendChild(b);end.insertBefore(w,end.firstChild)}
 if(rb0){var sb=document.createElement('button');sb.id='btnStudio';sb.type='button';sb.title='Modalit\u00e0 studio: nascondi le battute per impararle';sb.innerHTML=ico('eyeoff');sb.addEventListener('click',function(){setStudy(!on)});rb0.after(sb)}
 window.__ui.setStudy=setStudy;
+})();
+</script>
+
+<style id="ui-v12-css">
+@media(max-width:820px){
+ header .brand .mark{display:none}
+ header{padding:8px 12px 6px!important}
+ #titolo-opera{font-size:20px!important;min-width:0!important}
+ .stage-controls{position:static!important;margin:6px auto 2px!important;width:max-content;max-width:calc(100% - 16px)}
+ body footer{display:none!important}
+ .quick-add-fab{bottom:calc(76px + env(safe-area-inset-bottom))!important}
+ .page:not(.show-details) :is(.scene-info-box,.scene-meta-row,.presence-wrap,.director-wrap){display:none}
+ .sd-toggle{display:flex;align-items:center;gap:8px;width:100%;margin:8px 0 12px;padding:10px 14px;border:1px solid #E0DAD6;border-radius:12px;background:#fff;color:var(--inchiostro);font:600 13px Inter,sans-serif;cursor:pointer;text-align:left}
+ .sd-toggle svg{transition:transform .15s}
+ .page.show-details .sd-toggle svg{transform:rotate(180deg)}
+ .tg-h{grid-column:1/-1;font:600 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:var(--grigio);margin:8px 2px 0}
+}
+@media(min-width:821px){.sd-toggle,.tg-h{display:none}}
+</style>
+<script id="ui-v12">
+(function(){
+var U=window.__ui,ico=U.ico,$=function(id){return document.getElementById(id)};
+var narrow=window.matchMedia('(max-width:820px)'),open=false;
+/* dettagli della scena: chiusi di default sul telefono, per lasciare spazio alle battute */
+var _rs=renderStage;
+renderStage=function(){
+  var r=_rs.apply(this,arguments);
+  try{
+    var pg=document.querySelector('#stage .page');
+    if(pg&&!pg.querySelector('.sd-toggle')){
+      var first=pg.querySelector('.scene-info-box,.scene-meta-row,.presence-wrap,.director-wrap');
+      if(first){
+        var b=document.createElement('button');b.type='button';b.className='sd-toggle';
+        b.innerHTML=ico('list')+'<span style="flex:1">Dettagli della scena</span>'+ico('chev');
+        b.addEventListener('click',function(){open=!open;pg.classList.toggle('show-details',open)});
+        first.parentNode.insertBefore(b,first);
+      }
+    }
+    if(pg)pg.classList.toggle('show-details',open);
+  }catch(e){}
+  return r;
+};
+/* esportazione e stampa raggiungibili dal pannello Strumenti (la barra in basso sul telefono e' nascosta) */
+var grid=document.querySelector('.side-tools-grid');
+if(grid){
+  var box=document.createElement('div');box.className='tools-grid';box.id='phoneExport';
+  box.innerHTML='<div class="tg-h">Esporta e stampa</div>';
+  [['btnAnteprima','eye'],['btnPDF','pdf'],['btnFountain','file'],['btnEsportaProgetto','save'],['btnCopia','copy']].forEach(function(it){
+    var o=$(it[0]);if(!o)return;
+    var x=document.createElement('button');x.type='button';x.innerHTML=ico(it[1])+'<span>'+((o.textContent||'').trim()||'Esporta')+'</span>';
+    x.addEventListener('click',function(e){e.stopPropagation();o.click()});box.appendChild(x);
+  });
+  grid.appendChild(box);
+}
 })();
 </script>
 
