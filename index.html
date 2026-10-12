@@ -5587,5 +5587,35 @@ host.addEventListener('click',function(e){
 })();
 </script>
 
+<style id="ui-v13-css">
+#stage .block textarea{overflow-y:hidden}
+</style>
+<script id="ui-v13">
+/* le caselle di testo si riadattano quando cambiano interlinea, larghezza, carattere, zoom o i caratteri finiscono di caricarsi */
+(function(){
+  var st=document.getElementById('stage'),t=0;
+  function run(){
+    t=0;
+    var tas=st.querySelectorAll('textarea'),hs=[],i;
+    for(i=0;i<tas.length;i++)tas[i].style.height='auto';
+    for(i=0;i<tas.length;i++)hs.push(tas[i].scrollHeight);
+    for(i=0;i<tas.length;i++)tas[i].style.height=hs[i]+'px';
+  }
+  function refit(){if(!t)t=requestAnimationFrame(run)}
+  window.__refit=refit;
+  [['pfL','input'],['pfW','input'],['pfF','change'],['tbZoom','change']].forEach(function(x){
+    var e=document.getElementById(x[0]);if(e)e.addEventListener(x[1],refit);
+  });
+  if(window.ResizeObserver)new ResizeObserver(refit).observe(st);
+  window.addEventListener('resize',refit);
+  if(document.fonts){
+    if(document.fonts.ready)document.fonts.ready.then(refit);
+    if(document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',refit);
+  }
+  var _rs=renderStage;
+  renderStage=function(){var r=_rs.apply(this,arguments);refit();return r};
+})();
+</script>
+
 </body>
 </html>

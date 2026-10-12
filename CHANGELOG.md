@@ -5,6 +5,7 @@ Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento 
 ## Aspetto e uso
 - **Un solo tema, chiaro**: carta bianca, accento bordeaux, copione in carattere con le grazie. Rimossi gli altri stili e il tema scuro.
 - **Struttura a tre pannelli** su schermi larghi: menu in alto (File, Analisi, Pubblicazione), barra strumenti, struttura a sinistra, pannello di destra con Personaggi, Note di regia e Dettagli scena, barra inferiore con larghezza del testo, interlinea e carattere. I pannelli laterali si possono nascondere.
+- **Interlinea, larghezza del testo, carattere e zoom** ora riadattano subito l'altezza delle caselle di testo: nessuna riga viene più tagliata.
 - **Albero della struttura** con atti comprimibili, icone, contatore di scene e indicatore di stato (bozza, da rivedere, definitiva).
 - **Pagina iniziale** con il logo, la libreria dei copioni a scaffali e il riepilogo del copione aperto.
 - **Icone coerenti** al posto delle emoji, avvisi e conferme nello stile dell'app, messaggi per gli stati vuoti, animazioni leggere.
