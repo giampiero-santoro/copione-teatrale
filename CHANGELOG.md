@@ -5,12 +5,20 @@ Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento 
 ## Aspetto e uso
 - **Un solo tema, chiaro**: carta bianca, accento bordeaux, copione in carattere con le grazie. Rimossi gli altri stili e il tema scuro.
 - **Struttura a tre pannelli** su schermi larghi: menu in alto (File, Analisi, Pubblicazione), barra strumenti, struttura a sinistra, pannello di destra con Personaggi, Note di regia e Dettagli scena, barra inferiore con larghezza del testo, interlinea e carattere. I pannelli laterali si possono nascondere.
+- **Interlinea, larghezza del testo, carattere e zoom** ora riadattano subito l'altezza delle caselle di testo: nessuna riga viene più tagliata.
 - **Albero della struttura** con atti comprimibili, icone, contatore di scene e indicatore di stato (bozza, da rivedere, definitiva).
 - **Pagina iniziale** con il logo, la libreria dei copioni a scaffali e il riepilogo del copione aperto.
 - **Icone coerenti** al posto delle emoji, avvisi e conferme nello stile dell'app, messaggi per gli stati vuoti, animazioni leggere.
 - **Telefono**: barra di navigazione in basso, dettagli di scena in un riquadro richiudibile, esportazione nel pannello Strumenti.
 - **Installabile come app** sulla schermata Home, con icona Clan Destino.
 - **Accessibilità**: uso completo da tastiera, contorno di focus, etichette per i lettori di schermo, contrasti più alti, bersagli di tocco ampi, rispetto di «riduci movimento».
+
+## Correzioni
+- Il pulsante dello stato scena selezionato («Da rivedere» ecc.) ora è leggibile.
+- Campi e pulsanti delle finestre (Cerca e sostituisci, Versioni, Impostazioni PDF, Importa testo) con lo stesso stile del resto dell'editor.
+- Il confronto tra versioni si apre sopra l'elenco delle versioni.
+- Sul copione vuoto non compaiono più i pulsanti Battuta, Didascalia, Fuori scena.
+- Singolare e plurale corretti («1 minuto stimato», «1 blocco», «1 scena»).
 
 ## Personaggi
 - Nuovo elenco con cerchi colorati e ruolo; scheda con tre sezioni (Scheda, Relazioni, Note) modificabile direttamente.

@@ -1971,7 +1971,7 @@ function renderStats(){
     `<span><b>${play.acts.length}</b> atti</span>
      <span><b>${nScenes}</b> scene</span>
      <span><b>${words}</b> parole</span>
-     <span><b>~${pages}</b> pagine</span>
+     <span><b>~${pages}</b> ${pages === 1 ? 'pagina' : 'pagine'}</span>
      <span><b>~${minutes} min</b> di durata stimata</span>`;
 }
 
@@ -4531,6 +4531,7 @@ async function importLibrary(o){
   await libPersist();refreshDash();
   alert(added+(added===1?' copione ripristinato':' copioni ripristinati')+(skipped?'; '+skipped+(skipped===1?' già presente.':' già presenti.'):'.'));
 }
+const pl=(n,s,pp)=>n+' '+(n===1?s:pp);
 const agoTxt=t=>{const g=Math.floor((Date.now()-t)/864e5);return g<=0?'oggi':g===1?'ieri':g+' giorni fa'};
 function backupHtml(){
   const last=Number(LS('copione:lastBackup')||0),first=Number(LS('copione:firstSeen')||Date.now()),snooze=Number(LS('copione:backupSnooze')||0);
@@ -4560,7 +4561,7 @@ function shelfHtml(){
   if(!LIB.length)h+='<div class="bk-slot bk-none"><span>Qui compariranno i tuoi copioni, man mano che li salvi.</span></div>';
   if(!list.length&&LIB.length)h+='<div class="bk-slot bk-none"><span>Nessun copione trovato</span></div>';
   list.forEach(m=>{const cur=m.id===curId;
-    h+='<div class="bk-slot"><button class="bk'+(cur?' cur':'')+'" data-o="'+m.id+'" style="--c:'+covOf(m.id)+'" title="Apri «'+esc(m.title)+'»"><span class="bk-t">'+esc(m.title)+'</span><i></i><span class="bk-a">'+esc(m.author)+'</span><span class="bk-m">'+m.acts+' atti · '+m.scenes+' scene<br>~'+Math.max(1,Math.round(m.words/250))+'\u00a0min · '+fd(m.updated)+'</span>'+(cur?'<em>Aperto</em>':'')+'</button><div class="bk-ac"><button data-exp="'+m.id+'" aria-label="Esporta" title="Esporta">'+ico('download')+'</button><button data-dup="'+m.id+'" aria-label="Duplica" title="Duplica">'+ico('copy')+'</button><button data-del="'+m.id+'" aria-label="Elimina" title="Elimina">'+ico('trash')+'</button></div></div>';});
+    h+='<div class="bk-slot"><button class="bk'+(cur?' cur':'')+'" data-o="'+m.id+'" style="--c:'+covOf(m.id)+'" title="Apri «'+esc(m.title)+'»"><span class="bk-t">'+esc(m.title)+'</span><i></i><span class="bk-a">'+esc(m.author)+'</span><span class="bk-m">'+pl(m.acts,'atto','atti')+' · '+pl(m.scenes,'scena','scene')+'<br>~'+Math.max(1,Math.round(m.words/250))+'\u00a0min · '+fd(m.updated)+'</span>'+(cur?'<em>Aperto</em>':'')+'</button><div class="bk-ac"><button data-exp="'+m.id+'" aria-label="Esporta" title="Esporta">'+ico('download')+'</button><button data-dup="'+m.id+'" aria-label="Duplica" title="Duplica">'+ico('copy')+'</button><button data-del="'+m.id+'" aria-label="Elimina" title="Elimina">'+ico('trash')+'</button></div></div>';});
   return h;
 }
 
@@ -4574,9 +4575,9 @@ function refreshDash(){
   play.acts.forEach(a=>a.scenes.forEach(s=>{scenes.push([a,s]);blocks+=s.blocks.length;s.blocks.forEach(b=>words+=(b.text||'').trim().split(/\s+/).filter(Boolean).length)}));
   const cur=scenes.find(x=>x[1].id===currentSceneId);
   dash.innerHTML='<div class="lg"><img src="'+LOGO+'" alt="Clan Destino"><p class="k">Editor di copioni</p></div><h3>La tua libreria</h3><div class="lib-tools"><div class="qs">'+ico('search')+'<input id="libQ" type="search" autocomplete="off" placeholder="Cerca nella libreria" value="'+esc(libFilter)+'"></div><select id="libSort" aria-label="Ordina"><option value="upd"'+(libSortKey==='upd'?' selected':'')+'>Ultima modifica</option><option value="title"'+(libSortKey==='title'?' selected':'')+'>Titolo A–Z</option><option value="size"'+(libSortKey==='size'?' selected':'')+'>Più lungo</option></select></div><div class="shelf-wrap"><div class="shelf" id="shelfGrid">'+shelfHtml()+'</div></div>'+backupHtml()+'<h3>Copione aperto</h3><h2>'+esc(play.title)+'</h2><p class="by">di '+esc(play.author)+'</p>'
-  +'<div class="dg"><div class="dc"><b>'+scenes.length+'</b><span>scene in '+play.acts.length+' atti</span></div><div class="dc"><b>'+(play.characters||[]).length+'</b><span>personaggi</span></div><div class="dc"><b>'+words+'</b><span>parole</span></div><div class="dc"><b>~'+Math.max(1,Math.round(words/250))+'</b><span>minuti stimati</span></div></div>'
+  +'<div class="dg"><div class="dc"><b>'+scenes.length+'</b><span>'+(scenes.length===1?'scena':'scene')+' in '+pl(play.acts.length,'atto','atti')+'</span></div><div class="dc"><b>'+(play.characters||[]).length+'</b><span>'+((play.characters||[]).length===1?'personaggio':'personaggi')+'</span></div><div class="dc"><b>'+words+'</b><span>'+(words===1?'parola':'parole')+'</span></div><div class="dc"><b>~'+Math.max(1,Math.round(words/250))+'</b><span>'+(Math.max(1,Math.round(words/250))===1?'minuto stimato':'minuti stimati')+'</span></div></div>'
   +'<h3>Azioni rapide</h3><div class="dq"><button class="pri" data-d="go">'+ico('pen')+'<span>Continua a scrivere'+(cur?'<small style="display:block;font-weight:400;opacity:.8">'+esc(cur[1].title)+'</small>':'')+'</span></button><button data-d="scene">'+ico('plus')+'<span>Nuova scena</span></button><button data-d="btnImportaTesto">'+ico('download')+'<span>Importa testo</span></button><button data-d="btnCerca">'+ico('search')+'<span>Cerca e sostituisci</span></button><button data-d="btnVersioni">'+ico('clock')+'<span>Versioni</span></button><button data-d="btnGuida">'+ico('book')+'<span>Guida</span></button></div>'
-  +'<h3>Scene</h3>'+(scenes.length?'<div class="dl">'+scenes.map(([a,s])=>'<button data-s="'+s.id+'"><span>'+esc(s.title)+'<small>'+esc(a.title)+' · '+s.blocks.length+' blocchi</small></span></button>').join('')+'</div>':'<div class="es sm"><div class="es-ic">'+ico('pen')+'</div><h3>Ancora nessuna scena</h3><p>Crea la prima scena per iniziare a scrivere il tuo copione.</p><div class="es-act"><button class="pri" data-d="scene">'+ico('plus')+'Crea la prima scena</button></div></div>');
+  +'<h3>Scene</h3>'+(scenes.length?'<div class="dl">'+scenes.map(([a,s])=>'<button data-s="'+s.id+'"><span>'+esc(s.title)+'<small>'+esc(a.title)+' · '+pl(s.blocks.length,'blocco','blocchi')+'</small></span></button>').join('')+'</div>':'<div class="es sm"><div class="es-ic">'+ico('pen')+'</div><h3>Ancora nessuna scena</h3><p>Crea la prima scena per iniziare a scrivere il tuo copione.</p><div class="es-act"><button class="pri" data-d="scene">'+ico('plus')+'Crea la prima scena</button></div></div>');
 }
 function showDash(){refreshDash();dash.classList.add('open');dash.scrollTop=0;closeDrawer()}
 dash.addEventListener('click',e=>{
@@ -5586,6 +5587,55 @@ host.addEventListener('click',function(e){
 });
 })();
 </script>
+
+<style id="ui-v13-css">
+#stage .block textarea{overflow-y:hidden}
+</style>
+<script id="ui-v13">
+/* le caselle di testo si riadattano quando cambiano interlinea, larghezza, carattere, zoom o i caratteri finiscono di caricarsi */
+(function(){
+  var st=document.getElementById('stage'),t=0;
+  function run(){
+    t=0;
+    var tas=st.querySelectorAll('textarea'),hs=[],i;
+    for(i=0;i<tas.length;i++)tas[i].style.height='auto';
+    for(i=0;i<tas.length;i++)hs.push(tas[i].scrollHeight);
+    for(i=0;i<tas.length;i++)tas[i].style.height=hs[i]+'px';
+  }
+  function refit(){if(!t)t=requestAnimationFrame(run)}
+  window.__refit=refit;
+  [['pfL','input'],['pfW','input'],['pfF','change'],['tbZoom','change']].forEach(function(x){
+    var e=document.getElementById(x[0]);if(e)e.addEventListener(x[1],refit);
+  });
+  if(window.ResizeObserver)new ResizeObserver(refit).observe(st);
+  window.addEventListener('resize',refit);
+  if(document.fonts){
+    if(document.fonts.ready)document.fonts.ready.then(refit);
+    if(document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',refit);
+  }
+  var _rs=renderStage;
+  renderStage=function(){var r=_rs.apply(this,arguments);refit();return r};
+})();
+</script>
+
+<style id="ui-v14-css">
+/* stato della scena selezionato: colori leggibili */
+body.theme-bordeaux .status-btn.on-bozza{background:#7C869E!important;border-color:#7C869E!important;color:#fff!important}
+body.theme-bordeaux .status-btn.on-rivedere{background:#C97A1E!important;border-color:#C97A1E!important;color:#fff!important}
+body.theme-bordeaux .status-btn.on-definitiva{background:#2F7D4F!important;border-color:#2F7D4F!important;color:#fff!important}
+/* campi e pulsanti delle finestre: via i resti del vecchio tema crema/oro */
+body.theme-bordeaux .modal :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]),select,textarea){background:#fff!important;border:1px solid #E0DAD6!important;border-radius:10px;color:var(--inchiostro)}
+body.theme-bordeaux .modal :is(input,select,textarea):focus{border-color:var(--sipario)!important;box-shadow:0 0 0 3px rgba(138,30,62,.12);outline:none}
+body.theme-bordeaux .modal input[type=checkbox]{accent-color:var(--sipario);background:transparent!important}
+body.theme-bordeaux .version-item .v-actions button:nth-child(2){background:#fff;border:1px solid #E0DAD6;color:var(--inchiostro)}
+body.theme-bordeaux .block-toolbar button{background:#fff;border:1px solid #E0DAD6;color:var(--inchiostro);border-radius:10px}
+body.theme-bordeaux .block-toolbar button:hover{border-color:var(--sipario);color:var(--sipario)}
+/* il confronto tra versioni sta sopra l'elenco delle versioni */
+#modalDiff{z-index:260}
+/* nessuna scena: i pulsanti flottanti non servono */
+body:has(#stage>.es) .quick-add-fab{display:none}
+.home-top{white-space:nowrap}
+</style>
 
 </body>
 </html>
