@@ -18,6 +18,8 @@ Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento 
 - Campi e pulsanti delle finestre (Cerca e sostituisci, Versioni, Impostazioni PDF, Importa testo) con lo stesso stile del resto dell'editor.
 - Il confronto tra versioni si apre sopra l'elenco delle versioni.
 - Sul copione vuoto non compaiono più i pulsanti Battuta, Didascalia, Fuori scena.
+- Su schermi larghi meno di 1280 pixel il pannello di destra parte chiuso e il menu di sinistra è più stretto, così il foglio resta leggibile.
+- Menu da telefono: prima la ricerca e l'albero (o i personaggi), poi gli strumenti; tolte le statistiche, già presenti nella pagina iniziale.
 - Singolare e plurale corretti («1 minuto stimato», «1 blocco», «1 scena»).
 
 ## Personaggi

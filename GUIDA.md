@@ -47,7 +47,7 @@ Su uno schermo largo l'editor è diviso in tre pannelli.
 
 **Nascondere i pannelli.** Il pulsante accanto al «+» di *Struttura del copione* nasconde il menu di sinistra; il pulsante in fondo alle schede nasconde il pannello di destra. Quando un pannello è nascosto compare una piccola linguetta sul bordo dello schermo: cliccala per riaprirlo.
 
-> Sugli schermi stretti (telefoni, tablet in verticale) il layout è quello classico con menu laterale e barra inferiore. Vedi [Smartphone](#13-smartphone).
+> Su schermi larghi meno di 1280 pixel (per esempio un portatile piccolo) il pannello di destra parte chiuso, per lasciare spazio al foglio: lo riapri con la linguetta sul bordo destro. Sugli schermi stretti (telefoni, tablet in verticale) il layout è quello classico con menu laterale e barra inferiore. Vedi [Smartphone](#13-smartphone).
 
 ## 3. Scrivere il copione
 
@@ -196,7 +196,7 @@ Sotto circa 1000 pixel di larghezza l'editor usa un layout semplificato:
 - barra in basso con **Inizio**, **Struttura**, **Personaggi** e **Strumenti**: in *Strumenti* trovi anche **Esporta e stampa** (anteprima e PDF, `.fountain`, progetto `.json`, copia del testo);
 - i campi di descrizione, scenografia, stato e personaggi in scena sono nel riquadro **Dettagli della scena**, chiuso di default per lasciare spazio alle battute: toccalo per aprirlo;
 - la barra con annulla, ripristina e dimensione del testo sta sopra il foglio, senza coprirlo;
-- il menu laterale si apre come un cassetto, con struttura e personaggi in due schede;
+- il menu laterale si apre come un cassetto: in cima la ricerca, poi le schede **Struttura** e **Personaggi**, e in fondo gli strumenti (nuovo copione, versioni, cerca e sostituisci, esporta e stampa);
 - le finestre salgono dal basso come pannelli;
 - pulsanti *Battuta / Didascalia / Fuori scena* sempre a portata di pollice.
 
