@@ -207,7 +207,7 @@ L'editor ha un'icona (il logo Clan Destino) e può stare sulla schermata del tel
 - **Android / Chrome**: apri il menu del browser → *Installa app* (o *Aggiungi a schermata Home*). Su computer, in Chrome ed Edge, usa la voce **File → Installa come app** quando compare, o l'icona di installazione nella barra degli indirizzi.
 - **iPhone e iPad / Safari**: tocca il pulsante *Condividi* → *Aggiungi a Home*.
 
-> Funziona solo quando l'editor è aperto dall'indirizzo web (GitHub Pages), non dal file salvato sul computer. Serve ancora la connessione per aprirlo: non è un'app offline.
+> Funziona solo quando l'editor è aperto dall'indirizzo web (GitHub Pages), non dal file salvato sul computer. Per aprirla anche senza connessione serve il file `sw.js` nel repository (vedi la sezione «Senza connessione» più sotto).
 
 ## 14. Scorciatoie
 
@@ -230,6 +230,17 @@ L'editor ha un'icona (il logo Clan Destino) e può stare sulla schermata del tel
 - Su **telefono e tablet** i pulsanti hanno un'area di tocco di almeno 44 pixel e i campi di testo sono abbastanza grandi da non far ingrandire la pagina.
 - Se il dispositivo ha attivato «riduci movimento», le animazioni si spengono; con «contrasto alto» bordi e testi grigi diventano più scuri.
 
+### Informazioni e licenza
+
+*File → Informazioni e licenza* (sul telefono: *Strumenti*) e la riga in fondo alla pagina iniziale mostrano chi ha creato l'editor, la licenza (**CC BY-NC-SA 4.0**: uso non commerciale, nome e logo da mantenere, stessa licenza per le versioni modificate) e il link al codice. I copioni che scrivi restano tuoi.
+
+### Senza connessione
+
+- **Dal file scaricato**: apri `index.html` con un doppio clic. Funziona tutto, anche creare PDF e codici QR, senza internet.
+- **Dal sito (GitHub Pages)**: se nel repository c'è anche `sw.js`, dopo la prima visita l'editor si apre anche senza rete. Con la rete trova sempre l'ultima versione.
+- Quando perdi la connessione compare un breve avviso («Sei offline…»): il lavoro continua e si salva sul tuo dispositivo come sempre.
+- Il collegamento a un file del computer e i backup funzionano normalmente.
+
 ## 15. Domande frequenti
 
 **Ho svuotato la cache e il copione è sparito.**
@@ -248,7 +259,7 @@ Il formato Fountain non le contiene. Per copiare tutto usa il `.json`.
 Dal libro in libreria: *esporta → Progetto (.json)*, invialo a te stesso, poi sul computer *Importa copione* dalla Pagina iniziale.
 
 **Il carattere del foglio sembra diverso.**
-I caratteri vengono caricati da Google Fonts: senza connessione l'editor usa caratteri di riserva. Puoi cambiarlo dalla barra in basso.
+I caratteri principali sono incorporati nell'editor, quindi dovrebbero apparire sempre uguali. Puoi cambiare il carattere del foglio dalla barra in basso (Noto Serif, Playfair, Courier Prime, Inter). Nella *copia di lettura (HTML)* da condividere i caratteri vengono caricati da internet: senza connessione chi la apre vede caratteri di riserva.
 
 **Il copione è molto lungo: l'editor rallenta?**
 L'editor è pensato per copioni teatrali interi (decine di scene). Alcuni accorgimenti per tenerlo veloce:

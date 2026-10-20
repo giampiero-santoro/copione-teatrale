@@ -1,6 +1,6 @@
 # Elenco delle modifiche
 
-Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento è dell'11 ottobre 2026.
+Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento è del 17 ottobre 2026.
 
 ## Aspetto e uso
 - **Un solo tema, chiaro**: carta bianca, accento bordeaux, copione in carattere con le grazie. Rimossi gli altri stili e il tema scuro.
@@ -12,6 +12,15 @@ Tutte le novità dell'editor, raggruppate per argomento. L'ultimo aggiornamento 
 - **Telefono**: barra di navigazione in basso, dettagli di scena in un riquadro richiudibile, esportazione nel pannello Strumenti.
 - **Installabile come app** sulla schermata Home, con icona Clan Destino.
 - **Accessibilità**: uso completo da tastiera, contorno di focus, etichette per i lettori di schermo, contrasti più alti, bersagli di tocco ampi, rispetto di «riduci movimento».
+
+## Licenza
+- Licenza **CC BY-NC-SA 4.0** (file `LICENSE`), con richiesta di mantenere nome e logo.
+- Finestra **Informazioni e licenza** (menu File, strumenti da telefono, riga in fondo alla pagina iniziale) e avviso di copyright in testa a `index.html`.
+- `THIRD_PARTY_LICENSES.md` con le licenze dei componenti incorporati (jsPDF, qrcodejs, caratteri).
+
+## Offline
+- **Librerie e caratteri incorporati** nel file: l'editor funziona senza internet, anche per creare PDF e QR code. Il file ora pesa circa 1,1 MB.
+- **`sw.js` (facoltativo)**: permette di aprire anche il sito pubblicato senza connessione; avviso quando si perde e si ritrova la rete.
 
 ## Correzioni
 - Il pulsante dello stato scena selezionato («Da rivedere» ecc.) ora è leggibile.

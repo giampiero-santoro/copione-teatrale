@@ -97,7 +97,11 @@ Per aggiornare l'editor basta sostituire `index.html` e fare commit.
 | Collegare un file sul computer (salvataggio diretto) | ✅ | ❌ (si usa *Salva progetto .json*) | ❌ |
 | Layout a tre pannelli | ✅ (da ~1000 px di larghezza) | ✅ | layout dedicato |
 
-Serve una connessione per caricare i caratteri di Google Fonts e una piccola libreria per i QR code (`qrcodejs`); senza connessione l'editor funziona comunque con caratteri di riserva.
+## Funziona anche senza internet
+
+L'editor è **autosufficiente**: le librerie per i PDF e i QR code e i caratteri sono incorporati in `index.html` (circa 1,1 MB). Dopo averlo scaricato lo puoi aprire con un doppio clic, **anche senza connessione**, e creare PDF, importare ed esportare come sempre.
+
+Per usarlo offline anche dal sito pubblicato (e come app installata) aggiungi al repository il file **`sw.js`**: al primo accesso il browser salva una copia dell'editor, e le volte successive si apre anche senza rete. Con la rete trova sempre l'ultima versione; se la rete manca o è lenta (più di 4 secondi) usa la copia salvata. Se `sw.js` non c'è, l'editor funziona lo stesso, ma per aprirsi dal sito serve la connessione.
 
 ## Scorciatoie da tastiera
 
@@ -123,7 +127,10 @@ Serve una connessione per caricare i caratteri di Google Fonts e una piccola lib
 ## Struttura del repository
 
 ```
-├── index.html      # l'intero editor (HTML + CSS + JavaScript)
+├── index.html      # l'intero editor (HTML + CSS + JavaScript, librerie e caratteri inclusi)
+├── sw.js           # facoltativo: permette di aprire il sito anche offline
+├── LICENSE         # testo della licenza CC BY-NC-SA 4.0
+├── THIRD_PARTY_LICENSES.md  # licenze dei componenti di terzi incorporati
 ├── README.md       # questo file
 ├── GUIDA.md        # guida all'uso
 ├── CHANGELOG.md    # elenco delle modifiche
@@ -138,19 +145,33 @@ Segnalazioni e idee sono benvenute: apri una *Issue* descrivendo cosa hai fatto,
 
 ## Licenza
 
-*Da definire.* Finché non viene aggiunto un file `LICENSE`, tutti i diritti sono riservati all'autore: il codice si può vedere, ma non riutilizzare o ridistribuire senza permesso.
+**© 2026 Giampiero Santoro — Clan Destino** · [Creative Commons Attribuzione – Non commerciale – Condividi allo stesso modo 4.0 Internazionale (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.it). Il testo completo è nel file [`LICENSE`](LICENSE).
 
-Il **logo e il nome «Clan Destino»** sono marchi della compagnia e non sono ceduti con il codice, qualunque licenza venga scelta.
+| Puoi | Devi | Non puoi |
+|---|---|---|
+| usare, copiare e modificare l'editor, anche condividendo la tua versione, **senza scopi commerciali** | **mantenere visibili il mio nome e il logo**, indicare le modifiche, usare **la stessa licenza** e citare il link alla licenza | venderlo, offrirlo in servizi a pagamento o includerlo in prodotti commerciali; far credere che la tua versione sia approvata da me |
+
+**Come mantenere nome e logo.** È la «richiesta di attribuzione» prevista dalla licenza (art. 3): lascia invariati, nell'editor e nelle sue copie, il nome «Giampiero Santoro — Clan Destino» e il logo Clan Destino (intestazione, pagina iniziale, finestra *Informazioni e licenza*, copertina dei PDF) e l'avviso in testa a `index.html`. Il nome e il logo restano **marchi della compagnia**: la licenza non li concede per altri usi.
+
+**I tuoi copioni sono tuoi.** I testi che scrivi e i file che crei con l'editor (PDF, `.fountain`, `.json`) non sono coperti dalla licenza: appartengono a te.
+
+**Uso non commerciale: come lo intendo.** *(nota dell'autore, non fa parte del testo della licenza)*
+- È consentito usarlo per scrivere, provare e mettere in scena i propri copioni, **anche se gli spettacoli hanno un biglietto o un cachet**, e usarlo in corsi, laboratori, scuole e associazioni.
+- Non è consentito vendere l'editor o sue copie e modifiche, offrirlo come servizio a pagamento (abbonamenti, hosting a pagamento), o farne parte di un prodotto o servizio commerciale.
+
+**Uso commerciale e sostegno.** Chi vuole usarlo per scopi commerciali può chiedermi un accordo o una **licenza separata** (anche a pagamento): scrivimi tramite una *Issue* o il mio profilo GitHub. Il sostegno economico (donazioni, sponsorizzazioni) è benvenuto e non cambia la licenza.
+
+**Contributi.** Se mandi modifiche (*pull request*) accetti che siano rilasciate con la stessa licenza e che l'autore possa concedere anche licenze separate sul progetto.
 
 ## Crediti
 
 Autore: **Giampiero Santoro — Clan Destino**.
 
-L'editor si appoggia a componenti di terzi, ciascuno con la propria licenza:
+L'editor incorpora componenti di terzi, che **mantengono le proprie licenze** (testi completi in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)):
 
 | Componente | Uso | Licenza |
 |---|---|---|
 | [jsPDF](https://github.com/parallax/jsPDF) 2.5.1 | creazione dei PDF | MIT |
 | [qrcodejs](https://github.com/davidshimjs/qrcodejs) 1.0.0 | QR code nel PDF | MIT |
-| [Google Fonts](https://fonts.google.com): Inter, Playfair Display, Courier Prime, Space Grotesk, Noto Serif | caratteri | SIL Open Font License |
-| Icone lineari | interfaccia | disegnate a mano nello stile di [Lucide](https://lucide.dev) / [Feather](https://feathericons.com) (licenze ISC / MIT) |
+| Inter, Playfair Display, Courier Prime, Noto Serif (da [Fontsource](https://fontsource.org)) | caratteri, incorporati nel file | SIL Open Font License 1.1 |
+| Icone lineari | interfaccia | disegnate a mano nello stile di [Lucide](https://lucide.dev) / [Feather](https://feathericons.com) (ISC / MIT) |
